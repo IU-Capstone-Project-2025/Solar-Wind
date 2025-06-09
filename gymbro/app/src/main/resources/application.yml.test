@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: app
+  datasource:
+    url: jdbc:postgresql://host.docker.internal:5440/gymbroDB
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+logging:
+  level:
+    root: INFO
+  appender:
+    console:
+      type: console
