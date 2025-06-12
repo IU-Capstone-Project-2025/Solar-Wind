@@ -21,6 +21,7 @@ final class WelcomeView: UIView {
     }
     
     private let logoImageView: UIImageView = {
+//        let view = UIImageView()
         let view = UIImageView(image: UIImage(named: "logo"))
         view.contentMode = .scaleAspectFit
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -29,11 +30,12 @@ final class WelcomeView: UIView {
     
     private let sloganLabel: UILabel = {
         let view = UILabel()
-        view.font = .size24Medium
+//        view.font = .size24Medium
+        view.font = .systemFont(ofSize: 24)
         view.textColor = .white
         view.textAlignment = .center
         view.numberOfLines = 2
-        view.text = "Find someone who will\nget the most out of you"
+        view.text = "Because sports\nare better together."
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -62,13 +64,22 @@ final class WelcomeView: UIView {
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            logoImageView.bottomAnchor.constraint(equalTo: sloganLabel.topAnchor, constant: 0)
-            sloganLabel.bottomAnchor.constraint(equalTo: nextButton.topAnchor, constant: 80)
-            sloganLabel.
+            logoImageView.bottomAnchor.constraint(equalTo: sloganLabel.topAnchor, constant: 0),
+            logoImageView.widthAnchor.constraint(equalToConstant: 232),
+            logoImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            
+            sloganLabel.bottomAnchor.constraint(equalTo: nextButton.topAnchor, constant: -80),
+            sloganLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            
+            nextButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            nextButton.leftAnchor.constraint(equalTo: leftAnchor, constant: 20),
+            nextButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -20),
+            nextButton.heightAnchor.constraint(equalToConstant: 52)
         ])
     }
     
     public init() {
+        super.init(frame: .zero)
         setupContent()
         setupConstraints()
     }

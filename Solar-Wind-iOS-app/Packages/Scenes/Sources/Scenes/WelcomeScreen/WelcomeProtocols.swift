@@ -23,6 +23,7 @@ protocol WelcomeWorkingLogic {
     func fetch(_ completion: Welcome.fetchCompletion)
 }
 
+@MainActor
 protocol WelcomeDisplayLogic {
     func display(_ viewModel: Welcome.Fetch.ViewModel)
     func display(_ viewModel: Welcome.Next.ViewModel)

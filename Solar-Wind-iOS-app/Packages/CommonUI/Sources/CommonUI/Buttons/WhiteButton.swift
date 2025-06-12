@@ -30,7 +30,8 @@ public class WhiteButton: UIButton {
     
     public override func setTitle(_ title: String?, for state: UIControl.State) {
         super.setTitle(title, for: state)
-        titleLabel?.font = .size20Medium
+//        titleLabel?.font = .size20Medium
+        titleLabel?.font = .systemFont(ofSize: 20)
         setTitleColor(.black, for: .normal)
     }
     

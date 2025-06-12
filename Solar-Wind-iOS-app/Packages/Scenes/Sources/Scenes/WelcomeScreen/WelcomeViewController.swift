@@ -24,5 +24,21 @@ final class WelcomeViewController: UIViewController {
             }
         }
     }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        interactor?.request(Welcome.Fetch.Request())
+    }
 }
 
+extension WelcomeViewController: WelcomeDisplayLogic {
+    func display(_ viewModel: Welcome.Fetch.ViewModel) {
+        rootView.viewModel = viewModel.root
+    }
+    
+    func display(_ viewModel: Welcome.Next.ViewModel) {
+        router?.next()
+    }
+    
+    
+}
