@@ -1,0 +1,41 @@
+# macOS
+.DS_Store
+
+# Xcode
+*.xcuserstate
+*.xcscmblueprint
+*.xccheckout
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+
+# SwiftPM / Swift Package Manager
+/.build/
+/DerivedData/
+
+# User-specific settings
+*.swp
+*.swo
+*.orig
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+# Carthage
+Carthage/
+
+# Fastlane
+fastlane/report.xml
+fastlane/screenshots/
+fastlane/test_output/
+
+# Other
+.idea/
+.vscode/
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+*.xcarchive
+
+# Local config
+*.env
