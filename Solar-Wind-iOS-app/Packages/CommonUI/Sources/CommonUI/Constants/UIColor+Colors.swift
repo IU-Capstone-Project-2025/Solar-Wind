@@ -15,4 +15,8 @@ public extension UIColor {
     static var mainYellowColor: UIColor {
         UIColor(red: 251/255, green: 218/255, blue: 85/255, alpha: 1)
     }
+    
+    static var darkPinkColor: UIColor {
+        UIColor(red: 207/255, green: 51/255, blue: 172/255, alpha: 1)
+    }
 }

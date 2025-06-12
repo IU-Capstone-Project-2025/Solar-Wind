@@ -23,8 +23,8 @@ final class GradientBackgroundView: UIView {
 
     private func setupGradient() {
         gradientLayer.colors = [
-            UIColor.mainPinkColor.cgColor,
-            UIColor.mainYellowColor.cgColor
+            UIColor.mainYellowColor.cgColor,
+            UIColor.mainPinkColor.cgColor
         ]
         gradientLayer.locations = [0.1971, 1.0]
         gradientLayer.startPoint = CGPoint(x: 0.2, y: 0.0)
