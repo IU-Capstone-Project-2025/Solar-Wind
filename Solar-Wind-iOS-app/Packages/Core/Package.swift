@@ -4,29 +4,29 @@
 import PackageDescription
 
 let package = Package(
-    name: "Scenes",
+    name: "Core",
     platforms: [
         .iOS(.v16)
     ],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
-            name: "Scenes",
-            targets: ["Scenes"]),
+            name: "Core",
+            targets: ["Core"]),
     ],
     dependencies: [
-        .package(path: "../CommonUI"),
-        .package(path: "../Core"),
+        .package(url: "https://github.com/Alamofire/Alamofire.git", from: "5.6.4"),
+        .package(path: "../CommonModels")
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "Scenes",
+            name: "Core",
             dependencies: [
-                .byName(name: "CommonUI"),
-                .byName(name: "Core")
+                .product(name: "Alamofire", package: "Alamofire"),
+                .byName(name: "CommonModels")
             ]
-        )
+        ),
     ]
 )
