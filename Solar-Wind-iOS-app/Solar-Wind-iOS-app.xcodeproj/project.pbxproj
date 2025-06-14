@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		BC175F942DFACA0500C0F9FC /* Scenes in Frameworks */ = {isa = PBXBuildFile; productRef = BC175F932DFACA0500C0F9FC /* Scenes */; };
+		BC175FF02DFD6FFF00C0F9FC /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = BC175FEF2DFD6FFF00C0F9FC /* Alamofire */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,6 +76,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BC175F942DFACA0500C0F9FC /* Scenes in Frameworks */,
+				BC175FF02DFD6FFF00C0F9FC /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -146,6 +148,7 @@
 			name = "Solar-Wind-iOS-app";
 			packageProductDependencies = (
 				BC175F932DFACA0500C0F9FC /* Scenes */,
+				BC175FEF2DFD6FFF00C0F9FC /* Alamofire */,
 			);
 			productName = "Solar-Wind-iOS-app";
 			productReference = BC1651A72DF7016C0072E0D3 /* Solar-Wind-iOS-app.app */;
@@ -229,6 +232,9 @@
 			);
 			mainGroup = BC16519E2DF7016C0072E0D3;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				BC175FEE2DFD6FFF00C0F9FC /* XCRemoteSwiftPackageReference "Alamofire" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = BC1651A82DF7016C0072E0D3 /* Products */;
 			projectDirPath = "";
@@ -591,10 +597,26 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		BC175FEE2DFD6FFF00C0F9FC /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.10.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		BC175F932DFACA0500C0F9FC /* Scenes */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Scenes;
+		};
+		BC175FEF2DFD6FFF00C0F9FC /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BC175FEE2DFD6FFF00C0F9FC /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
