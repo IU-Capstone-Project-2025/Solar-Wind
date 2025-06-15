@@ -53,7 +53,7 @@ public class BaseRoundButton: UIButton {
                       delay: 0,
                       options: [.allowUserInteraction, .curveEaseOut],
                       animations: {
-            self.backgroundColor = .white
+//            self.backgroundColor = .white
             self.layer.shadowOpacity = 0.25
             self.transform = .identity
         }, completion: nil)

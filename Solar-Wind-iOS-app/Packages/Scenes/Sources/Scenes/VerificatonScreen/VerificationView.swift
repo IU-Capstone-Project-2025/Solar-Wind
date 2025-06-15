@@ -16,8 +16,8 @@ final class VerificationView: View {
     
     private let label: UILabel = {
         let view = UILabel()
-        view.text = "To continue, tap the button below. Your Telegram account data will be shared for authentication."
-        view.font = .size24Medium
+        view.text = "To continue, tap the button below.\nYour Telegram account data will be shared for authentication."
+        view.font = .size20Medium
         view.textColor = .black
         view.numberOfLines = 0
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -39,6 +39,8 @@ final class VerificationView: View {
         return view
     }()
     
+    private lazy var header = addGradientHeader()
+    
     override func setupContent() {
         backgroundColor = .white
         addSubview(label)
@@ -47,13 +49,14 @@ final class VerificationView: View {
     
     override func setupConstraints() {
         NSLayoutConstraint.activate([
-            label.topAnchor.constraint(equalTo: topAnchor, constant: 50),
+            label.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 200),
             label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             label.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             
             linkButton.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 30),
             linkButton.leftAnchor.constraint(equalTo: leftAnchor, constant: 20),
-            linkButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -20)
+            linkButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -20),
+            linkButton.heightAnchor.constraint(equalToConstant: 52)
         ])
     }
 }

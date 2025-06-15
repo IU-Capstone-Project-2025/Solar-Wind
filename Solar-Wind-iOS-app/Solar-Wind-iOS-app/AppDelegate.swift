@@ -7,6 +7,7 @@
 
 import UIKit
 import Scenes
+import CommonUI
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -14,7 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
-        let vc = WelcomeBuilder.build()
+        let vc = NavigationController(rootViewController: WelcomeBuilder.build())
         window?.rootViewController = vc
         window?.makeKeyAndVisible()
         return true

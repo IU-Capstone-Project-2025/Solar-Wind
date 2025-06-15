@@ -17,7 +17,7 @@ final class VerificationViewController: UIViewController {
             guard let self else { return }
             switch action {
             case .openTelegram:
-                
+                return
             }
         }
     }
