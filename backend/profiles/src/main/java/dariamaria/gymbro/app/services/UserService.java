@@ -1,6 +1,6 @@
 package dariamaria.gymbro.app.services;
 
-import dariamaria.gymbro.app.dto.UsersDto;
+import com.solarwind.dto.UsersDto;
 
 import java.util.List;
 

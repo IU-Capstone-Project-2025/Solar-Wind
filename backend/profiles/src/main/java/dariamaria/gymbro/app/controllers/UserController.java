@@ -1,6 +1,7 @@
 package dariamaria.gymbro.app.controllers;
 
-import dariamaria.gymbro.app.dto.UsersDto;
+import com.solarwind.dto.LikesDto;
+import com.solarwind.dto.UsersDto;
 import dariamaria.gymbro.app.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api")
 public class UserController {
     @Autowired
     private UserService service;
@@ -15,9 +17,9 @@ public class UserController {
     public UsersDto createUser(@RequestBody UsersDto dto) {
         return service.createUser(dto);
     }
-    @GetMapping("/")
+    @GetMapping("/hello")
     public String hello() {
-        return "Hello Дарияяяяяяяя!";
+        return "Hello Solar Wind!";
     }
     @GetMapping("/getUserById")
     public UsersDto getUserById(@RequestParam long id) {

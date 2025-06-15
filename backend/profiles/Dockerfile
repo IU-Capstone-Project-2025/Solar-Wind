@@ -2,6 +2,8 @@ FROM eclipse-temurin:21-jdk-alpine AS dependencies
 WORKDIR /app
 COPY pom.xml mvnw ./
 COPY .mvn .mvn
+RUN echo "===== ls -la in /app =====" && ls -la /app && file ./mvnw
+RUN chmod +x mvnw
 RUN ./mvnw dependency:go-offline -B
 
 FROM eclipse-temurin:21-jdk-alpine AS build

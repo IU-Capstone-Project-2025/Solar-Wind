@@ -1,14 +1,14 @@
-package dariamaria.gymbro.app.models;
+package com.solarwind.models;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum Roles {
-    USER ("user"),
-    ADMIN ("admin");
+public enum Gender {
+    MALE ("male"),
+    FEMALE ("female");
 
     private final String name;
 
-    private Roles(String s) {
+    private Gender(String s) {
         name = s;
     }
 

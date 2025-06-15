@@ -1,8 +1,8 @@
 package dariamaria.gymbro.app.services.implementation;
 
-import dariamaria.gymbro.app.dto.UsersDto;
-import dariamaria.gymbro.app.dto.mappers.UserMapper;
-import dariamaria.gymbro.app.models.Users;
+import com.solarwind.dto.UsersDto;
+import dariamaria.gymbro.app.mappers.UserMapper;
+import com.solarwind.models.Users;
 import dariamaria.gymbro.app.repositories.UserRepository;
 import dariamaria.gymbro.app.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
