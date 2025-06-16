@@ -6,11 +6,13 @@
 //
 
 final class WelcomePresenter: WelcomePresentationLogic {
+    var router: WelcomeRoutingLogic?
+    
     func present(_ response: Welcome.Fetch.Response) {
     
     }
     
     func present(_ response: Welcome.Next.Response) {
-        
+        router?.next()
     }
 }

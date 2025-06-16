@@ -36,6 +36,7 @@ public final class APIClient: @unchecked Sendable {
             case .success(let value):
                 completion(.success(value))
             case .failure(let error):
+                print(error)
                 completion(.failure(AppError.from(error)))
             }
         }

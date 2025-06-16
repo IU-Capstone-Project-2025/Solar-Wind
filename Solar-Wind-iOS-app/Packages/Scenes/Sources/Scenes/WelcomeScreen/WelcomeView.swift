@@ -8,7 +8,7 @@
 import UIKit
 import CommonUI
 
-final class WelcomeView: UIView {
+final class WelcomeView: View {
     enum Action {
         case next
     }
@@ -65,7 +65,7 @@ final class WelcomeView: UIView {
         return view
     }()
     
-    private func setupContent() {
+    override func setupContent() {
         addGradientBackgroundView()
         addSubview(logoImageView)
         addSubview(sloganLabel)
@@ -73,7 +73,7 @@ final class WelcomeView: UIView {
         addSubview(nameLabel)
     }
     
-    private func setupConstraints() {
+    override func setupConstraints() {
         NSLayoutConstraint.activate([
             logoImageView.widthAnchor.constraint(equalToConstant: 260),
             logoImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
@@ -91,15 +91,5 @@ final class WelcomeView: UIView {
             nextButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -20),
             nextButton.heightAnchor.constraint(equalToConstant: 52)
         ])
-    }
-    
-    public init() {
-        super.init(frame: .zero)
-        setupContent()
-        setupConstraints()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }

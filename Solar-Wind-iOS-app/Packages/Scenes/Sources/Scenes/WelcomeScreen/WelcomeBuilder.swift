@@ -10,11 +10,15 @@ import UIKit
 public final class WelcomeBuilder {
     @MainActor public static func build() -> UIViewController {
         let vc = WelcomeViewController()
+        let presenter = WelcomePresenter()
+        let worker = WelcomeWorker()
         let interactor = WelcomeInteractor(
-            presenter: WelcomePresenter(),
-            worker: WelcomeWorker()
+            presenter: presenter,
+            worker: worker
         )
         let router = WelcomeRouter()
+        router.vc = vc
+        presenter.router = router
         vc.interactor = interactor
         vc.router = router
         return vc

@@ -13,14 +13,6 @@ final class WelcomeInteractor: WelcomeBusinessLogic {
     }
     
     func request(_ requst: Welcome.Next.Request) {
-        APIClient.shared.send(TestRequest()) { result in
-            switch result {
-            case .success(let response):
-                print(response)
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
-        }
         presenter.present(Welcome.Next.Response())
     }
     
