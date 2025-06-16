@@ -8,6 +8,8 @@
 import UIKit
 
 final class VerificationViewController: UIViewController {
+    var router: VerificationRoutingLogic?
+    
     private lazy var rootView = VerificationView()
     
     override func loadView() {
@@ -17,7 +19,7 @@ final class VerificationViewController: UIViewController {
             guard let self else { return }
             switch action {
             case .openTelegram:
-                return
+                router?.toCity()
             }
         }
     }
