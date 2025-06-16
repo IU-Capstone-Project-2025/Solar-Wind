@@ -1,6 +1,5 @@
 package dariamaria.gymbro.app.controllers;
 
-import com.solarwind.dto.LikesDto;
 import com.solarwind.dto.UsersDto;
 import dariamaria.gymbro.app.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
