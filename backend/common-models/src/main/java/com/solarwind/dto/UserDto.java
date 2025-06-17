@@ -1,7 +1,6 @@
 package com.solarwind.dto;
 
 import com.solarwind.models.Gender;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,11 +8,10 @@ import java.util.Set;
 
 @Data
 @NoArgsConstructor
-public class UsersDto {
+public class UserDto {
     Long id;
-    @NotBlank
-    String username;
     Long telegramId;
+    String username;
     String firstName;
     String lastName;
     Integer age;
@@ -22,7 +20,5 @@ public class UsersDto {
     Gender preferredGender;
     String city;
     String preferredGymTime;
-
     Set<String> sportNames;
-
 }

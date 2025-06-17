@@ -14,7 +14,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Users {
+public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)
@@ -41,13 +41,9 @@ public class Users {
     String city;
     @Column(name = "preferred_gym_time")
     private String preferredGymTime;
-    @ManyToMany
-    @JoinTable(
-            name = "sports",
-            joinColumns = @JoinColumn(name = "users_id"),
-            inverseJoinColumns = @JoinColumn(name = "sport_types_id")
-    )
-    private Set<SportTypes> sports = new HashSet<>();
+    @ElementCollection
+    @CollectionTable(name="sports")
+    private Set<String> sports = new HashSet<>();
     @PrePersist
     public void prePersist() {
         if (this.gender == null) {

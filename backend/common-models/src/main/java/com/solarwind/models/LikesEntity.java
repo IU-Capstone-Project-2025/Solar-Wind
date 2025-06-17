@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Likes {
+public class LikesEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -19,12 +19,12 @@ public class Likes {
     // First user
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "liker_id_first", nullable = false)
-    private Users likerFirst;
+    private UserEntity likerFirst;
 
     // Second user
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "liker_id_second", nullable = false)
-    private Users likerSecond;
+    private UserEntity likerSecond;
 
     // Solution of like for first
     @Column(name = "is_first_likes", nullable = false)

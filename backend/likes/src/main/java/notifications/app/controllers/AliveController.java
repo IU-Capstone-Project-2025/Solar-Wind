@@ -1,4 +1,4 @@
-package likes.app.controllers;
+package notifications.app.controllers;
 
 import org.springframework.web.bind.annotation.*;
 

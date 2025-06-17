@@ -1,8 +1,9 @@
 package dariamaria.gymbro.app.services.implementation;
 
-import com.solarwind.dto.UsersDto;
+import com.solarwind.dto.UserDto;
+import com.solarwind.models.UserEntity;
+import dariamaria.gymbro.app.component.SportTypeHelper;
 import dariamaria.gymbro.app.mappers.UserMapper;
-import com.solarwind.models.Users;
 import dariamaria.gymbro.app.repositories.UserRepository;
 import dariamaria.gymbro.app.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,20 +18,24 @@ public class UserServiceImp implements UserService {
     private UserRepository repository;
     @Autowired
     private UserMapper mapper;
+    @Autowired
+    private SportTypeHelper sportHelper;
     @Override
-    public UsersDto createUser(UsersDto dto) {
-        Users user = mapper.mapToUsersEntity(dto);
+    public UserDto createUser(UserDto dto) {
+        UserEntity user = mapper.mapToUsersEntity(dto);
         repository.save(user);
         return dto;
     }
     @Override
-    public UsersDto getByUserId(long id) {
+    public UserDto getByUserId(long id) {
         return mapper.mapToUsersDto(repository.getById(id));
     }
 
     @Override
-    public List<UsersDto> getUsers() {
-        return repository.findAll().stream().map(mapper::mapToUsersDto)
+    public List<UserDto> getUsers() {
+        return repository.findAll()
+                .stream()
+                .map(user -> mapper.mapToUsersDto(user))
                 .collect(Collectors.toList());
     }
 

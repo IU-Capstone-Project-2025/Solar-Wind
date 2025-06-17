@@ -1,10 +1,10 @@
-package com.example.demo;
+package notifications.app;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class DeckShuffleApplicationTests {
+class NotificationsApplicationTests {
 
 	@Test
 	void contextLoads() {
