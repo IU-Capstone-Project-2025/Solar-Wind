@@ -1,43 +1,51 @@
 version: '3.8'
 
 services:
-  postgres:
-    image: postgres:17
-    environment:
-      POSTGRES_DB: gymbroDB
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    ports:
-      - "5440:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
-  profileService:
-    build: ./profiles
-    image: profiles_service:latest
-    depends_on:
-      - postgres
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/gymbroDB
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: postgres
-    ports:
-      - "8080:8080"
+#  postgres:
+#    image: postgres:17
+#    environment:
+#      POSTGRES_DB: gymbroDB
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: postgres
+#    ports:
+#      - "5440:5432"
+#    volumes:
+#      - postgres_data:/var/lib/postgresql/data
+#
+#  profileService:
+#    build:
+#      context: ./profiles/
+#      dockerfile: ../Dockerfile
+#    image: profiles_service:latest
+#    depends_on:
+#      - postgres
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/gymbroDB
+#      SPRING_DATASOURCE_USERNAME: postgres
+#      SPRING_DATASOURCE_PASSWORD: postgres
+#    ports:
+#      - "8080:8080"
 
   likesService:
-    build: ./likes
+    build:
+      context: ./likes/
+      dockerfile: ../Dockerfile
     image: likes_service:latest
     ports:
       - "8081:8080"
 
   notificationsService:
-    build: ./notifications
+    build:
+      context: ./notifications/
+      dockerfile: ../Dockerfile
     image: notifications_service:latest
     ports:
       - "8082:8080"
 
   deckShufflingService:
-    build: ./deckShuffle
+    build:
+      context: ./deckShuffle/
+      dockerfile: ../Dockerfile
     image: deck_shuffle_service:latest
     ports:
       - "8083:8080"
