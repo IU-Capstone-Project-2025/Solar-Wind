@@ -18,12 +18,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 @RestController
 @RequestMapping("/auth/telegram")
 public class AuthController {
-
     private final String tgBotToken = "7727350068:AAFDInaLmrhRlVT4EXOp3R_QT2ToupoNEA8";
 
-    /**
-     * возвращает html со скриптом для аутентификации
-     */
     @GetMapping
     public ResponseEntity<Resource> getAuthScript() {
         Resource resource = new ClassPathResource("login/login.html");

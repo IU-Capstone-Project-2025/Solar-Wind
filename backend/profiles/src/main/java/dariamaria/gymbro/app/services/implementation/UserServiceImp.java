@@ -2,7 +2,6 @@ package dariamaria.gymbro.app.services.implementation;
 
 import com.solarwind.dto.UserDto;
 import com.solarwind.models.UserEntity;
-import dariamaria.gymbro.app.component.SportTypeHelper;
 import dariamaria.gymbro.app.mappers.UserMapper;
 import dariamaria.gymbro.app.repositories.UserRepository;
 import dariamaria.gymbro.app.services.UserService;
@@ -18,8 +17,6 @@ public class UserServiceImp implements UserService {
     private UserRepository repository;
     @Autowired
     private UserMapper mapper;
-    @Autowired
-    private SportTypeHelper sportHelper;
     @Override
     public UserDto createUser(UserDto dto) {
         UserEntity user = mapper.mapToUsersEntity(dto);
