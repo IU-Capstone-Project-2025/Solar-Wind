@@ -2,8 +2,6 @@ package likes.app.controllers;
 
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 public class AliveController {
     @GetMapping("/")

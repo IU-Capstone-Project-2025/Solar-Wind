@@ -1,30 +1,31 @@
 package dariamaria.gymbro.app.controllers;
 
-import dariamaria.gymbro.app.dto.UsersDto;
-import dariamaria.gymbro.app.services.UserService;
+import com.solarwind.dto.UserDto;
+import dariamaria.gymbro.app.services.UserManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/api")
 public class UserController {
     @Autowired
-    private UserService service;
+    private UserManagementService service;
     @PostMapping("/createUser")
-    public UsersDto createUser(@RequestBody UsersDto dto) {
+    public UserDto createUser(@RequestBody UserDto dto) {
         return service.createUser(dto);
     }
-    @GetMapping("/")
+    @GetMapping("/hello")
     public String hello() {
-        return "Hello Дарияяяяяяяя!";
+        return "Hello Solar Wind!";
     }
     @GetMapping("/getUserById")
-    public UsersDto getUserById(@RequestParam long id) {
+    public UserDto getUserById(@RequestParam long id) {
         return service.getByUserId(id);
     }
     @GetMapping("/getUsers")
-    public List<UsersDto> getUsers() {
+    public List<UserDto> getUsers() {
         return service.getUsers();
     }
     @DeleteMapping("/deleteUserById")

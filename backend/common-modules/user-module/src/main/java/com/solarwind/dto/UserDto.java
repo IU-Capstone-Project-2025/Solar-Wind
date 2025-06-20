@@ -1,0 +1,24 @@
+package com.solarwind.dto;
+
+import com.solarwind.models.Gender;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.Set;
+
+@Data
+@NoArgsConstructor
+public class UserDto {
+    Long id;
+    Long telegramId;
+    String username;
+    String firstName;
+    String lastName;
+    Integer age;
+    Gender gender;
+    Boolean verified;
+    Gender preferredGender;
+    String city;
+    String preferredGymTime;
+    Set<String> sportNames;
+}
