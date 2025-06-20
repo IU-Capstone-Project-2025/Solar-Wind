@@ -8,7 +8,7 @@ public enum Gender {
 
     private final String name;
 
-    private Gender(String s) {
+    Gender(String s) {
         name = s;
     }
 
