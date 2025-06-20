@@ -1,4 +1,4 @@
-package dariamaria.gymbro.app;
+package likes.app;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,11 +9,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication
 @EnableJpaRepositories(basePackages = {"com.solarwind.repositories"})
 @EntityScan(basePackages = {"com.solarwind.models"})
-@ComponentScan(basePackages = {"com.solarwind", "com.solarwind.services", "com.solarwind.mappers", "dariamaria.gymbro.app"})
-public class ProfileApplication {
+@ComponentScan(basePackages = {"com.solarwind", "likes.app"})
+public class LikesApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ProfileApplication.class, args);
+		SpringApplication.run(LikesApplication.class, args);
 	}
 
 }

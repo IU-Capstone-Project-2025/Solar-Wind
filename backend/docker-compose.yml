@@ -12,13 +12,13 @@ services:
   postgres:
     image: postgres:17
     environment:
-      POSTGRES_DB: gymbroDB
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
       - "5440:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./init-db:/docker-entrypoint-initdb.d
 
   profileService:
     build:
@@ -28,7 +28,7 @@ services:
     depends_on:
       - postgres
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/gymbroDB
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/gymbrodb
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
     ports:
@@ -42,6 +42,10 @@ services:
     depends_on:
       - postgres
       # - kafka
+    environment:
+      SPRING_LIKES_DATASOURCE_URL: jdbc:postgresql://postgres:5432/likesdb
+      SPRING_LIKES_DATASOURCE_USERNAME: postgres
+      SPRING_LIKES_DATASOURCE_PASSWORD: postgres
     ports:
       - "8081:8080"
 
