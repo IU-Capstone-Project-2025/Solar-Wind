@@ -1,4 +1,4 @@
-package dariamaria.gymbro.app.repositories;
+package com.solarwind.repositories;
 
 import com.solarwind.models.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,4 +1,4 @@
-package com.solarwind.dto;
+package dariamaria.gymbro.app.dto;
 public record TelegramAuthRequest(
         Long id,
         String first_name,

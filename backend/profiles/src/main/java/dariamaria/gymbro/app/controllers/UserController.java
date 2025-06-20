@@ -1,7 +1,7 @@
 package dariamaria.gymbro.app.controllers;
 
 import com.solarwind.dto.UserDto;
-import dariamaria.gymbro.app.services.UserService;
+import dariamaria.gymbro.app.services.UserManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,7 +11,7 @@ import java.util.List;
 @RequestMapping("/api")
 public class UserController {
     @Autowired
-    private UserService service;
+    private UserManagementService service;
     @PostMapping("/createUser")
     public UserDto createUser(@RequestBody UserDto dto) {
         return service.createUser(dto);

@@ -14,7 +14,7 @@
     <description>Parent for all Solarwind modules</description>
 
     <modules>
-        <module>common-models</module>
+        <module>common-modules</module>
         <module>likes</module>
         <module>deckShuffle</module>
         <module>notifications</module>
@@ -66,6 +66,13 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>1.5.5.Final</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

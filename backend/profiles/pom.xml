@@ -37,14 +37,8 @@
 
 		<dependency>
 			<groupId>com.solarwind</groupId>
-			<artifactId>common-models</artifactId>
+			<artifactId>user-module</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.mapstruct</groupId>
-			<artifactId>mapstruct</artifactId>
-			<version>1.5.5.Final</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api -->

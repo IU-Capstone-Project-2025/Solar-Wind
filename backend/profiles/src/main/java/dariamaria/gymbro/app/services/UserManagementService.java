@@ -1,13 +1,9 @@
 package dariamaria.gymbro.app.services;
 
 import com.solarwind.dto.UserDto;
+import com.solarwind.services.UserRetrievalService;
 
-import java.util.List;
-
-public interface UserService {
+public interface UserManagementService extends UserRetrievalService {
     UserDto createUser(UserDto dto);
-    UserDto getByUserId(long id);
-    List<UserDto> getUsers();
-
     void deleteUserById(long id);
 }

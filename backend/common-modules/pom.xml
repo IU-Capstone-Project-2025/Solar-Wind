@@ -9,11 +9,15 @@
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>common-models</artifactId>
+    <artifactId>common-modules</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
     <name>common-models</name>
     <description>Shared DTOs and entities for GymBro microservices</description>
+    <modules>
+        <module>likes-module</module>
+        <module>user-module</module>
+    </modules>
 
     <dependencies>
         <dependency>
@@ -38,6 +42,14 @@
             <groupId>jakarta.persistence</groupId>
             <artifactId>jakarta.persistence-api</artifactId>
             <version>3.1.0</version> <!-- или совместимая с твоим стеком -->
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jpa</artifactId>
         </dependency>
     </dependencies>
 
