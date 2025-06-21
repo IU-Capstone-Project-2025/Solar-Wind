@@ -19,6 +19,8 @@ public class BaseRoundButton: UIButton {
         }
     }
     
+    internal weak var gradientView: GradientBackgroundView?
+    
     public func setup() {
         layer.cornerRadius = 20
         layer.shadowColor = UIColor.black.cgColor
@@ -44,6 +46,7 @@ public class BaseRoundButton: UIButton {
                       animations: {
 //            self.backgroundColor = UIColor(white: 0.85, alpha: 1.0)
             self.layer.shadowOpacity = 0.15
+            self.gradientView?.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
             self.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
         }, completion: nil)
     }
@@ -55,6 +58,7 @@ public class BaseRoundButton: UIButton {
                       animations: {
 //            self.backgroundColor = .white
             self.layer.shadowOpacity = 0.25
+            self.gradientView?.transform = .identity
             self.transform = .identity
         }, completion: nil)
     }

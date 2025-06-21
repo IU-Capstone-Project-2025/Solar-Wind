@@ -1,16 +1,16 @@
 //
-//  ChooseTimeViewController.swift
+//  FillAboutMeViewController.swift
 //  Scenes
 //
-//  Created by Даша Николаева on 16.06.2025.
+//  Created by Даша Николаева on 21.06.2025.
 //
 
 import UIKit
 
-final class ChooseTimeViewController: UIViewController {
-    var router: ChooseTimeRouter?
+final class FillAboutMeViewController: UIViewController {
+    var router: FillAboutMeRouter?
     
-    private lazy var rootView = ChooseTimeView()
+    private lazy var rootView = FillAboutMeView()
     
     override func loadView() {
         view = rootView

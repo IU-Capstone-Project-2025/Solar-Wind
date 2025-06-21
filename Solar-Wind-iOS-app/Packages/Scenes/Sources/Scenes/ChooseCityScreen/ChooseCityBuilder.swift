@@ -10,6 +10,14 @@ import UIKit
 final class ChooseCityBuilder {
     @MainActor public static func build() -> UIViewController {
         let vc = ChooseCityViewController()
+        let worker = ChooseCityWorker()
+        let presenter = ChooseCityPresenter()
+        let router = ChooseCityRouter()
+        router.vc = vc
+        presenter.router = router
+        let interactor = ChooseCityInteractor(presenter: presenter, worker: worker)
+        vc.interactor = interactor
+        vc.router = router
         return vc
     }
 }
