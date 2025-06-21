@@ -23,7 +23,6 @@ public class SearchView: UIView {
         textField.clearButtonMode = .whileEditing
         textField.autocorrectionType = .no
         textField.delegate = self
-        setupGradientBorder()
         return textField
     }()
     
