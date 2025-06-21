@@ -17,7 +17,7 @@ final class FillAboutMeView: View {
     private lazy var header = addGradientHeader(text: "Before you start...")
     
     private lazy var nextButton: UIButton = {
-        let button = PurpleButton()
+        let button = GradientButton()
         button.title = "Continue"
         button.addAction(
             UIAction(handler:

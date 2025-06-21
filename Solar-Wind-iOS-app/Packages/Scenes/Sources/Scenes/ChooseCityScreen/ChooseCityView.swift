@@ -40,7 +40,7 @@ class ChooseCityView: View {
     }()
     
     private lazy var nextButton: UIButton = {
-        let button = PurpleButton()
+        let button = GradientButton()
         button.title = "Continue"
         button.addAction(
             UIAction(

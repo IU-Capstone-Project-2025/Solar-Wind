@@ -11,6 +11,7 @@ public extension UIView {
     func addGradientBackgroundView() {
         let bg = GradientBackgroundView()
         bg.translatesAutoresizingMaskIntoConstraints = false
+        bg.isUserInteractionEnabled = false
         insertSubview(bg, at: 0)
         bg.clipsToBounds = true
         bg.layer.cornerRadius = layer.cornerRadius
