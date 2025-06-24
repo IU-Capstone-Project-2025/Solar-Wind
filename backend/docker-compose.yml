@@ -46,6 +46,7 @@ services:
       SPRING_LIKES_DATASOURCE_URL: jdbc:postgresql://postgres:5432/likesdb
       SPRING_LIKES_DATASOURCE_USERNAME: postgres
       SPRING_LIKES_DATASOURCE_PASSWORD: postgres
+      NOTIFICATION_SERVICE_URL: "http://localhost:8082"
     ports:
       - "8081:8080"
 

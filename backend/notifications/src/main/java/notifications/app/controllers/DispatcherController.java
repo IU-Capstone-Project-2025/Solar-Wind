@@ -26,9 +26,11 @@ public class DispatcherController {
 
     @PostMapping("/")
     public void publish(@RequestParam Long user1, @RequestParam Long user2) {
-        if (!allNotifications.containsKey(user1)) {
-            allNotifications.put(user1, new ArrayList<>());
+        for (var user : new Long[]{user1, user2}) {
+            if (!allNotifications.containsKey(user)) {
+                allNotifications.put(user, new ArrayList<>());
+            }
+            allNotifications.get(user).add(new NotificationDto("You have the match!", user1, user2));
         }
-        allNotifications.get(user1).add(new NotificationDto("You have the match!", user1, user2));
     }
 }
