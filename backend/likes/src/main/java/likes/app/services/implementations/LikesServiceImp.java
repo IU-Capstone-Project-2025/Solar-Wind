@@ -6,9 +6,10 @@ import com.solarwind.models.LikesCompositePrimaryKey;
 import com.solarwind.models.LikesEntity;
 import com.solarwind.repositories.LikesRepository;
 import likes.app.infrastructure.notifier.MatchNotificationPort;
-import likes.app.infrastructure.notifier.kafka.KafkaMatchNotifier;
+import likes.app.infrastructure.notifier.http.HttpMatchNotifier;
 import likes.app.services.LikesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
@@ -22,11 +23,8 @@ public class LikesServiceImp implements LikesService {
     private LikesMapper mapper;
     private MatchNotificationPort matchNotificationPort;
 
-    public LikesServiceImp(MatchNotificationPort matchNotificationPort) {
+    public LikesServiceImp(@Qualifier("httpNotifier") MatchNotificationPort matchNotificationPort) {
         this.matchNotificationPort = matchNotificationPort;
-    }
-    public LikesServiceImp() {
-        this.matchNotificationPort = new KafkaMatchNotifier();
     }
 
     // TODO: fix SRP violation
