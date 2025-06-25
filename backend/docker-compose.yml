@@ -1,7 +1,6 @@
 version: '3.8'
 
 services:
-
   postgres:
     image: postgres:17
     environment:
@@ -20,6 +19,7 @@ services:
     image: profiles_service:latest
     depends_on:
       - postgres
+      - deckShufflingService
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/gymbrodb
       SPRING_DATASOURCE_USERNAME: postgres
@@ -34,11 +34,12 @@ services:
     image: likes_service:latest
     depends_on:
       - postgres
-      # - kafka
+      - notificationsService
     environment:
       SPRING_LIKES_DATASOURCE_URL: jdbc:postgresql://postgres:5432/likesdb
       SPRING_LIKES_DATASOURCE_USERNAME: postgres
       SPRING_LIKES_DATASOURCE_PASSWORD: postgres
+      NOTIFICATION_SERVICE_URL: "http://notifications:8080"
     ports:
       - "8081:8080"
 
@@ -46,6 +47,7 @@ services:
     build:
       context: ./notifications/
       dockerfile: ../Dockerfile
+    container_name: notifications
     image: notifications_service:latest
 #    depends_on:
 #       - kafka
@@ -56,6 +58,7 @@ services:
     build:
       context: ./deckShuffle/
       dockerfile: ../Dockerfile
+    container_name: deck_shuffle
     image: deck_shuffle_service:latest
     depends_on:
       - postgres
