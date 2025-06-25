@@ -9,10 +9,14 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", uses = MapperHelper.class)
 public interface UserMapper {
+
     @Mapping(target = "sportId", source = "sports")
     @Mapping(target = "cityId", source = "city")
+    @Mapping(target = "preferredGymTime", source = "preferredGymTime", qualifiedByName = "mapGymTimeFromBits")
     UserDto mapToUsersDto(UserEntity user);
+
     @Mapping(target = "sports", source = "sportId")
     @Mapping(target = "city", source = "cityId")
+    @Mapping(target = "preferredGymTime", source = "preferredGymTime", qualifiedByName = "mapGymTimeToBits")
     UserEntity mapToUsersEntity(UserDto dto);
 }

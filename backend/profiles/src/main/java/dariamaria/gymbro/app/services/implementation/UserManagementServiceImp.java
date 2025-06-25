@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserManagementServiceImp extends UserRetrievalServiceImp implements UserManagementService {
     @Override
-    public UserDto createUser(UserDto dto) {
+    public Long createUser(UserDto dto) {
         UserEntity user = mapper.mapToUsersEntity(dto);
         repository.save(user);
-        return dto;
+        return repository.findIdByUsername(user.getUsername());
     }
 
     @Override

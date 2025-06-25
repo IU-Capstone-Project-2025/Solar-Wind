@@ -25,6 +25,8 @@ public class UserEntity {
     String firstName;
     @Column(name = "last_name")
     String lastName;
+    @Column(name = "description")
+    String description;
     @Column(name = "age")
     Integer age;
     @Enumerated(EnumType.STRING)
@@ -39,7 +41,7 @@ public class UserEntity {
     @JoinColumn(name = "city_id")
     CityEntity city;
     @Column(name = "preferred_gym_time")
-    private String preferredGymTime;
+    Integer preferredGymTime;
     @ManyToMany
     @JoinTable(
             name = "user_sport",

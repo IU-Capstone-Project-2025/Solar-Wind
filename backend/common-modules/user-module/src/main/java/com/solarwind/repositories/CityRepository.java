@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface CityRepository extends JpaRepository<CityEntity, Long> {
-    @Query(value = "SELECT * FROM city WHERE city_name ILIKE CONCAT(:word, '%')",
+    @Query(value = "SELECT * FROM city WHERE city_name ILIKE CONCAT(:word, '%') LIMIT 10",
             nativeQuery = true)
     public List<CityEntity> findByWord(@Param("word") String word);
 }

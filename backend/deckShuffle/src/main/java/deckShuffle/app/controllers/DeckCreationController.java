@@ -17,8 +17,7 @@ public class DeckCreationController {
     private DeckCreationService service;
 
     @GetMapping("/create-deck")
-    public List<Long> createDeck(@RequestParam Long id) {
-        System.out.println(id);
+    public List<UserDto> createDeck(@RequestParam Long id) {
         return service.createDeck(id);
     }
 }

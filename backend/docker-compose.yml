@@ -19,9 +19,9 @@ services:
     image: profiles_service:latest
     depends_on:
       - postgres
-      - deckShufflingService
+#      - deckShufflingService
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/gymbrodb
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/gymbroDB
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
     ports:
@@ -63,9 +63,9 @@ services:
     depends_on:
       - postgres
     environment:
-      SPRING_LIKES_DATASOURCE_URL: jdbc:postgresql://postgres:5432/likesdb
-      SPRING_LIKES_DATASOURCE_USERNAME: postgres
-      SPRING_LIKES_DATASOURCE_PASSWORD: postgres
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/gymbroDB
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
     ports:
       - "8083:8080"
 

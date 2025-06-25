@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface SportRepository extends JpaRepository<SportEntity, Long> {
-    @Query(value = "SELECT * FROM sport WHERE sport_type ILIKE CONCAT(:word, '%')",
+    @Query(value = "SELECT * FROM sport WHERE sport_type ILIKE CONCAT(:word, '%') LIMIT 10",
             nativeQuery = true)
     public List<SportEntity> findByWord(@Param("word") String word);
 }

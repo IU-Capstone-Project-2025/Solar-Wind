@@ -13,7 +13,7 @@ public class UserController {
     @Autowired
     private UserManagementService service;
     @PostMapping("/createUser")
-    public UserDto createUser(@RequestBody UserDto dto) {
+    public Long createUser(@RequestBody UserDto dto) {
         return service.createUser(dto);
     }
     @GetMapping("/hello")

@@ -20,14 +20,14 @@ public class DeckCreationServiceImp implements DeckCreationService {
     private UserMapper mapper;
 
     @Override
-    public List<Long> createDeck(Long user_id) {
+    public List<UserDto> createDeck(Long user_id) {
         UserDto initialUser = mapper.mapToUsersDto(userRepository.findById(user_id)
                 .orElseThrow(() -> new RuntimeException("User not found")));
 
-        List<Long> matched_users = userRepository.createDeck(initialUser.getGender().toString(),
+        return userRepository.createDeckAllSettings(initialUser.getGender().toString(),
                 initialUser.getPreferredGender().toString(),
-                initialUser.getCityId(), initialUser.getAge(), initialUser.getId());
-        return matched_users;
+                initialUser.getCityId(), initialUser.getAge(), initialUser.getId()).stream().map(user ->
+                mapper.mapToUsersDto(user)).toList();
     }
 
     //Процент схожести интересов

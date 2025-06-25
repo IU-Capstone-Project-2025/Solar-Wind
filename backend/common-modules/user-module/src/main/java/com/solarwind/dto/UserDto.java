@@ -14,11 +14,12 @@ public class UserDto {
     String username;
     String firstName;
     String lastName;
+    String description;
     Integer age;
     Gender gender;
     Boolean verified;
     Gender preferredGender;
     Long cityId;
-    String preferredGymTime;
+    List<Integer> preferredGymTime;
     List<Long> sportId;
 }
