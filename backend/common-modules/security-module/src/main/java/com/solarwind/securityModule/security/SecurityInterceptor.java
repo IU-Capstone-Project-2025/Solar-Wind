@@ -17,22 +17,23 @@ public class SecurityInterceptor implements HandlerInterceptor {
             @NonNull HttpServletResponse response,
             @NonNull Object handler
     ) throws Exception {
-        if (handler instanceof HandlerMethod handlerMethod) {
-            Secured secured = handlerMethod.getMethodAnnotation(Secured.class);
-            if (secured == null) {
-                secured = handlerMethod.getBeanType().getAnnotation(Secured.class);
-            }
+        if (!(handler instanceof HandlerMethod handlerMethod)) {
+            return true;
+        }
+        Secured secured = handlerMethod.getMethodAnnotation(Secured.class);
+        if (secured == null) {
+            secured = handlerMethod.getBeanType().getAnnotation(Secured.class);
+        }
+        if (secured == null) {
+            return true;
+        }
+        Class<? extends TokenSourceReader> tokenSourceClass = secured.value();
+        TokenSourceReader tokenSource = tokenSourceClass.getDeclaredConstructor().newInstance();
 
-            if (secured != null) {
-                Class<? extends TokenSourceReader> tokenSourceClass = secured.value();
-                TokenSourceReader tokenSource = tokenSourceClass.getDeclaredConstructor().newInstance();
-
-                TokenData tokenData = tokenSource.extractToken(request);
-                if (tokenData == null || !tokenSource.isValid(tokenData)) {
-                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token");
-                    return false;
-                }
-            }
+        TokenData tokenData = tokenSource.extractToken(request);
+        if (tokenData == null || !tokenSource.isValid(tokenData)) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token");
+            return false;
         }
         return true;
     }
