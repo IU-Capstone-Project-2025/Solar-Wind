@@ -6,14 +6,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Data
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
+@Table(name = "users")
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -21,7 +19,7 @@ public class UserEntity {
     Long id;
     @Column(name = "telegram_id")
     Long telegramId;
-    @Column(unique = true, nullable = false, name = "username")
+    @Column(unique = true, name = "username")
     String username;
     @Column(name = "first_name")
     String firstName;
@@ -37,13 +35,18 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     @Column (name = "preferred_gender")
     Gender preferredGender;
-    @Column(name = "city")
-    String city;
+    @ManyToOne
+    @JoinColumn(name = "city_id")
+    CityEntity city;
     @Column(name = "preferred_gym_time")
     private String preferredGymTime;
-    @ElementCollection
-    @CollectionTable(name="sports")
-    private Set<String> sports = new HashSet<>();
+    @ManyToMany
+    @JoinTable(
+            name = "user_sport",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "sport_id")
+    )
+    List<SportEntity> sports;
     @PrePersist
     public void prePersist() {
         if (this.gender == null) {

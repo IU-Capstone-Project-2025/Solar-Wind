@@ -22,7 +22,7 @@ public class AuthController {
 
     @GetMapping
     public ResponseEntity<Resource> getAuthScript() {
-        Resource resource = new ClassPathResource("login/login.html");
+        Resource resource = new ClassPathResource("login/login.html"); // для проверки работы кнопки
         var headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=telegramAuth.html");
         return ResponseEntity.ok().headers(headers).body(resource);

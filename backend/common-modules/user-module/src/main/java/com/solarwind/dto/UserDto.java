@@ -4,7 +4,7 @@ import com.solarwind.models.Gender;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -18,7 +18,7 @@ public class UserDto {
     Gender gender;
     Boolean verified;
     Gender preferredGender;
-    String city;
+    Long cityId;
     String preferredGymTime;
-    Set<String> sportNames;
+    List<Long> sportId;
 }

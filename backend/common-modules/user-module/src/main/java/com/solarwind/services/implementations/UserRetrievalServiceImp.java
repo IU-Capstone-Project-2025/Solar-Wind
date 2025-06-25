@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UserRetrievalServiceImp implements UserRetrievalService {
+public class  UserRetrievalServiceImp implements UserRetrievalService {
     @Autowired
     protected UserRepository repository;
     @Autowired
