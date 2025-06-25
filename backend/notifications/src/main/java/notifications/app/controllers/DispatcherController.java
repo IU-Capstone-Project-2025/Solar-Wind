@@ -18,7 +18,7 @@ public class DispatcherController {
     private final static HashMap<Long, ArrayList<NotificationDto>> allNotifications = new HashMap<>();
 
     @GetMapping("/")
-    public ArrayList<NotificationDto> dispatcher(@RequestHeader Long owner) {
+    public ArrayList<NotificationDto> dispatcher(@RequestHeader("Authorization-telegram-id") Long owner) {
         var result = allNotifications.get(owner);
         allNotifications.remove(owner);
         return result;
