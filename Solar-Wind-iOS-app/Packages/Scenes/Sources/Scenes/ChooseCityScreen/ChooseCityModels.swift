@@ -46,17 +46,32 @@ enum ChooseCity {
         struct ViewModel { }
     }
     
+    enum Add {
+        struct Request {}
+
+        struct Response {
+            var model: Model?
+            var error: AppError?
+        }
+
+        struct ViewModel {
+            var root: RootViewModel?
+            var error: AppError?
+        }
+    }
+    
     struct Model {
-        var currentPage: Int
-        var itemsPerPage: Int
-        var totalPages: Int
-        var totalItems: Int
-        var items: [String]
+        var items: [City]
+    }
+    
+    struct City: Codable, Sendable, Hashable {
+        let id: Int
+        let name: String
     }
     
     struct RootViewModel {
         enum Section: Hashable {
-            case items([String])
+            case items([City])
         }
         let sections: [Section]
         let currentItemsCount: Int

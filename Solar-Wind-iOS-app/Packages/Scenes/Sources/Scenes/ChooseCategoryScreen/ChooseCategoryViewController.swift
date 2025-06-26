@@ -7,19 +7,39 @@
 
 import UIKit
 
+import UIKit
+
+import UIKit
+
 public final class ChooseCategoryViewController: UIViewController {
     private lazy var rootView = ChooseCategoryView()
-    
+    var interactor: ChooseCategoryInteractor?
     var router: ChooseCategoryRouter?
-    
+
     public override func loadView() {
         view = rootView
+        hideKeyboardWhenTappedAround()
+
         rootView.actionHandler = { [weak self] action in
             guard let self else { return }
             switch action {
             case .next:
-                router?.next()
+                self.router?.next()
+            case .selected(let id):
+                self.interactor?.toggleCategory(with: id)
+            case .add:
+                self.interactor?.loadMoreData()
             }
         }
+    }
+}
+
+extension ChooseCategoryViewController {
+    func display(_ viewModel: ChooseCategory.Add.ViewModel) {
+        rootView.viewModel = viewModel.root
+    }
+
+    func updateSelectedTags(_ selected: [ChooseCategory.Category]) {
+        rootView.selectedCategories = selected
     }
 }

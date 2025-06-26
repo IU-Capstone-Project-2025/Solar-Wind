@@ -15,6 +15,7 @@ class ChooseCityViewController: UIViewController {
     
     override func loadView() {
         view = rootView
+        hideKeyboardWhenTappedAround()
         
         rootView.actionHandler = { [weak self] action in
             guard let self else { return }
@@ -22,10 +23,18 @@ class ChooseCityViewController: UIViewController {
             case .next:
                 self.interactor?.requset(ChooseCity.Next.Request())
             case .selected(let index):
-                return
+                guard let city = self.interactor?.cities[index] else { return }
+                self.interactor?.saveSelectedCity(city)
+                rootView.setSelectedCity(city)
             case .add:
-                return
+                self.interactor?.loadMoreData()
             }
         }
+    }
+}
+
+extension ChooseCityViewController {
+    func display(_ viewModel: ChooseCity.Add.ViewModel) {
+        rootView.viewModel = viewModel.root
     }
 }

@@ -96,12 +96,18 @@ public class SearchView: UIView {
             searchTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 5),
             searchTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5)
         ])
+        searchTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
     }
     
     @objc private func textFieldDidChange(_ textField: UITextField) {
         guard let searchText = textField.text else { return }
         searchAction?(searchText)
     }
+    
+    public func setText(_ text: String) {
+        searchTextField.text = text
+    }
+    
 }
 
 extension SearchView: UITextFieldDelegate {
