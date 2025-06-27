@@ -6,8 +6,6 @@ services:
       context: ./profiles/
       dockerfile: ../Dockerfile
     image: profiles_service:latest
-    depends_on:
-      - deckShufflingService
     environment:
       SPRING_DATASOURCE_URL: ${PROFILE_DB_URL}
       SPRING_DATASOURCE_USERNAME: ${PROFILE_DB_USERNAME}
@@ -46,6 +44,8 @@ services:
       dockerfile: ../Dockerfile
     container_name: deck_shuffle
     image: deck_shuffle_service:latest
+    depends_on:
+      - profileService
     environment:
       SPRING_DATASOURCE_URL: ${PROFILE_DB_URL}
       SPRING_DATASOURCE_USERNAME: ${PROFILE_DB_USERNAME}
