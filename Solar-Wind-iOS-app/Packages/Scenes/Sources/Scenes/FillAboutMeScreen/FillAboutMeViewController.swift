@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Core
 
 final class FillAboutMeViewController: UIViewController {
     var router: FillAboutMeRouter?
@@ -32,5 +33,17 @@ final class FillAboutMeViewController: UIViewController {
 
         UserDefaults.standard.setValue(name, forKey: "userName")
         UserDefaults.standard.setValue(aboutMe, forKey: "userAboutMe")
+        
+        let request = SaveAboutMeRequest(userDefaults: UserDefaults.standard)
+        
+        APIClient.shared.send(request) { result in
+            switch result {
+            case .success(let response):
+                print(response)
+                UserDefaults.standard.setValue(response.id, forKey: "userId")
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
 }

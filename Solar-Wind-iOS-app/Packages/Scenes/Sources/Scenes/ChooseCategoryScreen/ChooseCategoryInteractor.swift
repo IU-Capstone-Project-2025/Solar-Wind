@@ -15,6 +15,7 @@ final class ChooseCategoryInteractor: @unchecked Sendable {
     var selectedCategories: [ChooseCategory.Category] = [] {
         didSet { DispatchQueue.main.async { self.presenter.presentSelected(self.selectedCategories) }}
     }
+    var selectedCategoriesIds: [Int] = []
 
     private var currentPage = 0
     private let pageSize = 20
@@ -32,6 +33,9 @@ final class ChooseCategoryInteractor: @unchecked Sendable {
             selectedCategories.remove(at: index)
         } else {
             selectedCategories.append(category)
+            selectedCategoriesIds.append(category.id)
+            
+            UserDefaults.standard.set(selectedCategoriesIds, forKey: "sports")
         }
     }
 

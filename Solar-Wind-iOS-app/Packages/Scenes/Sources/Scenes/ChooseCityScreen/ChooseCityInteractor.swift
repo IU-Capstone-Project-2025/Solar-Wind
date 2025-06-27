@@ -76,7 +76,6 @@ final  class ChooseCityInteractor: @unchecked Sendable {
     }
     
     func saveSelectedCity(_ city: ChooseCity.City) {
-        let data = try? JSONEncoder().encode(city)
-        UserDefaults.standard.set(data, forKey: "selectedCity")
+        UserDefaults.standard.set(city.id, forKey: "selectedCityId")
     }
 }
