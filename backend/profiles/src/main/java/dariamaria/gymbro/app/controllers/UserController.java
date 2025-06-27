@@ -5,22 +5,24 @@ import dariamaria.gymbro.app.services.UserManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api")
 public class UserController {
     @Autowired
     private UserManagementService service;
-    @PostMapping("/createUser")
-    public Long createUser(@RequestBody UserDto dto) {
-        return service.createUser(dto);
+    @PostMapping("/me")
+    public Map<String, Long> createUser(@RequestBody UserDto dto) {
+        Map<String, Long> response = new HashMap<>();
+        response.put("id", service.createUser(dto));
+        return response;
     }
     @GetMapping("/hello")
     public String hello() {
         return "Hello Solar Wind!";
     }
-    @GetMapping("/getUserById")
+    @GetMapping("/me")
     public UserDto getUserById(@RequestParam long id) {
         return service.getByUserId(id);
     }
