@@ -10,6 +10,9 @@ import UIKit
 final class FillAboutMeBuilder {
     @MainActor public static func build() -> UIViewController {
         let vc = FillAboutMeViewController()
+        let router = FillAboutMeRouter()
+        vc.router = router
+        router.vc = vc
         return vc
     }
 }

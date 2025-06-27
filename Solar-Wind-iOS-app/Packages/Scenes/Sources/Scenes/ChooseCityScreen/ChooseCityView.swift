@@ -9,8 +9,8 @@ import UIKit
 import CommonUI
 
 class ChooseCityView: View {
-    private typealias DataSource = UITableViewDiffableDataSource<ChooseCity.RootViewModel.Section, String>
-    private typealias Snapshot = NSDiffableDataSourceSnapshot<ChooseCity.RootViewModel.Section, String>
+    private typealias DataSource = UITableViewDiffableDataSource<ChooseCity.RootViewModel.Section, ChooseCity.City>
+    private typealias Snapshot = NSDiffableDataSourceSnapshot<ChooseCity.RootViewModel.Section, ChooseCity.City>
     
     var viewModel: ChooseCity.RootViewModel? {
         didSet {
@@ -27,6 +27,11 @@ class ChooseCityView: View {
         }
     }
     
+    func setSelectedCity(_ city: ChooseCity.City) {
+        searchView.setText(city.name)
+    }
+
+    
     private lazy var tableView: UITableView = {
         let view = UITableView(frame: .zero, style: .grouped)
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -36,11 +41,14 @@ class ChooseCityView: View {
         view.showsVerticalScrollIndicator = false
         view.rowHeight = UITableView.automaticDimension
         view.backgroundColor = .white
+        view.separatorStyle = .singleLine
+        view.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+        view.separatorColor = UIColor.black.withAlphaComponent(0.1)
         return view
     }()
     
     private lazy var nextButton: UIButton = {
-        let button = PurpleButton()
+        let button = GradientButton()
         button.title = "Continue"
         button.addAction(
             UIAction(
@@ -116,7 +124,7 @@ class ChooseCityView: View {
             tableView.topAnchor.constraint(equalTo: searchView.bottomAnchor, constant: 6),
             tableView.leftAnchor.constraint(equalTo: leftAnchor),
             tableView.rightAnchor.constraint(equalTo: rightAnchor),
-            tableView.bottomAnchor.constraint(lessThanOrEqualTo: nextButton.topAnchor, constant: 6),
+            tableView.bottomAnchor.constraint(equalTo: nextButton.topAnchor, constant: 6),
             
             nextButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -40),
             nextButton.leftAnchor.constraint(equalTo: leftAnchor, constant: 20),
@@ -156,7 +164,7 @@ class SearchCell: UITableViewCell {
         }
         set {
             content.viewModel = newValue ?? .init(
-                city: " "
+                city: .init(id: -1, name: "")
             )
         }
     }
@@ -179,12 +187,12 @@ class SearchCellContentView: View {
     public struct Model {
         let city: String
         
-        public init(city: String) {
-            self.city = city
+        public init(city: ChooseCity.City) {
+            self.city = city.name
         }
     }
     
-    public var viewModel: Model = .init(city: "") {
+    public var viewModel: Model = .init(city: ChooseCity.City(id: -1, name: "")) {
         didSet {
             cityLabel.text = viewModel.city
         }
@@ -212,7 +220,7 @@ class SearchCellContentView: View {
     override func setupConstraints() {
         super.setupConstraints()
         NSLayoutConstraint.activate([
-            cityLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 5),
+            cityLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
             cityLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
             cityLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])

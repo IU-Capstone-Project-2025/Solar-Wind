@@ -11,7 +11,7 @@ final class ChooseCityBuilder {
     @MainActor public static func build() -> UIViewController {
         let vc = ChooseCityViewController()
         let worker = ChooseCityWorker()
-        let presenter = ChooseCityPresenter()
+        let presenter = ChooseCityPresenter(view: vc)
         let router = ChooseCityRouter()
         router.vc = vc
         presenter.router = router

@@ -26,8 +26,22 @@ class ChooseTimeView: View {
         return view
     }()
     
+    private let stackView: UIStackView = {
+        let view = UIStackView()
+        view.axis = .vertical
+        view.spacing = 15
+        for day in ChooseTime.Weekday.allCases {
+            let button = YellowButton()
+            button.title = day.title
+            button.tag = day.rawValue
+            view.addArrangedSubview(button)
+        }
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     private lazy var nextButton: UIButton = {
-        let button = PurpleButton()
+        let button = GradientButton()
         button.title = "Continue"
         button.addAction(
             UIAction(handler:
@@ -41,6 +55,7 @@ class ChooseTimeView: View {
     override func setupContent() {
         backgroundColor = .white
         addSubview(titleLabel)
+        addSubview(stackView)
         addSubview(nextButton)
     }
     
@@ -49,6 +64,10 @@ class ChooseTimeView: View {
             titleLabel.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 32),
             titleLabel.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor, constant: 20),
             titleLabel.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor, constant: -20),
+            
+            stackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 40),
+            stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             
             nextButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -40),
             nextButton.leftAnchor.constraint(equalTo: leftAnchor, constant: 20),

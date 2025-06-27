@@ -9,6 +9,6 @@ final class FillAboutMeRouter {
     weak var vc: FillAboutMeViewController?
     
     @MainActor func next() {
-        vc?.navigationController?.setViewControllers([], animated: true)
+        vc?.navigationController?.pushViewController(CanStartBuilder.build(), animated: true)
     }
 }

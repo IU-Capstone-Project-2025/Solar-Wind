@@ -7,7 +7,7 @@
 
 import Alamofire
 
-public enum AppError: Error {
+public enum AppError: Error, Sendable {
     case decodingError
     case networkError(_ code: Int)
     case unknown(_ detail: String)
