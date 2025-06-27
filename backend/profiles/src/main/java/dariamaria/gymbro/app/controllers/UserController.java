@@ -1,30 +1,33 @@
 package dariamaria.gymbro.app.controllers;
 
-import dariamaria.gymbro.app.dto.UsersDto;
-import dariamaria.gymbro.app.services.UserService;
+import com.solarwind.dto.UserDto;
+import dariamaria.gymbro.app.services.UserManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.*;
 
 @RestController
+@RequestMapping("/api")
 public class UserController {
     @Autowired
-    private UserService service;
-    @PostMapping("/createUser")
-    public UsersDto createUser(@RequestBody UsersDto dto) {
-        return service.createUser(dto);
+    private UserManagementService service;
+    @PostMapping("/me")
+    public Map<String, Long> createUser(@RequestBody UserDto dto) {
+        Map<String, Long> response = new HashMap<>();
+        response.put("id", service.createUser(dto));
+        return response;
     }
-    @GetMapping("/")
+    @GetMapping("/hello")
     public String hello() {
-        return "Hello Дарияяяяяяяя!";
+        return "Hello Solar Wind!";
     }
-    @GetMapping("/getUserById")
-    public UsersDto getUserById(@RequestParam long id) {
+    @GetMapping("/me")
+    public UserDto getUserById(@RequestParam long id) {
         return service.getByUserId(id);
     }
     @GetMapping("/getUsers")
-    public List<UsersDto> getUsers() {
+    public List<UserDto> getUsers() {
         return service.getUsers();
     }
     @DeleteMapping("/deleteUserById")
