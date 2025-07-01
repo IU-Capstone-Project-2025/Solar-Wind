@@ -47,4 +47,8 @@ final class FeedInteractor {
         
         presenter.present(users: mockUsers)
     }
+    
+    @MainActor func request(_ request: Feed.Select.Request) {
+        self.presenter.present(Feed.Select.Response(), id: request.userId)
+    }
 }

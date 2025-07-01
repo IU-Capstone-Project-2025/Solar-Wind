@@ -6,13 +6,14 @@
 //
 
 final class FeedPresenter {
-    weak var view: FeedView?
+    weak var vc: FeedViewController?
     
     @MainActor func present(users: [Feed.RootViewModel.User]) {
-        let viewModel = Feed.RootViewModel(
-            sections: [.items(users)],
-            currentItemsCount: users.count
-        )
-        view?.viewModel = viewModel
+        let viewModel = Feed.Fetch.ViewModel(root: .init(sections: [.items(users)], currentItemsCount: users.count))
+        vc?.display(viewModel)
+    }
+    
+    @MainActor func present(_ response: Feed.Select.Response, id: Int) {
+        vc?.display(Feed.Select.ViewModel(), id: id)
     }
 }
