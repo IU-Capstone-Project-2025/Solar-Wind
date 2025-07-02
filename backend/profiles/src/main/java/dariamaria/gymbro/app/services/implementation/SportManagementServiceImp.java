@@ -20,12 +20,12 @@ public class SportManagementServiceImp implements SportManagementService {
     }
 
     @Override
-    public List<SportEntity> getPartOfCities(int page, int size) {
+    public List<SportEntity> getPartOfSports(int page, int size) {
         return sportRepository.findAll().subList(page*size, (page+1)*size);
     }
 
     @Override
-    public List<SportEntity> searchCity(String word) {
+    public List<SportEntity> searchSport(String word) {
         return sportRepository.findByWord(word);
     }
 }

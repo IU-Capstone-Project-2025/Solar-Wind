@@ -26,8 +26,8 @@ public class SportController {
 
     @GetMapping("/pagination")
     public List<SportEntity> getPaginationSports(@RequestParam("page") int page,
-                                                @RequestParam("size") int size) {return sportService.getPartOfCities(page, size);}
+                                                @RequestParam("size") int size) {return sportService.getPartOfSports(page, size);}
 
     @GetMapping("/search")
-    public List<SportEntity> searchSport(@RequestParam("word") String word) {return sportService.searchCity(word);}
+    public List<SportEntity> searchSport(@RequestParam("word") String word) {return sportService.searchSport(word);}
 }

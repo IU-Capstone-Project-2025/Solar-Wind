@@ -1,6 +1,5 @@
 package com.solarwind.repositories;
 
-import com.solarwind.models.CityEntity;
 import com.solarwind.models.SportEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
