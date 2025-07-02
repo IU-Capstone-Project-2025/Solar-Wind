@@ -30,16 +30,9 @@ jobs:
           postgres:17
 
       - name: Set up variables
+        working-directory: ./backend
         run: |
-          cat > .env <<EOF
-          PROFILE_DB_URL=jdbc:postgresql:gymbro_db
-          PROFILE_DB_USERNAME=${{ secrets.PROFILE_DB_USERNAME }}
-          PROFILE_DB_PASSWORD=${{ secrets.PROFILE_DB_PASSWORD }}
-          TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}
-          LIKES_DB_URL=${{ secrets.LIKES_DB_URL }}
-          LIKES_DB_USERNAME=${{ secrets.LIKES_DB_USERNAME }}
-          LIKES_DB_PASSWORD=${{ secrets.LIKES_DB_PASSWORD }}
-          EOF
+          cat > .env << .env.example
 
       - name: Compile project
         working-directory: ./backend
