@@ -28,17 +28,17 @@ public struct FeedRequest: APIRequest {
 }
 
 public struct User: Decodable, Sendable {
-    let id: Int
+    public let id: Int
     let telegramId: String?
-    let username: String
+    public let username: String
     let firstName: String
     let lastName: String
-    let description: String
+    public let description: String
     let age: Int
     let gender: String
     let verified: Bool
     let preferredGender: String
-    let cityId: Int
+    public let cityId: Int
     let preferredGymTime: [Int]
-    let sportId: [Int]
+    public let sportId: [Int]
 }

@@ -12,6 +12,7 @@ import SwiftUI
 final class FeedView: CommonUI.View, UITableViewDelegate {
     enum Action {
         case selected(Int)
+        case liked(Int)
     }
     var actionHandler: (Action) -> Void = { _ in }
     
@@ -55,7 +56,7 @@ final class FeedView: CommonUI.View, UITableViewDelegate {
             switch indexPath.section {
             case 0:
                 let cell = tableView.dequeueReusableCell(withIdentifier: "FeedCell", for: indexPath) as! FeedCell
-                cell.viewModel = .init(name: item.name, city: item.city, tags: item.tags, description: item.description)
+                cell.viewModel = .init(id: item.id, name: item.name, city: item.city, tags: item.tags, description: item.description)
                 cell.selectionStyle = .none
                 return cell
             default:
@@ -104,6 +105,7 @@ class FeedCell: UITableViewCell {
         }
         set {
             content.viewModel = newValue ?? .init(
+                id: -10,
                 name: "",
                 city: "",
                 tags: [],
@@ -131,18 +133,23 @@ class FeedCellContentView: CommonUI.View {
 
     @objc private func likeTapped() {
         isLiked.toggle()
+        if isLiked {
+            actionHandler(.liked(viewModel.id))
+        }
         likeButton.setImage(UIImage(systemName: isLiked ? "heart.fill" : "heart"), for: .normal)
         likeButton.tintColor = isLiked ? .red : .lightGray
     }
 
     public struct Model {
+        let id: Int
         let name: String
         let city: String
         let tags: [String]
         let description: String
         var isLiked: Bool
 
-        public init(name: String, city: String, tags: [String], description: String, isLiked: Bool = false) {
+        public init(id: Int, name: String, city: String, tags: [String], description: String, isLiked: Bool = false) {
+            self.id = id
             self.name = name
             self.city = city
             self.tags = tags
@@ -163,7 +170,7 @@ class FeedCellContentView: CommonUI.View {
     
     internal lazy var tagsView = SwiftUIHostingView(rootView: TagsView())
     
-    public var viewModel: Model = .init(name: "", city: "", tags: [], description: "") {
+    public var viewModel: Model = .init(id: -10, name: "", city: "", tags: [], description: "") {
         didSet {
             nameLabel.text = viewModel.name
             cityLabel.text = viewModel.city
@@ -180,6 +187,7 @@ class FeedCellContentView: CommonUI.View {
     
     public enum Action {
         case pressed
+        case liked(Int)
     }
     public var actionHandler: (Action) -> Void = { _ in }
     

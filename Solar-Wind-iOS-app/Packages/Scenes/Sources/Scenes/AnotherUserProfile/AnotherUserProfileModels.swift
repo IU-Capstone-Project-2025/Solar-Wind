@@ -21,16 +21,28 @@ enum AnotherUserProfile {
             var error: AppError?
         }
     }
+    
+    enum back {
+        struct Request { }
+        
+        struct Response { }
+        
+        struct ViewModel { }
+    }
 
     struct Model {
         let username: String
         let city: String
         let sports: [String]
+        let about: String
+        let days: [Int]
     }
     
     struct RootViewModel {
         let username: String
         let city: String
         let sports: [String]
+        let about: String
+        let days: [String]
     }
 }

@@ -48,20 +48,24 @@ public extension UIView {
     }
     
     private func addBackButton(to header: GradientBackgroundView) {
-        lazy var button: UIButton = {
-            let view = UIButton()
-            let image = UIImage(systemName: "arrow.uturn.left")
-            image?.withTintColor(.white)
-            view.setImage(image, for: .normal)
-            view.translatesAutoresizingMaskIntoConstraints = false
-            return view
-        }()
+        let button = UIButton(type: .system)
         
+        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
+        let image = UIImage(systemName: "arrow.uturn.left", withConfiguration: config)?
+            .withTintColor(.white, renderingMode: .alwaysOriginal)
+
+        button.setImage(image, for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.contentMode = .scaleAspectFit
+        button.contentHorizontalAlignment = .center
+        button.contentVerticalAlignment = .center
         header.addSubview(button)
-        
+
         NSLayoutConstraint.activate([
             button.bottomAnchor.constraint(equalTo: header.bottomAnchor, constant: -16),
-            button.leftAnchor.constraint(equalTo: leftAnchor, constant: 3)
+            button.leftAnchor.constraint(equalTo: header.leftAnchor, constant: 16),
+            button.widthAnchor.constraint(equalToConstant: 44),
+            button.heightAnchor.constraint(equalToConstant: 44)
         ])
     }
 }

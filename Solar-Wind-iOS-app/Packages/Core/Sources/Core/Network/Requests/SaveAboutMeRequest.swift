@@ -21,6 +21,7 @@ public struct SaveAboutMeRequest: APIRequest {
         let description = userDefaults.string(forKey: "userAboutMe") ?? ""
         let cityId = userDefaults.integer(forKey: "selectedCityId")
         let sportId: [Int] = (userDefaults.array(forKey: "sports") as? [Int]) ?? [1]
+        let days: [Int] = (userDefaults.array(forKey: "selectedWeekdays") as? [Int]) ?? [1]
         
         self.parameters = [
             "username": username,
@@ -31,10 +32,9 @@ public struct SaveAboutMeRequest: APIRequest {
             "gender": "male",
             "preferredGender": "male",
             "cityId": cityId,
-            "preferredGymTime": [0],
+            "preferredGymTime": days,
             "sportId": sportId
         ]
-        print(parameters)
     }
 }
 

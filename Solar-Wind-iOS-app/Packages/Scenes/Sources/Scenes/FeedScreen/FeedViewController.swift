@@ -22,6 +22,8 @@ final class FeedViewController: UIViewController {
             switch action {
             case .selected(let index):
                 interactor?.request(Feed.Select.Request(userId: index))
+            case .liked(_):
+                return
             }
         }
         

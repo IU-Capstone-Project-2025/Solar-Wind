@@ -42,7 +42,24 @@
 			);
 			target = BC1651A62DF7016C0072E0D3 /* Solar-Wind-iOS-app */;
 		};
+		BC3AE00E2E1591740011DE7F /* Exceptions for "Solar-Wind-iOS-appTests" folder in "Solar-Wind-iOS-appTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				ChooseCategoryInteractorTests.swift,
+			);
+			target = BC1651BF2DF7016E0072E0D3 /* Solar-Wind-iOS-appTests */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		BC3AE00F2E1591740011DE7F /* Exceptions for "Solar-Wind-iOS-appTests" folder in "Copy Bundle Resources" phase from "Solar-Wind-iOS-appTests" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = BC1651BE2DF7016E0072E0D3 /* Resources */;
+			membershipExceptions = (
+				ChooseCategoryInteractorTests.swift,
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		BC1651A92DF7016C0072E0D3 /* Solar-Wind-iOS-app */ = {
@@ -55,6 +72,10 @@
 		};
 		BC1651C32DF7016E0072E0D3 /* Solar-Wind-iOS-appTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				BC3AE00E2E1591740011DE7F /* Exceptions for "Solar-Wind-iOS-appTests" folder in "Solar-Wind-iOS-appTests" target */,
+				BC3AE00F2E1591740011DE7F /* Exceptions for "Solar-Wind-iOS-appTests" folder in "Copy Bundle Resources" phase from "Solar-Wind-iOS-appTests" target */,
+			);
 			path = "Solar-Wind-iOS-appTests";
 			sourceTree = "<group>";
 		};

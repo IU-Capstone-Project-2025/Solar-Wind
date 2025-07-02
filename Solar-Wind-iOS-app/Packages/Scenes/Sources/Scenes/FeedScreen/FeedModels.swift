@@ -42,4 +42,14 @@ enum Feed {
             var error: AppError?
         }
     }
+    
+    enum Like {
+        struct Request {
+            let userId: Int
+        }
+        
+        struct Response { }
+        
+        struct ViewModel { }
+    }
 }

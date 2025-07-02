@@ -10,7 +10,7 @@ import UIKit
 
 public struct TagsView: SwiftUI.View {
     var tags: [String] = []
-    var backgroundColor: Color = .orange
+    var backgroundColor: Color = Color(UIColor.orangeColor)
     var textColor: Color = .white
     var cornerRadius: CGFloat = 16
     var padding: CGFloat = 8
