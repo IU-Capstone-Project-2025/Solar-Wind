@@ -8,8 +8,8 @@ endif
 compile:
 	$(MVNW) clean package -DskipTests
 build: compile
-	docker-compose build
+	docker compose build
 up:
-	docker-compose up
+	docker compose up
 all: build up
 up-build: all
