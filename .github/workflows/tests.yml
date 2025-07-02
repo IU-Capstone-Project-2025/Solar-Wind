@@ -42,7 +42,9 @@ jobs:
           EOF
 
       - name: Compile project
+        working-directory: ./backend
         run: ./mvnw package
 
       - name: Run tests
+        working-directory: ./backend
         run: ./mvnw test
