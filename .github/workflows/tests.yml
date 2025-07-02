@@ -18,14 +18,14 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '23'
+          java-version: '21'
 
       - name: Set up environment
         run:
-          docker run -it -d --rm \
-          -e POSTGRES_USER=postgres\
-          -e POSTGRES_PASSWORD=postgres\
-          -p 5432:5432\
+          docker run -d \
+          -e POSTGRES_USER=postgres \
+          -e POSTGRES_PASSWORD=postgres \
+          -p 5432:5432 \
           -v ${{ github.workspace }}/backend/.init-db:/docker-entrypoint-initdb.d \
           postgres:17
 
