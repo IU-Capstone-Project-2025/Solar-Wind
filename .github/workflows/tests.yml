@@ -30,7 +30,7 @@ jobs:
           postgres:17
 
       - name: Set up variables
-        run:
+        run: |
           cat > .env <<EOF
           PROFILE_DB_URL=jdbc:postgresql:gymbro_db
           PROFILE_DB_USERNAME=${{ secrets.PROFILE_DB_USERNAME }}
