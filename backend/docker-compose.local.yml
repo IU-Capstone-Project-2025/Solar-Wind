@@ -8,8 +8,8 @@ services:
     volumes:
       - ./.init-db:/docker-entrypoint-initdb.d
     environment:
-      POSTGRES_USER: ${PROFILE_DB_USER}
-      POSTGRES_PASSWORD: ${PROFILE_DB_USER}
+      POSTGRES_USER: ${PROFILE_DB_USERNAME}
+      POSTGRES_PASSWORD: ${PROFILE_DB_PASSWORD}
 
   profileService:
     build:

@@ -8,8 +8,8 @@ endif
 compile:
 	$(MVNW) clean package -DskipTests
 build: compile
-	docker compose build
+	docker compose --env-file .env -f docker-compose.local.yml build
 up:
-	docker compose up
+	docker compose --env-file .env -f docker-compose.local.yml up -d
 all: build up
 up-build: all
