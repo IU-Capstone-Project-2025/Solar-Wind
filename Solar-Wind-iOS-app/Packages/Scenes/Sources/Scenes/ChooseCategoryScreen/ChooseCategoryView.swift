@@ -7,8 +7,9 @@
 
 import UIKit
 import CommonUI
+import SwiftUI
 
-final class ChooseCategoryView: View {
+final class ChooseCategoryView: CommonUI.View {
     enum Action {
         case next
         case selected(Int)
@@ -57,22 +58,8 @@ final class ChooseCategoryView: View {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-
-    private lazy var tagsScrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.showsHorizontalScrollIndicator = false
-        return scrollView
-    }()
-
-    private lazy var tagsContainerView: UIStackView = {
-        let stack = UIStackView()
-        stack.axis = .horizontal
-        stack.spacing = 8
-        stack.alignment = .center
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        return stack
-    }()
+    
+    private lazy var tagsView = SwiftUIHostingView<TagsView>(rootView: TagsView())
 
     private lazy var tableView: UITableView = {
         let table = UITableView()
@@ -107,8 +94,7 @@ final class ChooseCategoryView: View {
         backgroundColor = .white
         addSubview(titleLabel)
         addSubview(searchView)
-        addSubview(tagsScrollView)
-        tagsScrollView.addSubview(tagsContainerView)
+        addSubview(tagsView)
         addSubview(tableView)
         addSubview(nextButton)
     }
@@ -123,17 +109,12 @@ final class ChooseCategoryView: View {
             searchView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             searchView.heightAnchor.constraint(equalToConstant: 45),
 
-            tagsScrollView.topAnchor.constraint(equalTo: searchView.bottomAnchor, constant: 12),
-            tagsScrollView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-            tagsScrollView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-            tagsScrollView.heightAnchor.constraint(equalToConstant: 32),
+            tagsView.topAnchor.constraint(equalTo: searchView.bottomAnchor, constant: 12),
+            tagsView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            tagsView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            tagsView.heightAnchor.constraint(equalToConstant: 100),
 
-            tagsContainerView.topAnchor.constraint(equalTo: tagsScrollView.topAnchor),
-            tagsContainerView.bottomAnchor.constraint(equalTo: tagsScrollView.bottomAnchor),
-            tagsContainerView.leadingAnchor.constraint(equalTo: tagsScrollView.leadingAnchor),
-            tagsContainerView.trailingAnchor.constraint(equalTo: tagsScrollView.trailingAnchor),
-
-            tableView.topAnchor.constraint(equalTo: tagsScrollView.bottomAnchor, constant: 12),
+            tableView.topAnchor.constraint(equalTo:  tagsView.bottomAnchor, constant: 12),
             tableView.leadingAnchor.constraint(equalTo: leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: nextButton.topAnchor, constant: -12),
@@ -143,14 +124,13 @@ final class ChooseCategoryView: View {
             nextButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             nextButton.heightAnchor.constraint(equalToConstant: 52)
         ])
+        
+        tableView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
     }
 
     private func updateTags(_ categories: [ChooseCategory.Category]) {
-        tagsContainerView.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        for category in categories {
-            let tag = TagView(text: category.name)
-            tagsContainerView.addArrangedSubview(tag)
-        }
+        let tagNames = categories.map { $0.name }
+        tagsView.update(rootView: TagsView(tags: tagNames))
     }
 }
 

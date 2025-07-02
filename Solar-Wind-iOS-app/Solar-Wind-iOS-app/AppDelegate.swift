@@ -18,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let vc = NavigationController(rootViewController: WelcomeBuilder.build())
         window?.rootViewController = vc
         window?.makeKeyAndVisible()
+
         return true
     }
 }

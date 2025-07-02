@@ -5,6 +5,8 @@
 //  Created by Даша Николаева on 25.06.2025.
 //
 
+import CommonModels
+
 enum Feed {
     struct RootViewModel {
         enum Section: Hashable {
@@ -20,5 +22,34 @@ enum Feed {
             let tags: [String]
             let description: String
         }
+    }
+    
+    enum Select {
+        struct Request { let userId: Int }
+        
+        struct Response { }
+        
+        struct ViewModel { }
+    }
+    
+    enum Fetch {
+        struct Request { }
+        
+        struct Response { }
+        
+        struct ViewModel {
+            var root: RootViewModel?
+            var error: AppError?
+        }
+    }
+    
+    enum Like {
+        struct Request {
+            let userId: Int
+        }
+        
+        struct Response { }
+        
+        struct ViewModel { }
     }
 }

@@ -40,6 +40,29 @@ final class ChooseCategoryInteractor: @unchecked Sendable {
     }
 
     func loadMoreData() {
+//        self.categories = [
+//            ChooseCategory.Category(id: -1, name: "Белгород"),
+//            ChooseCategory.Category(id: -2, name: "Воронеж"),
+//            ChooseCategory.Category(id: -3, name: "Калининград"),
+//            ChooseCategory.Category(id: -4, name: "Томск"),
+//            ChooseCategory.Category(id: -5, name: "Пермь"),
+//            ChooseCategory.Category(id: -6, name: "Ярославль"),
+//            ChooseCategory.Category(id: -7, name: "Иркутск"),
+//            ChooseCategory.Category(id: -8, name: "Ульяновск"),
+//            ChooseCategory.Category(id: -9, name: "Тула"),
+//            ChooseCategory.Category(id: -10, name: "Киров"),
+//            ChooseCategory.Category(id: -11, name: "Смоленск"),
+//            ChooseCategory.Category(id: -12, name: "Барнаул"),
+//            ChooseCategory.Category(id: -13, name: "Мурманск"),
+//            ChooseCategory.Category(id: -14, name: "Петрозаводск"),
+//            ChooseCategory.Category(id: -15, name: "Сочи"),
+//            ChooseCategory.Category(id: -16, name: "Архангельск"),
+//            ChooseCategory.Category(id: -17, name: "Чебоксары"),
+//            ChooseCategory.Category(id: -18, name: "Новороссийск"),
+//            ChooseCategory.Category(id: -19, name: "Кострома"),
+//            ChooseCategory.Category(id: -20, name: "Владикавказ")
+//        ]
+//        DispatchQueue.main.async{ self.presenter.present(categories: self.categories)}
         guard !isLoading else { return }
         isLoading = true
         currentPage += 1

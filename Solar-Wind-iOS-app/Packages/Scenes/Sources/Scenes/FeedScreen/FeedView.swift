@@ -7,10 +7,12 @@
 
 import UIKit
 import CommonUI
+import SwiftUI
 
-final class FeedView: View, UITableViewDelegate {
+final class FeedView: CommonUI.View, UITableViewDelegate {
     enum Action {
         case selected(Int)
+        case liked(Int)
     }
     var actionHandler: (Action) -> Void = { _ in }
     
@@ -54,7 +56,7 @@ final class FeedView: View, UITableViewDelegate {
             switch indexPath.section {
             case 0:
                 let cell = tableView.dequeueReusableCell(withIdentifier: "FeedCell", for: indexPath) as! FeedCell
-                cell.viewModel = .init(name: item.name, city: item.city, tags: item.tags, description: item.description)
+                cell.viewModel = .init(id: item.id, name: item.name, city: item.city, tags: item.tags, description: item.description)
                 cell.selectionStyle = .none
                 return cell
             default:
@@ -78,44 +80,11 @@ final class FeedView: View, UITableViewDelegate {
             tableView.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
     }
-}
-
-class TagView: UIView {
-    private let label: UILabel = {
-        let label = UILabel()
-        label.font = .size16Medium
-        label.textColor = .white
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
     
-    init(text: String) {
-        super.init(frame: .zero)
-        setupView(text: text)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func setupView(text: String) {
-        translatesAutoresizingMaskIntoConstraints = false
-        backgroundColor = .orangeColor
-        layer.cornerRadius = 12
-        layer.masksToBounds = true
-        
-        addSubview(label)
-        label.text = text
-        
-        NSLayoutConstraint.activate([
-            label.topAnchor.constraint(equalTo: topAnchor, constant: 4),
-            label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
-            label.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
-            label.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -4),
-            
-            heightAnchor.constraint(equalToConstant: 24)
-        ])
+    private weak var tableViewDelegate: UITableViewDelegate?
+    func setDelegate(_ delegate: UITableViewDelegate) {
+        self.tableViewDelegate = delegate
+        tableView.delegate = delegate
     }
 }
 
@@ -136,6 +105,7 @@ class FeedCell: UITableViewCell {
         }
         set {
             content.viewModel = newValue ?? .init(
+                id: -10,
                 name: "",
                 city: "",
                 tags: [],
@@ -155,27 +125,31 @@ class FeedCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         viewModel = nil
-        content.tagsContainer.subviews.forEach { $0.removeFromSuperview() }
     }
 }
 
-class FeedCellContentView: View {
+class FeedCellContentView: CommonUI.View {
     private var isLiked: Bool = false
 
     @objc private func likeTapped() {
         isLiked.toggle()
+        if isLiked {
+            actionHandler(.liked(viewModel.id))
+        }
         likeButton.setImage(UIImage(systemName: isLiked ? "heart.fill" : "heart"), for: .normal)
         likeButton.tintColor = isLiked ? .red : .lightGray
     }
 
     public struct Model {
+        let id: Int
         let name: String
         let city: String
         let tags: [String]
         let description: String
         var isLiked: Bool
 
-        public init(name: String, city: String, tags: [String], description: String, isLiked: Bool = false) {
+        public init(id: Int, name: String, city: String, tags: [String], description: String, isLiked: Bool = false) {
+            self.id = id
             self.name = name
             self.city = city
             self.tags = tags
@@ -194,13 +168,9 @@ class FeedCellContentView: View {
     }()
 
     
-    let tagsContainer: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
+    internal lazy var tagsView = SwiftUIHostingView(rootView: TagsView())
     
-    public var viewModel: Model = .init(name: "", city: "", tags: [], description: "") {
+    public var viewModel: Model = .init(id: -10, name: "", city: "", tags: [], description: "") {
         didSet {
             nameLabel.text = viewModel.name
             cityLabel.text = viewModel.city
@@ -211,12 +181,13 @@ class FeedCellContentView: View {
             )
             likeButton.tintColor = viewModel.isLiked ? .red : .lightGray
             isLiked = viewModel.isLiked
-            setupTags()
+            tagsView.update(rootView: TagsView(tags:viewModel.tags))
         }
     }
     
     public enum Action {
         case pressed
+        case liked(Int)
     }
     public var actionHandler: (Action) -> Void = { _ in }
     
@@ -264,7 +235,7 @@ class FeedCellContentView: View {
         super.setupContent()
         addSubview(containerView)
         containerView.addSubview(nameLabel)
-        containerView.addSubview(tagsContainer)
+        containerView.addSubview(tagsView)
         containerView.addSubview(cityLabel)
         containerView.addSubview(descriptionLabel)
         containerView.addSubview(likeButton)
@@ -272,82 +243,37 @@ class FeedCellContentView: View {
     }
     
     override func setupConstraints() {
-            super.setupConstraints()
+        super.setupConstraints()
+        
+        NSLayoutConstraint.activate([
+            containerView.topAnchor.constraint(equalTo: topAnchor, constant: 5),
+            containerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            containerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            containerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5),
             
-            NSLayoutConstraint.activate([
-                containerView.topAnchor.constraint(equalTo: topAnchor, constant: 5),
-                containerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-                containerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-                containerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5),
-                
-                nameLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16),
-                nameLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
-                nameLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
-                
-                cityLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4),
-                cityLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
-                cityLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
-                
-                tagsContainer.topAnchor.constraint(equalTo: cityLabel.bottomAnchor, constant: 6),
-                tagsContainer.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
-                tagsContainer.trailingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor, constant: -16),
-                
-                descriptionLabel.topAnchor.constraint(equalTo: tagsContainer.bottomAnchor, constant: 30),
-                descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
-                descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
-                descriptionLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -16),
-                
-                likeButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16),
-                likeButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
-                likeButton.widthAnchor.constraint(equalToConstant: 24),
-                likeButton.heightAnchor.constraint(equalToConstant: 24),
+            nameLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16),
+            nameLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
+            nameLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
+            
+            cityLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4),
+            cityLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
+            cityLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
+            
+            tagsView.topAnchor.constraint(equalTo: cityLabel.bottomAnchor, constant: 24),
+            tagsView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
+            tagsView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
+            
+            descriptionLabel.topAnchor.constraint(equalTo: tagsView.bottomAnchor, constant: 30),
+            descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
+            descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
+            descriptionLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -16),
+            
+            likeButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16),
+            likeButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
+            likeButton.widthAnchor.constraint(equalToConstant: 24),
+            likeButton.heightAnchor.constraint(equalToConstant: 24),
 
-            ])
-        }
-    
-    private func setupTags() {
-        // Удаляем старые теги
-        tagsContainer.subviews.forEach { $0.removeFromSuperview() }
-        
-        // Создаем массив для хранения тегов
-        var tagViews: [TagView] = []
-        
-        // Создаем теги
-        for tag in viewModel.tags {
-            let tagView = TagView(text: tag)
-            tagViews.append(tagView)
-        }
-        
-        // Располагаем теги в контейнере
-        var currentX: CGFloat = 0
-        var currentY: CGFloat = 0
-        let horizontalSpacing: CGFloat = 8
-        let verticalSpacing: CGFloat = 8
-        let maxWidth = UIScreen.main.bounds.width - 64 // Ширина контейнера
-        
-        for tagView in tagViews {
-            tagView.sizeToFit()
-            let tagWidth = tagView.bounds.width + 16 // Добавляем отступы
-            
-            // Если тег не помещается в текущую строку, переносим на новую
-            if currentX + tagWidth > maxWidth {
-                currentX = 0
-                currentY += tagView.bounds.height + verticalSpacing
-            }
-            
-            tagView.frame.origin = CGPoint(x: currentX, y: currentY)
-            tagsContainer.addSubview(tagView)
-            
-            currentX += tagWidth + horizontalSpacing
-        }
-        
-        // Обновляем высоту контейнера
-        if let lastTag = tagViews.last {
-            let totalHeight = lastTag.frame.maxY
-            tagsContainer.heightAnchor.constraint(equalToConstant: totalHeight).isActive = true
-        } else {
-            tagsContainer.heightAnchor.constraint(equalToConstant: 0).isActive = true
-        }
+        ])
     }
 }
 
@@ -361,4 +287,10 @@ extension FeedView {
         headerView.backgroundColor = .clear
         return headerView
     }
+    
+func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+       tableView.deselectRow(at: indexPath, animated: true)
+       guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
+       actionHandler(.selected(item.id))
+   }
 }

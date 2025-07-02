@@ -8,13 +8,17 @@
 import UIKit
 
 public extension UIView {
-    func addGradientHeader(text: String? = nil) -> UIView {
+    func addGradientHeader(text: String? = nil, backButton: Bool = true) -> UIView {
         let header = GradientBackgroundView()
         header.translatesAutoresizingMaskIntoConstraints = false
         addSubview(header)
         
         if let text = text {
-            configureHeagerText(header: header, text: text)
+            configureHeagerText(to: header, text: text)
+        }
+        
+        if backButton {
+            addBackButton(to: header)
         }
         
         NSLayoutConstraint.activate([
@@ -26,7 +30,7 @@ public extension UIView {
         return header
     }
     
-    private func configureHeagerText(header: GradientBackgroundView, text: String) {
+    private func configureHeagerText(to header: GradientBackgroundView, text: String) {
         let label: UILabel = {
             let view = UILabel()
             view.text = text
@@ -40,6 +44,28 @@ public extension UIView {
         NSLayoutConstraint.activate([
             label.bottomAnchor.constraint(equalTo: header.bottomAnchor, constant: -16),
             label.centerXAnchor.constraint(equalTo: header.centerXAnchor)
+        ])
+    }
+    
+    private func addBackButton(to header: GradientBackgroundView) {
+        let button = UIButton(type: .system)
+        
+        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
+        let image = UIImage(systemName: "arrow.uturn.left", withConfiguration: config)?
+            .withTintColor(.white, renderingMode: .alwaysOriginal)
+
+        button.setImage(image, for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.contentMode = .scaleAspectFit
+        button.contentHorizontalAlignment = .center
+        button.contentVerticalAlignment = .center
+        header.addSubview(button)
+
+        NSLayoutConstraint.activate([
+            button.bottomAnchor.constraint(equalTo: header.bottomAnchor, constant: -16),
+            button.leftAnchor.constraint(equalTo: header.leftAnchor, constant: 16),
+            button.widthAnchor.constraint(equalToConstant: 44),
+            button.heightAnchor.constraint(equalToConstant: 44)
         ])
     }
 }

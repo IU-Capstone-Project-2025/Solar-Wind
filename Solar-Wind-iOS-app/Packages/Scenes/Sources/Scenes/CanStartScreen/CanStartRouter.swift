@@ -9,6 +9,6 @@ class CanStartRouter {
     weak var vc: CanStartViewController?
     
     @MainActor func next() {
-        vc?.navigationController?.pushViewController(FeedBuilder.build(), animated: true)
+        vc?.navigationController?.setViewControllers([FeedBuilder.build()], animated: true)
     }
 }

@@ -49,8 +49,7 @@ final  class ChooseCityInteractor: @unchecked Sendable {
 //            ChooseCity.City(id: -19, name: "Кострома"),
 //            ChooseCity.City(id: -20, name: "Владикавказ")
 //        ]
-
-        // Отдаём заглушки в презентер
+//
 //        DispatchQueue.main.async{ self.presenter.present(cities: self.cities)}
         guard !isLoading else { return }
         isLoading = true
