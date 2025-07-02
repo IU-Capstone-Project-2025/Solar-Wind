@@ -21,7 +21,7 @@ jobs:
           java-version: '21'
 
       - name: Set up environment
-        run:
+        run: |
           docker run -d \
           -e POSTGRES_USER=postgres \
           -e POSTGRES_PASSWORD=postgres \
