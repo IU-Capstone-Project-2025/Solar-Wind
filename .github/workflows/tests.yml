@@ -43,7 +43,7 @@ jobs:
 
       - name: Compile project
         working-directory: ./backend
-        run: ./mvnw package
+        run: ./mvnw clean package -DskipTests
 
       - name: Run tests
         working-directory: ./backend
