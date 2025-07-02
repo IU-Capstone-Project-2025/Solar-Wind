@@ -26,7 +26,7 @@ jobs:
           -e POSTGRES_USER=postgres\
           -e POSTGRES_PASSWORD=postgres\
           -p 5432:5432\
-          -v ${{ github.workspace }}/backend/.init-db/init.sql:/docker-entrypoint-initdb.d/init.sql \
+          -v ${{ github.workspace }}/backend/.init-db:/docker-entrypoint-initdb.d \
           postgres:17
 
       - name: Set up variables
