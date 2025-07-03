@@ -11,7 +11,7 @@ import Foundation
 public struct SaveAboutMeRequest: APIRequest {
     public typealias Response = SaveAboutMeResponse
     public var method: HTTPMethod { .post }
-    public var path: String { "me" }
+    public var path: String { "profiles/api/me" }
     public var parameters: Parameters?
     public var headers: HTTPHeaders? { nil }
     public var encoding: ParameterEncoding { JSONEncoding.default }
@@ -28,7 +28,7 @@ public struct SaveAboutMeRequest: APIRequest {
             "firstName": "firstName",
             "lastName": "lastName",
             "description": description,
-            "age": 1,
+            "age": 10,
             "gender": "male",
             "preferredGender": "male",
             "cityId": cityId,

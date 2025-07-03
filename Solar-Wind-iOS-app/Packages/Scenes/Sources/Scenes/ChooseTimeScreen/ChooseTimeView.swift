@@ -78,6 +78,7 @@ class ChooseTimeView: View {
 
     private func saveSelection() {
         let array = Array(selectedIndexes).sorted()
+        print(array)
         UserDefaults.standard.set(array, forKey: "selectedWeekdays")
     }
 

@@ -12,13 +12,14 @@ public struct FeedRequest: APIRequest {
     public typealias Response = [User]
     
     public var method: HTTPMethod { .get }
-    public var path: String { "create-deck" }
+    public var path: String { "deckShuffle/api/create-deck" }
     public var parameters: Parameters?
     public var headers: HTTPHeaders? { nil }
     public var encoding: ParameterEncoding { URLEncoding.default }
     
     public init(userDefaults: UserDefaults = .standard) {
-        let id = userDefaults.integer(forKey: "id")
+        let id = userDefaults.integer(forKey: "userId")
+        print(id)
         var params: [String: String] = [
             "id": "\(id)",
         ]
@@ -29,16 +30,9 @@ public struct FeedRequest: APIRequest {
 
 public struct User: Decodable, Sendable {
     public let id: Int
-    let telegramId: String?
     public let username: String
-    let firstName: String
-    let lastName: String
     public let description: String
-    let age: Int
-    let gender: String
-    let verified: Bool
-    let preferredGender: String
-    public let cityId: Int
+    public let cityName: String
     let preferredGymTime: [Int]
-    public let sportId: [Int]
+    public let sportName: [String]
 }

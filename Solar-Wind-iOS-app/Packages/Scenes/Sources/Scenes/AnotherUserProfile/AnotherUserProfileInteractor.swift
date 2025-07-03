@@ -24,8 +24,8 @@ final class AnotherUserProfileInteractor: @unchecked Sendable {
         APIClient.shared.send(request) { result in
             switch result {
             case .success(let user):
-//                let mappedResult = AnotherUserProfile.Fetch.Response(model: .init(username: <#T##String#>, city: <#T##String#>, sports: <#T##[String]#>, about: <#T##String#>, days: <#T##[Int]#>))
-//                DispatchQueue.main.async { self.presenter.present(mappedResult) }
+                let mappedResult = AnotherUserProfile.Fetch.Response(model: .init(username: user.username, city: user.cityName, sports: user.sportName, about: user.description, days: user.preferredGymTime))
+                DispatchQueue.main.async { self.presenter.present(mappedResult) }
                 return
             case .failure(let error):
                 print(error)

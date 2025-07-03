@@ -25,7 +25,7 @@ public final class APIClient: @unchecked Sendable {
         _ request: T,
         completion: @escaping (Result<T.Response, AppError>) -> Void
     ) {
-        let url = "http://10.91.58.117:8080/api/" + request.path
+        let url = "https://solar-wind-gymbro.ru/" + request.path
         
         session.request(
             url,

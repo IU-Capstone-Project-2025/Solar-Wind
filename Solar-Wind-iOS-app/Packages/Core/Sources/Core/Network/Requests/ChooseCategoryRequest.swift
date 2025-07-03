@@ -13,7 +13,7 @@ public struct CategoryRequest: APIRequest {
     public typealias Response = [Category]
 
     public var method: HTTPMethod { .get }
-    public var path: String { "sports/pagination" }
+    public var path: String { "profiles/api/sports/pagination" }
     public var parameters: Parameters?
     public var headers: HTTPHeaders? { nil }
     public var encoding: ParameterEncoding { URLEncoding.default }
