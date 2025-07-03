@@ -1,8 +1,6 @@
 package com.solarwind.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -53,6 +51,9 @@ public class UserEntity {
     public void prePersist() {
         if (this.gender == null) {
             this.gender = Gender.MALE;
+        }
+        if (this.preferredGender == null) {
+            this.preferredGender = Gender.MALE;
         }
         if (this.verified == null) {
             verified = false;

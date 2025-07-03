@@ -1,6 +1,6 @@
 package deckShuffle.app.controllers;
 
-import com.solarwind.dto.UserDto;
+import com.solarwind.dto.ProfileDto;
 import deckShuffle.app.services.DeckCreationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +17,7 @@ public class DeckCreationController {
     private DeckCreationService service;
 
     @GetMapping("/create-deck")
-    public List<UserDto> createDeck(@RequestParam Long id) {
+    public List<ProfileDto> createDeck(@RequestParam Long id) {
         return service.createDeck(id);
     }
 }

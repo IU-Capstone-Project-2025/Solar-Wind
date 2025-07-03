@@ -1,23 +1,30 @@
 package com.solarwind.models;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum Gender {
-    MALE ("male"),
-    FEMALE ("female");
+    MALE("male"),
+    FEMALE("female");
 
     private final String name;
 
-    Gender(String s) {
-        name = s;
+    Gender(String name) {
+        this.name = name;
     }
 
-    public boolean equalsName(String otherName) {
-        return name.equals(otherName);
-    }
-
-    @JsonValue  // При сериализации enum -> строка
+    @JsonValue
     public String toString() {
-        return this.name;
+        return name;
+    }
+
+    @JsonCreator
+    public static Gender fromValue(String value) {
+        for (Gender gender : Gender.values()) {
+            if (gender.name.equalsIgnoreCase(value)) {
+                return gender;
+            }
+        }
+        throw new IllegalArgumentException("Invalid gender: " + value);
     }
 }

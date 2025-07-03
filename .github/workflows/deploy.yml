@@ -17,8 +17,8 @@ jobs:
         uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.REMOTE_HOST }}
-          username: ${{ secrets.REMOTE_USER }}
-          key: ${{ secrets.REMOTE_SSH_KEY }}
+          username: ${{ secrets.REMOTE_HOST_USER }}
+          key: ${{ secrets.REMOTE_HOST_SSH_KEY }}
           script: |
             APP_DIR=~/app
 

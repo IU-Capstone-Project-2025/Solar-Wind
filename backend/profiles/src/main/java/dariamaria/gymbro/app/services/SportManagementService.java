@@ -8,7 +8,7 @@ import java.util.List;
 public interface SportManagementService {
     public List<SportEntity> getSports();
 
-    List<SportEntity> getPartOfCities(int page, int size);
+    List<SportEntity> getPartOfSports(int page, int size);
 
-    List<SportEntity> searchCity(String word);
+    List<SportEntity> searchSport(String word);
 }

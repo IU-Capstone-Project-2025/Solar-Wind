@@ -1,7 +1,9 @@
 package dariamaria.gymbro.app.controllers;
 
+import com.solarwind.dto.ProfileDto;
 import com.solarwind.dto.UserDto;
 import dariamaria.gymbro.app.services.UserManagementService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,24 +15,24 @@ public class UserController {
     @Autowired
     private UserManagementService service;
     @PostMapping("/me")
-    public Map<String, Long> createUser(@RequestBody UserDto dto) {
+    public Map<String, Long> createUser(@Valid @RequestBody UserDto dto) {
         Map<String, Long> response = new HashMap<>();
         response.put("id", service.createUser(dto));
         return response;
     }
-    @GetMapping("/hello")
+    @GetMapping("/ping")
     public String hello() {
-        return "Hello Solar Wind!";
+        return "pong";
     }
     @GetMapping("/me")
-    public UserDto getUserById(@RequestParam long id) {
+    public ProfileDto getUserById(@RequestParam long id) {
         return service.getByUserId(id);
     }
     @GetMapping("/getUsers")
-    public List<UserDto> getUsers() {
+    public List<ProfileDto> getUsers() {
         return service.getUsers();
     }
-    @DeleteMapping("/deleteUserById")
+    @DeleteMapping("/me")
     public void deleteUser(@RequestParam long id) {
         service.deleteUserById(id);
     }
