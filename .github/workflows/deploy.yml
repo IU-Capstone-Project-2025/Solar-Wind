@@ -42,7 +42,7 @@ jobs:
             LIKES_DB_PASSWORD=${{ secrets.LIKES_DB_PASSWORD }}
             EOF
             
-            docker-compose down
+            docker compose down
             ./mvnw clean package -DskipTests
-            docker-compose build
-            docker-compose up -d
+            docker compose build
+            docker compose up -d

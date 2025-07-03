@@ -1,4 +1,4 @@
-name: Deploy to remote server
+name: Test code on runner
 
 on:
   push:
