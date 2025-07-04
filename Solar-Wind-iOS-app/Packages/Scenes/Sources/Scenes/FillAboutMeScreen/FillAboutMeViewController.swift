@@ -23,6 +23,8 @@ final class FillAboutMeViewController: UIViewController {
             case .next:
                 self.saveInfo()
                 self.router?.next()
+            case .back:
+                self.router?.back()
             }
         }
     }
@@ -33,6 +35,7 @@ final class FillAboutMeViewController: UIViewController {
 
         UserDefaults.standard.setValue(name, forKey: "userName")
         UserDefaults.standard.setValue(aboutMe, forKey: "userAboutMe")
+        UserDefaults.standard.setValue(true, forKey: "authorized")
         
         let request = SaveAboutMeRequest(userDefaults: UserDefaults.standard)
         

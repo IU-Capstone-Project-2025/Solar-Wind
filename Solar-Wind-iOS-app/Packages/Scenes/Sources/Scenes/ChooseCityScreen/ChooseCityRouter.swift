@@ -11,4 +11,8 @@ final class ChooseCityRouter {
     @MainActor func next() {
         vc?.navigationController?.pushViewController(ChooseCategoryBuilder.build(), animated: true)
     }
+    
+    @MainActor func back() {
+        vc?.navigationController?.popViewController(animated: true)
+    }
 }

@@ -36,9 +36,14 @@ public final class SwiftUIHostingView<Content: SwiftUI.View>: UIView {
                 self?.heightConstraint?.constant = height
                 self?.superview?.setNeedsLayout()
             }
+            heightReportingView.onCenterXChange = { [weak self] centerX in
+                print("centerX of SwiftUI view in global space:", centerX)
+            }
 
             view = heightReportingView as! Content
         }
+        
+        
 
         let controller = UIHostingController(rootView: view)
         controller.view.translatesAutoresizingMaskIntoConstraints = false
@@ -64,4 +69,5 @@ public final class SwiftUIHostingView<Content: SwiftUI.View>: UIView {
 
 public protocol HeightReporting: SwiftUI.View {
     var onHeightChange: ((CGFloat) -> Void)? { get set }
+    var onCenterXChange: ((CGFloat) -> Void)? { get set }
 }

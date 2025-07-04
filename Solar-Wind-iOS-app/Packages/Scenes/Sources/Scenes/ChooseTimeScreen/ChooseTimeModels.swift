@@ -14,6 +14,14 @@ enum ChooseTime {
         struct ViewModel { }
     }
     
+    enum Back {
+        struct Request { }
+        
+        struct Response { }
+        
+        struct ViewModel { }
+    }
+    
     enum Weekday: Int, CaseIterable {
         case monday = 1, tuesday, wednesday, thursday, friday, saturday, sunday
 

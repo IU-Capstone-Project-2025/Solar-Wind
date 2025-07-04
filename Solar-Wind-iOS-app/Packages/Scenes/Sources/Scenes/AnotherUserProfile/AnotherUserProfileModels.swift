@@ -22,7 +22,7 @@ enum AnotherUserProfile {
         }
     }
     
-    enum back {
+    enum Back {
         struct Request { }
         
         struct Response { }

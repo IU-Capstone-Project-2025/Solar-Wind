@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class FeedBuilder {
+public final class FeedBuilder {
     @MainActor public static func build() -> UIViewController {
         let vc = FeedViewController()
         let router = FeedRouter()

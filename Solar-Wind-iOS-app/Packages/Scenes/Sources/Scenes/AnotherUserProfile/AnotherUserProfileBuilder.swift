@@ -14,6 +14,7 @@ public final class AnotherUserProfileBuilder {
         let presenter = AnotherUserProfilePresenter(view: vc)
         let worker = AnotherUserProfileWorker()
         vc.router = router
+        router.vc = vc
         let interactor = AnotherUserProfileInteractor(presenter: presenter, worker: worker, userId: userId)
         vc.interactor = interactor
         vc.router = router

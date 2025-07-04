@@ -29,6 +29,8 @@ public final class ChooseCategoryViewController: UIViewController {
                 self.interactor?.toggleCategory(with: id)
             case .add:
                 self.interactor?.loadMoreData()
+            case .back:
+                self.router?.back()
             }
         }
     }

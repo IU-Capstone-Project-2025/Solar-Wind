@@ -82,10 +82,11 @@ class ChooseCityView: View {
         case next
         case selected(Int)
         case add
+        case back
     }
     var actionHandler: (Action) -> Void = { _ in }
     
-    private lazy var header = addGradientHeader()
+    private lazy var header = addGradientHeader(backButton: false)
     
     private var titleLabel: UILabel = {
         let view = UILabel()

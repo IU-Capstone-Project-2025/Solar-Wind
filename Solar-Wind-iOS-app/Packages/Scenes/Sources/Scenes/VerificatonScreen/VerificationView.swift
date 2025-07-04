@@ -39,7 +39,7 @@ final class VerificationView: View {
         return view
     }()
     
-    private lazy var header = addGradientHeader()
+    private lazy var header = addGradientHeader(backButton: false)
     
     override func setupContent() {
         backgroundColor = .white

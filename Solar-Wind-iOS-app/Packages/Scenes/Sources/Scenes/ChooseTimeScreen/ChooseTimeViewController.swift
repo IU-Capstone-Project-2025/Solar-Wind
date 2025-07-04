@@ -20,6 +20,8 @@ final class ChooseTimeViewController: UIViewController {
             switch action {
             case .next:
                 router?.next()
+            case .back:
+                self.router?.back()
             }
         }
     }

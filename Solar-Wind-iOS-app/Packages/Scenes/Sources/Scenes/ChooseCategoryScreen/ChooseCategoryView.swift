@@ -14,6 +14,7 @@ final class ChooseCategoryView: CommonUI.View {
         case next
         case selected(Int)
         case add
+        case back
     }
 
     var actionHandler: (Action) -> Void = { _ in }
@@ -51,7 +52,9 @@ final class ChooseCategoryView: CommonUI.View {
         return label
     }()
 
-    private lazy var header = addGradientHeader(text: "Before you start...")
+    private lazy var header = addGradientHeader(text: "Before you start...", backButton: true) { [weak self] in
+        self?.actionHandler(.back)
+    }
 
     private lazy var searchView: SearchView = {
         let view = SearchView(placeholder: "Search...")

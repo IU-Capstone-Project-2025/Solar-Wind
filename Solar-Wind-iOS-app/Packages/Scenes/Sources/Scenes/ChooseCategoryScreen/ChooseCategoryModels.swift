@@ -27,6 +27,14 @@ enum ChooseCategory {
         struct Response { }
         struct ViewModel { }
     }
+    
+    enum Back {
+        struct Request { }
+        
+        struct Response { }
+        
+        struct ViewModel { }
+    }
 
     enum Add {
         struct Request {}

@@ -8,7 +8,7 @@
 import UIKit
 
 public extension UIView {
-    func addGradientHeader(text: String? = nil, backButton: Bool = true) -> UIView {
+    func addGradientHeader(text: String? = nil, backButton: Bool = true, backButtonAction: (() -> Void)? = nil) -> UIView {
         let header = GradientBackgroundView()
         header.translatesAutoresizingMaskIntoConstraints = false
         addSubview(header)
@@ -17,8 +17,8 @@ public extension UIView {
             configureHeagerText(to: header, text: text)
         }
         
-        if backButton {
-            addBackButton(to: header)
+        if backButton, let backButtonAction = backButtonAction {
+            addBackButton(to: header, action: backButtonAction)
         }
         
         NSLayoutConstraint.activate([
@@ -47,7 +47,7 @@ public extension UIView {
         ])
     }
     
-    private func addBackButton(to header: GradientBackgroundView) {
+    private func addBackButton(to header: GradientBackgroundView, action: @escaping () -> Void) {
         let button = UIButton(type: .system)
         
         let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
@@ -59,6 +59,7 @@ public extension UIView {
         button.contentMode = .scaleAspectFit
         button.contentHorizontalAlignment = .center
         button.contentVerticalAlignment = .center
+        button.addAction(UIAction(handler: {_ in action()}), for: .touchUpInside)
         header.addSubview(button)
 
         NSLayoutConstraint.activate([

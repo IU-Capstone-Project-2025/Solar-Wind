@@ -11,11 +11,14 @@ import CommonUI
 class ChooseTimeView: View {
     enum Action {
         case next
+        case back
     }
 
     var actionHandler: (Action) -> Void = { _ in }
 
-    private lazy var header = addGradientHeader(text: "Before you start...")
+    private lazy var header = addGradientHeader(text: "Before you start...", backButton: true) { [weak self] in
+        self?.actionHandler(.back)
+    }
     private var selectedIndexes = Set<Int>()
 
     private let titleLabel: UILabel = {

@@ -28,6 +28,8 @@ class ChooseCityViewController: UIViewController {
                 rootView.setSelectedCity(city)
             case .add:
                 self.interactor?.loadMoreData()
+            case .back:
+                self.router?.back()
             }
         }
     }

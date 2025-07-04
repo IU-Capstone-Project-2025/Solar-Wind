@@ -9,6 +9,13 @@ import UIKit
 import CommonUI
 
 final class AnotherUserProfileView: View {
+    enum Action {
+        case back
+    }
+
+    var actionHandler: (Action) -> Void = { _ in }
+    
+    private var isLiked: Bool = false
     var viewModel: AnotherUserProfile.RootViewModel? {
         didSet {
             guard let viewModel = viewModel else { return }
@@ -19,7 +26,9 @@ final class AnotherUserProfileView: View {
         }
     }
     
-    private lazy var header = addGradientHeader(backButton: true)
+    private lazy var header = addGradientHeader(backButton: true) { [weak self] in
+        self?.actionHandler(.back)
+    }
 
     private lazy var scrollView: UIScrollView = {
         let scroll = UIScrollView()
@@ -50,6 +59,30 @@ final class AnotherUserProfileView: View {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+    
+    private let likeView: HalfCircleView = {
+        let view = HalfCircleView()
+        let image = UIImage(systemName: "heart")
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private lazy var likeButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        let config = UIImage.SymbolConfiguration(pointSize: 26, weight: .medium)
+        button.setImage(UIImage(systemName: "heart", withConfiguration: config), for: .normal)
+        button.tintColor = .black
+        button.addTarget(self, action: #selector(likeTapped), for: .touchUpInside)
+        return button
+    }()
+    
+    @objc private func likeTapped() {
+        isLiked.toggle()
+        let config = UIImage.SymbolConfiguration(pointSize: 26, weight: .medium)
+        likeButton.setImage(UIImage(systemName: isLiked ? "heart.fill" : "heart", withConfiguration: config), for: .normal)
+        likeButton.tintColor = isLiked ? .darkPinkColor : .black
+    }
 
     override func setupContent() {
         super.setupContent()
@@ -57,6 +90,8 @@ final class AnotherUserProfileView: View {
 
         addSubview(header)
         addSubview(scrollView)
+        addSubview(likeView)
+        likeView.addSubview(likeButton)
         scrollView.addSubview(contentView)
 
         contentView.addSubview(image)
@@ -107,11 +142,19 @@ final class AnotherUserProfileView: View {
 
             // daysView
             daysView.topAnchor.constraint(equalTo: aboutView.bottomAnchor, constant: 50),
-            daysView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 90),
+            daysView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             daysView.rightAnchor.constraint(lessThanOrEqualTo: contentView.rightAnchor, constant: -16),
 
             // bottom constraint to scroll
-            daysView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -30)
+            daysView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -30),
+            
+            likeView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -80),
+            likeView.rightAnchor.constraint(equalTo: rightAnchor),
+            likeView.heightAnchor.constraint(equalToConstant: 120),
+            likeView.widthAnchor.constraint(equalToConstant: 60),
+            
+            likeButton.centerXAnchor.constraint(equalTo: likeView.centerXAnchor),
+            likeButton.centerYAnchor.constraint(equalTo: likeView.centerYAnchor)
         ])
     }
 }
