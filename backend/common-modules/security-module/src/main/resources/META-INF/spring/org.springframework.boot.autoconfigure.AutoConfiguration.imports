@@ -1,0 +1,2 @@
+com.solarwind.securityModule.config.SecurityDataSourceConfig
+com.solarwind.securityModule.config.SecurityJpaConfig
