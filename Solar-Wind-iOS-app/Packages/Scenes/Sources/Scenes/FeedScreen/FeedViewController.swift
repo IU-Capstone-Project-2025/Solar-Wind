@@ -24,6 +24,8 @@ final class FeedViewController: UIViewController {
                 interactor?.request(Feed.Select.Request(userId: index))
             case .liked(_):
                 return
+            case .myProfile:
+                router?.myProfile()
             }
         }
         

@@ -31,6 +31,8 @@ public final class ChooseCategoryViewController: UIViewController {
                 self.interactor?.loadMoreData()
             case .back:
                 self.router?.back()
+            case .search(let word):
+                self.interactor?.request(ChooseCategory.Search.Request(word: word))
             }
         }
     }

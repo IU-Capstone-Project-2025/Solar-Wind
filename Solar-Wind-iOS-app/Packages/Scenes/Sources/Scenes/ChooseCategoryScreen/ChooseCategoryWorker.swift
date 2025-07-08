@@ -34,4 +34,16 @@ final class ChooseCategoryWorker {
             }
         }
     }
+    
+    func find(word: String, completion: @escaping ChooseCategory.Completion) {
+        let request = ChooseCategorySearchRequest(word: word)
+        apiClient.send(request) { [callbackQueue] result in
+            let mappedResult = result.map { categories in
+                categories.map { ChooseCategory.Category(id: $0.id, name: $0.name) }
+            }.map { ChooseCategory.Model(items: $0) }
+            callbackQueue.async {
+                completion(mappedResult)
+            }
+        }
+    }
 }

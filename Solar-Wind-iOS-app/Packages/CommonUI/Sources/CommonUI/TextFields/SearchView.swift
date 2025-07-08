@@ -108,6 +108,9 @@ public class SearchView: UIView {
         searchTextField.text = text
     }
     
+    public func getText() -> String {
+        searchTextField.text ?? ""
+    }
 }
 
 extension SearchView: UITextFieldDelegate {

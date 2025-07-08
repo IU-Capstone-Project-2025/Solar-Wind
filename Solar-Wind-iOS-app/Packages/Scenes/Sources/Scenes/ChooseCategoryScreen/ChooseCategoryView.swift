@@ -15,9 +15,11 @@ final class ChooseCategoryView: CommonUI.View {
         case selected(Int)
         case add
         case back
+        case search(String)
     }
 
     var actionHandler: (Action) -> Void = { _ in }
+    var searchText: String = ""
 
     private typealias DataSource = UITableViewDiffableDataSource<ChooseCategory.RootViewModel.Section, ChooseCategory.Category>
     private typealias Snapshot = NSDiffableDataSourceSnapshot<ChooseCategory.RootViewModel.Section, ChooseCategory.Category>
@@ -40,7 +42,7 @@ final class ChooseCategoryView: CommonUI.View {
                     snapshot.appendItems(items, toSection: section)
                 }
             }
-            dataSource.apply(snapshot, animatingDifferences: true)
+            dataSource.apply(snapshot, animatingDifferences: false)
         }
     }
 
@@ -58,6 +60,10 @@ final class ChooseCategoryView: CommonUI.View {
 
     private lazy var searchView: SearchView = {
         let view = SearchView(placeholder: "Search...")
+        view.searchAction = { [weak self] text in
+            self?.actionHandler(.search(text))
+            self?.searchText = text
+        }
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -69,6 +75,7 @@ final class ChooseCategoryView: CommonUI.View {
         table.translatesAutoresizingMaskIntoConstraints = false
         table.delegate = self
         table.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        table.keyboardDismissMode = .onDrag
         return table
     }()
 
@@ -144,13 +151,10 @@ extension ChooseCategoryView: UITableViewDelegate {
         actionHandler(.selected(category.id))
     }
 
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard scrollView == tableView else { return }
-        let offsetY = scrollView.contentOffset.y
-        let contentHeight = scrollView.contentSize.height
-        let height = scrollView.frame.size.height
-        if offsetY > contentHeight - height * 1.5 {
-            actionHandler(.add)
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard let itemsCount = viewModel?.currentItemsCount else { return }
+        if searchText == "" && indexPath.row == itemsCount - 5 {
+            self.actionHandler(.add)
         }
     }
 }

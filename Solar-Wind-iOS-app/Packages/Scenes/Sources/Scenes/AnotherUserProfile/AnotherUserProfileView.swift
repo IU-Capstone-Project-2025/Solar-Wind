@@ -130,7 +130,7 @@ final class AnotherUserProfileView: View {
             image.heightAnchor.constraint(equalToConstant: 300),
 
             // tagsView
-            tagsView.topAnchor.constraint(equalTo: image.bottomAnchor, constant: 50),
+            tagsView.topAnchor.constraint(equalTo: image.bottomAnchor, constant: 70),
             tagsView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
             tagsView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16),
             tagsView.heightAnchor.constraint(equalToConstant: 100),

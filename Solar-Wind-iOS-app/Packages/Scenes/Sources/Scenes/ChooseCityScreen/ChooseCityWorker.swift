@@ -38,4 +38,18 @@ final class ChooseCityWorker {
             }
         }
     }
+    
+    func find(word: String, completion: @escaping ChooseCity.Completion) {
+        let request = CitySearchRequest(word: word)
+        
+        apiClient.send(request) { [callbackQueue] result in
+            let mappedResult = result.map { cities in
+                cities.map { ChooseCity.City(id: $0.id, name: $0.name) }
+            }.map { ChooseCity.Model(items: $0) }
+            
+            callbackQueue.async {
+                completion(mappedResult)
+            }
+        }
+    }
 }

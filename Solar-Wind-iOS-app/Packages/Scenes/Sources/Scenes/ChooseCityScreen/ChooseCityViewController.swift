@@ -21,7 +21,7 @@ class ChooseCityViewController: UIViewController {
             guard let self else { return }
             switch action {
             case .next:
-                self.interactor?.requset(ChooseCity.Next.Request())
+                self.interactor?.request(ChooseCity.Next.Request())
             case .selected(let index):
                 guard let city = self.interactor?.cities[index] else { return }
                 self.interactor?.saveSelectedCity(city)
@@ -30,6 +30,8 @@ class ChooseCityViewController: UIViewController {
                 self.interactor?.loadMoreData()
             case .back:
                 self.router?.back()
+            case .search(let word):
+                self.interactor?.request(ChooseCity.Search.Request(word: word))
             }
         }
     }

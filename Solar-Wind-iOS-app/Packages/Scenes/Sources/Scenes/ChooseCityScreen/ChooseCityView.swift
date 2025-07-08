@@ -7,10 +7,13 @@
 
 import UIKit
 import CommonUI
+import Foundation
 
 class ChooseCityView: View {
     private typealias DataSource = UITableViewDiffableDataSource<ChooseCity.RootViewModel.Section, ChooseCity.City>
     private typealias Snapshot = NSDiffableDataSourceSnapshot<ChooseCity.RootViewModel.Section, ChooseCity.City>
+    
+    var searchWord: String = ""
     
     var viewModel: ChooseCity.RootViewModel? {
         didSet {
@@ -44,6 +47,7 @@ class ChooseCityView: View {
         view.separatorStyle = .singleLine
         view.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         view.separatorColor = UIColor.black.withAlphaComponent(0.1)
+        view.keyboardDismissMode = .onDrag
         return view
     }()
     
@@ -83,6 +87,7 @@ class ChooseCityView: View {
         case selected(Int)
         case add
         case back
+        case search(String)
     }
     var actionHandler: (Action) -> Void = { _ in }
     
@@ -99,6 +104,10 @@ class ChooseCityView: View {
     
     private lazy var searchView: SearchView = {
         let view = SearchView(placeholder: "Search...")
+        view.searchAction = { [weak self] text in
+            self?.actionHandler(.search(text))
+            self?.searchWord = text
+        }
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -142,7 +151,7 @@ extension ChooseCityView: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         guard let itemsCount = viewModel?.currentItemsCount else { return }
-        if indexPath.row == itemsCount - 5 {
+        if searchWord == "" && indexPath.row == itemsCount - 5 {
             self.actionHandler(.add)
         }
     }

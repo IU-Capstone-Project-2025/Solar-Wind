@@ -8,7 +8,7 @@
 import UIKit
 
 public extension UIView {
-    func addGradientHeader(text: String? = nil, backButton: Bool = true, backButtonAction: (() -> Void)? = nil) -> UIView {
+    func addGradientHeader(text: String? = nil, backButton: Bool = true, imaheName: String = "arrow.uturn.left", backButtonAction: (() -> Void)? = nil) -> UIView {
         let header = GradientBackgroundView()
         header.translatesAutoresizingMaskIntoConstraints = false
         addSubview(header)
@@ -18,7 +18,7 @@ public extension UIView {
         }
         
         if backButton, let backButtonAction = backButtonAction {
-            addBackButton(to: header, action: backButtonAction)
+            addBackButton(to: header, action: backButtonAction, name: imaheName)
         }
         
         NSLayoutConstraint.activate([
@@ -47,11 +47,11 @@ public extension UIView {
         ])
     }
     
-    private func addBackButton(to header: GradientBackgroundView, action: @escaping () -> Void) {
+    private func addBackButton(to header: GradientBackgroundView, action: @escaping () -> Void, name: String) {
         let button = UIButton(type: .system)
         
         let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
-        let image = UIImage(systemName: "arrow.uturn.left", withConfiguration: config)?
+        let image = UIImage(systemName: name, withConfiguration: config)?
             .withTintColor(.white, renderingMode: .alwaysOriginal)
 
         button.setImage(image, for: .normal)

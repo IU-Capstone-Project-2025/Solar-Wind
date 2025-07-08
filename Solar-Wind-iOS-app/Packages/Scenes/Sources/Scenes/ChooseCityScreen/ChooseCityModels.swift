@@ -24,7 +24,7 @@ enum ChooseCity {
     
     enum Search {
         struct Request {
-            let text: String
+            let word: String
         }
 
         struct Response {

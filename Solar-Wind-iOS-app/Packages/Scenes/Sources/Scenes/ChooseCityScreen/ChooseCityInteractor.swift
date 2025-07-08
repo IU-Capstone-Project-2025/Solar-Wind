@@ -22,7 +22,7 @@ final  class ChooseCityInteractor: @unchecked Sendable {
         loadMoreData()
     }
     
-    @MainActor public func requset(_ request: ChooseCity.Next.Request) {
+    @MainActor public func request(_ request: ChooseCity.Next.Request) {
         self.presenter.present(ChooseCity.Next.ViewModel())
     }
     
@@ -69,7 +69,22 @@ final  class ChooseCityInteractor: @unchecked Sendable {
                 }
                 
             case .failure(let error):
-                print("Error loading more cities: \(error)") // Ошибки можно и в фоне логировать
+                print("Error loading more cities: \(error)")
+            }
+        }
+    }
+    
+    public func request(_ request: ChooseCity.Search.Request) {
+        worker.find(word: request.word) { [weak self] result in
+            guard let self else { return }
+            switch result {
+            case .success(let model):
+                self.cities = model.items
+                DispatchQueue.main.async {
+                    self.presenter.present(cities: self.cities.map { ChooseCity.City(id: $0.id, name: $0.name) })
+                }
+            case .failure(let error):
+                print("Error loading more cities: \(error)")
             }
         }
     }

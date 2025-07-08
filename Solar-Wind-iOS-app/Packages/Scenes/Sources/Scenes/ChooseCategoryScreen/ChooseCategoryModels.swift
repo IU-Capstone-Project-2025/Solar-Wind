@@ -47,6 +47,22 @@ enum ChooseCategory {
             var error: AppError?
         }
     }
+    
+    enum Search {
+        struct Request {
+            var word: String
+        }
+        
+        struct Response {
+            var model: Model?
+            var error: AppError?
+        }
+        
+        struct ViewModel {
+            var root: RootViewModel?
+            var error: AppError?
+        }
+    }
 
     struct Model {
         var items: [Category]
