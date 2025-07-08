@@ -25,24 +25,19 @@ final class ChooseCategoryView: CommonUI.View {
     private typealias Snapshot = NSDiffableDataSourceSnapshot<ChooseCategory.RootViewModel.Section, ChooseCategory.Category>
 
     var selectedCategories: [ChooseCategory.Category] = [] {
-        didSet { updateTags(selectedCategories) }
+        didSet {
+            updateTags(selectedCategories)
+            updateSnapshot()
+        }
     }
+    
+    var selectedIds: [Int] = []
 
     private var allItems: [ChooseCategory.Category] = []
 
     var viewModel: ChooseCategory.RootViewModel? {
         didSet {
-            guard let viewModel = viewModel else { return }
-            var snapshot = Snapshot()
-            snapshot.appendSections(viewModel.sections)
-            viewModel.sections.forEach { section in
-                switch section {
-                case .items(let items):
-                    allItems = items
-                    snapshot.appendItems(items, toSection: section)
-                }
-            }
-            dataSource.apply(snapshot, animatingDifferences: false)
+            updateSnapshot()
         }
     }
 
@@ -74,7 +69,7 @@ final class ChooseCategoryView: CommonUI.View {
         let table = UITableView()
         table.translatesAutoresizingMaskIntoConstraints = false
         table.delegate = self
-        table.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        table.register(CategoryCell.self, forCellReuseIdentifier: "SearchCell")
         table.keyboardDismissMode = .onDrag
         return table
     }()
@@ -90,11 +85,9 @@ final class ChooseCategoryView: CommonUI.View {
     }()
 
     private lazy var dataSource: DataSource = {
-        let ds = DataSource(tableView: tableView) { [weak self] tableView, indexPath, item in
-            guard let self else { return nil }
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-            cell.textLabel?.text = item.name
-            cell.accessoryType = selectedCategories.contains(item) ? .checkmark : .none
+        let ds = DataSource(tableView: tableView) { tableView, indexPath, item in
+            let cell = tableView.dequeueReusableCell(withIdentifier: "SearchCell", for: indexPath) as! CategoryCell
+            cell.viewModel = .init(category: item, isSelected: self.selectedIds.contains(item.id))
             return cell
         }
         return ds
@@ -142,13 +135,34 @@ final class ChooseCategoryView: CommonUI.View {
         let tagNames = categories.map { $0.name }
         tagsView.update(rootView: TagsView(tags: tagNames))
     }
+    
+    private func updateSnapshot() {
+        guard let viewModel = viewModel else { return }
+        var snapshot = Snapshot()
+        snapshot.appendSections(viewModel.sections)
+        viewModel.sections.forEach { section in
+            switch section {
+            case .items(let items):
+                let updatedItems = items.map { category in
+                    ChooseCategory.Category(id: category.id, name: category.name, isSelected: selectedIds.contains(category.id))
+                }
+                snapshot.appendItems(updatedItems, toSection: section)
+            }
+        }
+        dataSource.apply(snapshot, animatingDifferences: false)
+    }
 }
 
 extension ChooseCategoryView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let category = dataSource.itemIdentifier(for: indexPath) else { return }
-        tableView.deselectRow(at: indexPath, animated: true)
+        if category.isSelected {
+            selectedIds.removeAll { $0 == category.id}
+        } else {
+            selectedIds.append(category.id)
+        }
         actionHandler(.selected(category.id))
+        updateSnapshot()
     }
 
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -156,5 +170,88 @@ extension ChooseCategoryView: UITableViewDelegate {
         if searchText == "" && indexPath.row == itemsCount - 5 {
             self.actionHandler(.add)
         }
+    }
+}
+
+class CategoryCell: UITableViewCell {
+
+    var actionHandler: (CategoryCellContentView.Action) -> Void {
+        get {
+            content.actionHandler
+        }
+        set {
+            content.actionHandler = newValue
+        }
+    }
+
+    var viewModel: CategoryCellContentView.Model? {
+        get {
+            content.viewModel
+        }
+        set {
+            content.viewModel = newValue ?? .init(
+                category: .init(id: -1, name: "", isSelected: false)
+            )
+        }
+    }
+
+    private lazy var content: CategoryCellContentView = {
+        let view = CategoryCellContentView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        self.contentView.addSubview(view)
+        view.pinToSuperview()
+        return view
+    }()
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        viewModel = nil
+    }
+}
+
+class CategoryCellContentView: CommonUI.View {
+    public struct Model {
+        let category: String
+        var isSelected: Bool = false
+        
+        public init(category: ChooseCategory.Category, isSelected: Bool = false) {
+            self.category = category.name
+            self.isSelected = isSelected
+        }
+    }
+    
+    public var viewModel: Model = .init(category: ChooseCategory.Category(id: -1, name: ""), isSelected: false) {
+        didSet {
+            categoryLabel.text = viewModel.category
+            backgroundColor = viewModel.isSelected ? .orangeColor : .clear
+        }
+    }
+    
+    public enum Action {
+        case pressed
+    }
+    public var actionHandler: (Action) -> Void = { _ in }
+    
+    private let categoryLabel: UILabel = {
+        let label = UILabel()
+        label.font = .size16Medium
+        label.textColor = .black
+        label.textAlignment = .left
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    override func setupContent() {
+        super.setupContent()
+        addSubview(categoryLabel)
+    }
+    
+    override func setupConstraints() {
+        super.setupConstraints()
+        NSLayoutConstraint.activate([
+            categoryLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
+            categoryLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
+            categoryLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
+        ])
     }
 }

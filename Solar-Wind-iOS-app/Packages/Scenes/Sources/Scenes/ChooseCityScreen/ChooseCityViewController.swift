@@ -23,7 +23,7 @@ class ChooseCityViewController: UIViewController {
             case .next:
                 self.interactor?.request(ChooseCity.Next.Request())
             case .selected(let index):
-                guard let city = self.interactor?.cities[index] else { return }
+                guard let city = self.interactor?.findCityById(index) else { break }
                 self.interactor?.saveSelectedCity(city)
                 rootView.setSelectedCity(city)
             case .add:

@@ -71,6 +71,7 @@ enum ChooseCategory {
     struct Category: Codable, Sendable, Hashable {
         let id: Int
         let name: String
+        var isSelected: Bool = false
     }
 
     struct RootViewModel {

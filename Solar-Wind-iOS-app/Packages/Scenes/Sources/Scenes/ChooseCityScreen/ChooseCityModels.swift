@@ -75,6 +75,7 @@ enum ChooseCity {
     struct City: Codable, Sendable, Hashable {
         let id: Int
         let name: String
+        var isSelected: Bool = false
     }
     
     struct RootViewModel {

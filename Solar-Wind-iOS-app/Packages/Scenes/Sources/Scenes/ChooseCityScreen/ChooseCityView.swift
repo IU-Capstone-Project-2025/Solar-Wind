@@ -14,19 +14,11 @@ class ChooseCityView: View {
     private typealias Snapshot = NSDiffableDataSourceSnapshot<ChooseCity.RootViewModel.Section, ChooseCity.City>
     
     var searchWord: String = ""
+    var chosenCityId: Int?
     
     var viewModel: ChooseCity.RootViewModel? {
         didSet {
-            var snapshot = Snapshot()
-            guard let viewModel = viewModel else { return }
-            snapshot.appendSections(viewModel.sections)
-            viewModel.sections.forEach { section in
-                switch section {
-                case .items(let items):
-                    snapshot.appendItems(items, toSection: section)
-                }
-            }
-            dataSource.apply(snapshot, animatingDifferences: false)
+            updateSnapshot()
         }
     }
     
@@ -71,7 +63,7 @@ class ChooseCityView: View {
             switch indexPath.section {
             case 0:
                 let cell = tableView.dequeueReusableCell(withIdentifier: "SearchCell", for: indexPath) as! SearchCell
-                cell.viewModel = .init(city: item)
+                cell.viewModel = .init(city: item, isSelected: item.id == self.chosenCityId)
                 cell.selectionStyle = .none
                 return cell
             default:
@@ -142,11 +134,30 @@ class ChooseCityView: View {
             nextButton.heightAnchor.constraint(equalToConstant: 52)
         ])
     }
+    
+    private func updateSnapshot() {
+        guard let viewModel = viewModel else { return }
+        var snapshot = Snapshot()
+        snapshot.appendSections(viewModel.sections)
+        viewModel.sections.forEach { section in
+            switch section {
+            case .items(let items):
+                let updatedItems = items.map { city in
+                    ChooseCity.City(id: city.id, name: city.name, isSelected: city.id == chosenCityId)
+                }
+                snapshot.appendItems(updatedItems, toSection: section)
+            }
+        }
+        dataSource.apply(snapshot, animatingDifferences: false)
+    }
 }
 
 extension ChooseCityView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        actionHandler(.selected(indexPath.row))
+        guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
+        actionHandler(.selected(item.id))
+        chosenCityId = item.id
+        updateSnapshot()
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -174,7 +185,7 @@ class SearchCell: UITableViewCell {
         }
         set {
             content.viewModel = newValue ?? .init(
-                city: .init(id: -1, name: "")
+                city: .init(id: -1, name: "", isSelected: false)
             )
         }
     }
@@ -196,15 +207,18 @@ class SearchCell: UITableViewCell {
 class SearchCellContentView: View {
     public struct Model {
         let city: String
+        var isSelected: Bool = false
         
-        public init(city: ChooseCity.City) {
+        public init(city: ChooseCity.City, isSelected: Bool = false) {
             self.city = city.name
+            self.isSelected = isSelected
         }
     }
     
-    public var viewModel: Model = .init(city: ChooseCity.City(id: -1, name: "")) {
+    public var viewModel: Model = .init(city: ChooseCity.City(id: -1, name: ""), isSelected: false) {
         didSet {
             cityLabel.text = viewModel.city
+            backgroundColor = viewModel.isSelected ? .orangeColor : .clear
         }
     }
     

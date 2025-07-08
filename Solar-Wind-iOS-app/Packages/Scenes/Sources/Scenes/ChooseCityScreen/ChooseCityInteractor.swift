@@ -92,4 +92,8 @@ final  class ChooseCityInteractor: @unchecked Sendable {
     func saveSelectedCity(_ city: ChooseCity.City) {
         UserDefaults.standard.set(city.id, forKey: "selectedCityId")
     }
+    
+    public func findCityById(_ id: Int) -> ChooseCity.City? {
+        return cities.first { $0.id == id }
+    }
 }
