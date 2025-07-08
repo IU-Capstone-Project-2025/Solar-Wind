@@ -12,6 +12,7 @@ class ChooseTimeView: View {
     enum Action {
         case next
         case back
+        case select(Int)
     }
 
     var actionHandler: (Action) -> Void = { _ in }
@@ -19,7 +20,6 @@ class ChooseTimeView: View {
     private lazy var header = addGradientHeader(text: "Before you start...", backButton: true) { [weak self] in
         self?.actionHandler(.back)
     }
-    private var selectedIndexes = Set<Int>()
 
     private let titleLabel: UILabel = {
         let view = UILabel()
@@ -37,7 +37,6 @@ class ChooseTimeView: View {
         let button = GradientButton()
         button.title = "Continue"
         button.addAction(UIAction(handler: { [weak self] _ in
-            self?.saveSelection()
             self?.actionHandler(.next)
         }), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -52,7 +51,6 @@ class ChooseTimeView: View {
         addSubview(nextButton)
 
         setupStackView()
-        loadSelection()
     }
 
     private func setupStackView() {
@@ -64,35 +62,15 @@ class ChooseTimeView: View {
             let button = YellowButton()
             button.title = day.title
             button.tag = day.rawValue
-            button.addTarget(self, action: #selector(dayButtonTapped(_:)), for: .touchUpInside)
+            button.addAction(
+                UIAction (
+                    handler: { [weak self] _ in
+                        self?.actionHandler(.select(button.tag))
+                        button.isSelected.toggle()
+                    }
+                ), for: .touchUpInside
+            )
             stackView.addArrangedSubview(button)
-        }
-    }
-
-    @objc private func dayButtonTapped(_ sender: UIButton) {
-        let index = sender.tag
-        if selectedIndexes.contains(index) {
-            selectedIndexes.remove(index)
-        } else {
-            selectedIndexes.insert(index)
-        }
-        sender.isSelected = selectedIndexes.contains(index)
-    }
-
-    private func saveSelection() {
-        let array = Array(selectedIndexes).sorted()
-        print(array)
-        UserDefaults.standard.set(array, forKey: "selectedWeekdays")
-    }
-
-    private func loadSelection() {
-        let array = UserDefaults.standard.array(forKey: "selectedWeekdays") as? [Int] ?? []
-        selectedIndexes = Set(array)
-
-        // Обновить UI-кнопки
-        for case let button as YellowButton in stackView.arrangedSubviews {
-            let isSelected = selectedIndexes.contains(button.tag)
-            button.isSelected = isSelected
         }
     }
 

@@ -15,6 +15,7 @@ final  class ChooseCityInteractor: @unchecked Sendable {
     private var currentPage = -1
     private let pageSize = 20
     private var isLoading = false
+    public var selectedCityId: Int?
     
     init(presenter: ChooseCityPresenter, worker: ChooseCityWorker) {
         self.presenter = presenter
@@ -23,7 +24,9 @@ final  class ChooseCityInteractor: @unchecked Sendable {
     }
     
     @MainActor public func request(_ request: ChooseCity.Next.Request) {
-        self.presenter.present(ChooseCity.Next.ViewModel())
+        if selectedCityId != nil {
+            self.presenter.present(ChooseCity.Next.ViewModel())
+        }
     }
     
     func loadMoreData() {
@@ -90,6 +93,7 @@ final  class ChooseCityInteractor: @unchecked Sendable {
     }
     
     func saveSelectedCity(_ city: ChooseCity.City) {
+        selectedCityId = city.id
         UserDefaults.standard.set(city.id, forKey: "selectedCityId")
     }
     

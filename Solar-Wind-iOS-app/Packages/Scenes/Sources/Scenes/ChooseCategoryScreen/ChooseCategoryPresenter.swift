@@ -7,6 +7,7 @@
 
 final class ChooseCategoryPresenter {
     weak var view: ChooseCategoryViewController?
+    var router: ChooseCategoryRouter?
 
     init(view: ChooseCategoryViewController) {
         self.view = view
@@ -24,5 +25,9 @@ final class ChooseCategoryPresenter {
 
     @MainActor func presentSelected(_ selected: [ChooseCategory.Category]) {
         view?.updateSelectedTags(selected)
+    }
+    
+    @MainActor func present(_ viewModel: ChooseCategory.Next.ViewModel) {
+        router?.next()
     }
 }

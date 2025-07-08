@@ -10,6 +10,7 @@ public final class ChooseCategoryBuilder {
         let vc = ChooseCategoryViewController()
         let router = ChooseCategoryRouter()
         let presenter = ChooseCategoryPresenter(view: vc)
+        presenter.router = router
         let worker = ChooseCategoryWorker()
         let interactor = ChooseCategoryInteractor(presenter: presenter, worker: worker)
         router.vc = vc

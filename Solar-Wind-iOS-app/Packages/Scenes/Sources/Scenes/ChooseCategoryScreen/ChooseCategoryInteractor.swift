@@ -94,4 +94,10 @@ final class ChooseCategoryInteractor: @unchecked Sendable {
             }
         }
     }
+    
+    func request(_ request: ChooseCategory.Next.Request) {
+        if !selectedCategories.isEmpty {
+            DispatchQueue.main.async { self.presenter.present(ChooseCategory.Next.ViewModel()) }
+        }
+    }
 }

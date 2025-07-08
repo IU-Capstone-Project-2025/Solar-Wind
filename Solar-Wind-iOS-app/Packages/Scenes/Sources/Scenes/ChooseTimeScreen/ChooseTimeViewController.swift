@@ -9,6 +9,7 @@ import UIKit
 
 final class ChooseTimeViewController: UIViewController {
     var router: ChooseTimeRouter?
+    var interactor: ChooseTimeInteractor?
     
     private lazy var rootView = ChooseTimeView()
     
@@ -19,10 +20,18 @@ final class ChooseTimeViewController: UIViewController {
             guard let self else { return }
             switch action {
             case .next:
-                router?.next()
+                self.interactor?.request(ChooseTime.Next.Request())
             case .back:
                 self.router?.back()
+            case .select(let dayId):
+                self.interactor?.request(ChooseTime.Select.Request(dayId: dayId))
             }
         }
+    }
+}
+
+extension ChooseTimeViewController {
+    func display(_ viewModel: ChooseTime.Next.ViewModel) {
+        router?.next()
     }
 }

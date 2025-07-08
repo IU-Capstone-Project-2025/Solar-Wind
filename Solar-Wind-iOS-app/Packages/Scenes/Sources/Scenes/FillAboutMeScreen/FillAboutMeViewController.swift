@@ -10,6 +10,7 @@ import Core
 
 final class FillAboutMeViewController: UIViewController {
     var router: FillAboutMeRouter?
+    var interactor: FillAboutMeInteractor?
 
     private lazy var rootView = FillAboutMeView()
 
@@ -21,32 +22,16 @@ final class FillAboutMeViewController: UIViewController {
             guard let self else { return }
             switch action {
             case .next:
-                self.saveInfo()
-                self.router?.next()
+                self.interactor?.request(FillAboutMe.Next.Request(name: self.rootView.name ?? "", about: self.rootView.aboutMe ?? ""))
             case .back:
                 self.router?.back()
             }
         }
     }
+}
 
-    private func saveInfo() {
-        let name = rootView.name ?? ""
-        let aboutMe = rootView.aboutMe ?? ""
-
-        UserDefaults.standard.setValue(name, forKey: "userName")
-        UserDefaults.standard.setValue(aboutMe, forKey: "userAboutMe")
-        UserDefaults.standard.setValue(true, forKey: "authorized")
-        
-        let request = SaveAboutMeRequest(userDefaults: UserDefaults.standard)
-        
-        APIClient.shared.send(request) { result in
-            switch result {
-            case .success(let response):
-                print(response)
-                UserDefaults.standard.setValue(response.id, forKey: "userId")
-            case .failure(let error):
-                print(error)
-            }
-        }
+extension FillAboutMeViewController {
+    func display(_ viewModel: FillAboutMe.Next.ViewModel) {
+        self.router?.next()
     }
 }
