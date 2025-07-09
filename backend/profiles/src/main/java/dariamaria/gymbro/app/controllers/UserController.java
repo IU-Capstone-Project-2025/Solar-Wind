@@ -2,6 +2,8 @@ package dariamaria.gymbro.app.controllers;
 
 import com.solarwind.dto.ProfileDto;
 import com.solarwind.dto.UserDto;
+import com.solarwind.securityModule.annotation.Secured;
+import com.solarwind.securityModule.service.DatabaseSourceReader;
 import dariamaria.gymbro.app.services.UserManagementService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
+@Secured(DatabaseSourceReader.class)
 @RestController
 @RequestMapping("/api")
 public class UserController {
@@ -28,7 +31,7 @@ public class UserController {
     }
 
     @DeleteMapping("/me")
-    public void deleteUser(@RequestParam long id) {
+    public void deleteUser(@RequestHeader("Authorization-telegram-id") long id) {
         service.deleteUserById(id);
     }
 

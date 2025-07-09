@@ -1,5 +1,7 @@
 package dariamaria.gymbro.app.controllers;
 
+import com.solarwind.securityModule.annotation.Secured;
+import com.solarwind.securityModule.service.PropertyTokenSourceReader;
 import dariamaria.gymbro.app.services.implementation.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -95,7 +97,7 @@ public class AuthController {
         }
     }
 
-
+    @Secured(PropertyTokenSourceReader.class)
     @PostMapping("/custom-auth")
     public void postMatchingCode(@RequestParam Integer code, @RequestParam Long userId) {
         code_awaiters.put(code, userId);

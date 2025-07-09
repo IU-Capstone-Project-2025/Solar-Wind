@@ -25,6 +25,7 @@ public class HttpMatchNotifier implements MatchNotificationPort {
     public void notifyMatch(Long likerId, Long likedId) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.TEXT_PLAIN);
+        headers.set("Authorize", System.getenv("LIKE_TO_NOTIFICATION_TOKEN"));
 
         String fullUrl = UriComponentsBuilder.fromUriString(matchServiceUrl + "/")
                 .queryParam("user1", likedId)

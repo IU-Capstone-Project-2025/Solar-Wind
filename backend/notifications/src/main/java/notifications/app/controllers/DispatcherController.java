@@ -1,5 +1,8 @@
 package notifications.app.controllers;
 
+import com.solarwind.securityModule.annotation.Secured;
+import com.solarwind.securityModule.service.DatabaseSourceReader;
+import com.solarwind.securityModule.service.PropertyTokenSourceReader;
 import notifications.app.dto.NotificationDto;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +20,7 @@ import java.util.HashMap;
 public class DispatcherController {
     private final static HashMap<Long, ArrayList<NotificationDto>> allNotifications = new HashMap<>();
 
+    @Secured(DatabaseSourceReader.class)
     @GetMapping("/")
     public ArrayList<NotificationDto> dispatcher(@RequestHeader("Authorization-telegram-id") Long owner) {
         var result = allNotifications.get(owner);
@@ -24,6 +28,7 @@ public class DispatcherController {
         return result;
     }
 
+    @Secured(PropertyTokenSourceReader.class)
     @PostMapping("/")
     public void publish(@RequestParam Long user1, @RequestParam Long user2) {
         for (var user : new Long[]{user1, user2}) {
