@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct DaysView: SwiftUI.View, HeightReporting {
+public struct DaysView: SwiftUI.View {
     let days: [String]
     
     public var onHeightChange: ((CGFloat) -> Void)?

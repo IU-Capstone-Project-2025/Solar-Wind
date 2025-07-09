@@ -11,9 +11,12 @@ import UIKit
 public final class SwiftUIHostingView<Content: SwiftUI.View>: UIView {
     private var hostingController: UIHostingController<Content>?
     private var heightConstraint: NSLayoutConstraint?
+    
+    private var rootView: Content?
 
     public init(rootView: Content) {
         super.init(frame: .zero)
+        self.rootView = rootView
         setup(rootView: rootView)
     }
 
@@ -25,25 +28,6 @@ public final class SwiftUIHostingView<Content: SwiftUI.View>: UIView {
         self.translatesAutoresizingMaskIntoConstraints = false
 
         var view = rootView
-
-        // Подключаем callback, если Content поддерживает HeightReporting
-        if var heightReportingView = view as? (any HeightReporting) {
-            heightConstraint = heightAnchor.constraint(equalToConstant: 0)
-            heightConstraint?.priority = .defaultHigh
-            heightConstraint?.isActive = true
-
-            heightReportingView.onHeightChange = { [weak self] height in
-                self?.heightConstraint?.constant = height
-                self?.superview?.setNeedsLayout()
-            }
-            heightReportingView.onCenterXChange = { [weak self] centerX in
-                print("centerX of SwiftUI view in global space:", centerX)
-            }
-
-            view = heightReportingView as! Content
-        }
-        
-        
 
         let controller = UIHostingController(rootView: view)
         controller.view.translatesAutoresizingMaskIntoConstraints = false
@@ -63,11 +47,4 @@ public final class SwiftUIHostingView<Content: SwiftUI.View>: UIView {
     public func update(rootView: Content) {
         hostingController?.rootView = rootView
     }
-}
-
-
-
-public protocol HeightReporting: SwiftUI.View {
-    var onHeightChange: ((CGFloat) -> Void)? { get set }
-    var onCenterXChange: ((CGFloat) -> Void)? { get set }
 }

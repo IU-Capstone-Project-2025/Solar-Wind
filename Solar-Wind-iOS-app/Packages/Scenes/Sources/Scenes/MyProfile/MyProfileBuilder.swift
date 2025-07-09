@@ -10,7 +10,8 @@ public final class MyProfileBuilder {
         let vc = MyProfileViewController()
         let presenter = MyProfilePresenter()
         presenter.view = vc
-        let interactor = MyProfileInteractor(presenter: presenter)
+        let worker = MyProfileWorker()
+        let interactor = MyProfileInteractor(presenter: presenter, worker: worker)
         vc.interactor = interactor
         let router = MyProfileRouter()
         router.vc = vc

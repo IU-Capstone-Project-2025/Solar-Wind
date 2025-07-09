@@ -1,13 +1,13 @@
 //
-//  AnotherUserProfileModels.swift
+//  MyProfileModels.swift
 //  Scenes
 //
-//  Created by Даша Николаева on 01.07.2025.
+//  Created by Даша Николаева on 09.07.2025.
 //
 
 import CommonModels
 
-enum AnotherUserProfile {
+enum MyProfile {
     enum Fetch {
         struct Request { }
 
@@ -46,5 +46,5 @@ enum AnotherUserProfile {
         let days: [String]
     }
     
-    typealias AnotherUserProfileCompletion = (Result<Fetch.Response, AppError>) -> Void
+    typealias MyProfileCompletion = (Result<Fetch.Response, AppError>) -> Void
 }

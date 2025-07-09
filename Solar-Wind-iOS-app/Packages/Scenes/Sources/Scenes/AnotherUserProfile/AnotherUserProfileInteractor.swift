@@ -20,13 +20,11 @@ final class AnotherUserProfileInteractor: @unchecked Sendable {
     }
     
     public func request(_ request: AnotherUserProfile.Fetch.Request) {
-        let request = ProfileRequest(id: userId)
-        APIClient.shared.send(request) { result in
+        worker.fetch(id: userId) { [weak self] result in
+            guard let self else { return }
             switch result {
             case .success(let user):
-                let mappedResult = AnotherUserProfile.Fetch.Response(model: .init(username: user.username, city: user.cityName, sports: user.sportName, about: user.description, days: user.preferredGymTime))
-                DispatchQueue.main.async { self.presenter.present(mappedResult) }
-                return
+                DispatchQueue.main.async { self.presenter.present(user) }
             case .failure(let error):
                 print(error)
             }

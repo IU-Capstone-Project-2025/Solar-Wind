@@ -8,7 +8,7 @@
 import UIKit
 
 public extension UIView {
-    func addGradientHeader(text: String? = nil, backButton: Bool = true, imaheName: String = "arrow.uturn.left", backButtonAction: (() -> Void)? = nil) -> UIView {
+    func addGradientHeader(text: String? = nil, backButton: Bool = true, rightButton: Bool = false, rightButtonImageName: String = "pencil", rightButtonActoin: (() -> Void)? = nil, imaheName: String = "arrow.uturn.left", backButtonAction: (() -> Void)? = nil) -> UIView {
         let header = GradientBackgroundView()
         header.translatesAutoresizingMaskIntoConstraints = false
         addSubview(header)
@@ -19,6 +19,10 @@ public extension UIView {
         
         if backButton, let backButtonAction = backButtonAction {
             addBackButton(to: header, action: backButtonAction, name: imaheName)
+        }
+        
+        if rightButton, let rightButtonActoin = rightButtonActoin {
+            addRightButton(to: header, action: rightButtonActoin, name: rightButtonImageName)
         }
         
         NSLayoutConstraint.activate([
@@ -65,6 +69,29 @@ public extension UIView {
         NSLayoutConstraint.activate([
             button.bottomAnchor.constraint(equalTo: header.bottomAnchor, constant: -16),
             button.leftAnchor.constraint(equalTo: header.leftAnchor, constant: 16),
+            button.widthAnchor.constraint(equalToConstant: 44),
+            button.heightAnchor.constraint(equalToConstant: 44)
+        ])
+    }
+    
+    private func addRightButton(to header: GradientBackgroundView, action: @escaping () -> Void, name: String) {
+        let button = UIButton(type: .system)
+        
+        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
+        let image = UIImage(systemName: name, withConfiguration: config)?
+            .withTintColor(.white, renderingMode: .alwaysOriginal)
+        
+        button.setImage(image, for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.contentMode = .scaleAspectFit
+        button.contentHorizontalAlignment = .center
+        button.contentVerticalAlignment = .center
+        button.addAction(UIAction(handler: {_ in action()}), for: .touchUpInside)
+        header.addSubview(button)
+        
+        NSLayoutConstraint.activate([
+            button.bottomAnchor.constraint(equalTo: header.bottomAnchor, constant: -16),
+            button.rightAnchor.constraint(equalTo: header.rightAnchor, constant: -16),
             button.widthAnchor.constraint(equalToConstant: 44),
             button.heightAnchor.constraint(equalToConstant: 44)
         ])

@@ -43,6 +43,33 @@ final class AnotherUserProfileView: View {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+    
+    private let daysViewBackground: UIView = {
+        let view = UIView()
+        view.backgroundColor = .orangeColor.withAlphaComponent(0.2)
+        view.layer.cornerRadius = 8
+        view.layer.masksToBounds = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private let tagsViewBackground: UIView = {
+        let view = UIView()
+        view.backgroundColor = .orangeColor.withAlphaComponent(0.2)
+        view.layer.cornerRadius = 8
+        view.layer.masksToBounds = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private let aboutViewBackground: UIView = {
+        let view = UIView()
+        view.backgroundColor = .orangeColor.withAlphaComponent(0.2)
+        view.layer.cornerRadius = 8
+        view.layer.masksToBounds = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
 
     private lazy var image = SwiftUIHostingView(rootView: ImageWithFooter(image: UIImage(named: "avatarPlaceholder")!, name: "", city: ""))
 
@@ -95,9 +122,12 @@ final class AnotherUserProfileView: View {
         scrollView.addSubview(contentView)
 
         contentView.addSubview(image)
-        contentView.addSubview(tagsView)
-        contentView.addSubview(aboutView)
-        contentView.addSubview(daysView)
+        contentView.addSubview(tagsViewBackground)
+        contentView.addSubview(aboutViewBackground)
+        contentView.addSubview(daysViewBackground)
+        daysViewBackground.addSubview(daysView)
+        tagsViewBackground.addSubview(tagsView)
+        aboutViewBackground.addSubview(aboutView)
     }
 
     override func setupConstraints() {
@@ -130,23 +160,24 @@ final class AnotherUserProfileView: View {
             image.heightAnchor.constraint(equalToConstant: 300),
 
             // tagsView
-            tagsView.topAnchor.constraint(equalTo: image.bottomAnchor, constant: 70),
-            tagsView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
-            tagsView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16),
-            tagsView.heightAnchor.constraint(equalToConstant: 100),
+            tagsViewBackground.topAnchor.constraint(equalTo: image.bottomAnchor, constant: 70),
+            tagsViewBackground.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
+            tagsViewBackground.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16),
+            tagsViewBackground.heightAnchor.constraint(equalToConstant: 100),
 
             // aboutView
-            aboutView.topAnchor.constraint(equalTo: tagsView.bottomAnchor, constant: 10),
-            aboutView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
-            aboutView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16),
+            aboutViewBackground.topAnchor.constraint(equalTo: tagsViewBackground.bottomAnchor, constant: 20),
+            aboutViewBackground.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
+            aboutViewBackground.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16),
 
             // daysView
-            daysView.topAnchor.constraint(equalTo: aboutView.bottomAnchor, constant: 50),
-            daysView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            daysView.rightAnchor.constraint(lessThanOrEqualTo: contentView.rightAnchor, constant: -16),
+            daysViewBackground.topAnchor.constraint(equalTo: aboutViewBackground.bottomAnchor, constant: 20),
+            daysViewBackground.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16),
+            daysViewBackground.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
+            daysViewBackground.heightAnchor.constraint(equalToConstant: 80),
 
             // bottom constraint to scroll
-            daysView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -30),
+            daysViewBackground.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -30),
             
             likeView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -80),
             likeView.rightAnchor.constraint(equalTo: rightAnchor),
@@ -154,7 +185,22 @@ final class AnotherUserProfileView: View {
             likeView.widthAnchor.constraint(equalToConstant: 60),
             
             likeButton.centerXAnchor.constraint(equalTo: likeView.centerXAnchor),
-            likeButton.centerYAnchor.constraint(equalTo: likeView.centerYAnchor)
+            likeButton.centerYAnchor.constraint(equalTo: likeView.centerYAnchor),
+            
+            daysView.centerXAnchor.constraint(equalTo: daysViewBackground.centerXAnchor),
+            daysView.centerYAnchor.constraint(equalTo: daysViewBackground.centerYAnchor),
+            daysView.heightAnchor.constraint(equalTo: daysViewBackground.heightAnchor),
+            daysView.widthAnchor.constraint(equalTo: daysViewBackground.widthAnchor),
+            
+            tagsView.rightAnchor.constraint(equalTo: tagsViewBackground.rightAnchor, constant: -10),
+            tagsView.leftAnchor.constraint(equalTo: tagsViewBackground.leftAnchor, constant: 10),
+            tagsView.centerYAnchor.constraint(equalTo: tagsViewBackground.centerYAnchor),
+            tagsView.heightAnchor.constraint(equalTo: tagsViewBackground.heightAnchor),
+            
+            aboutView.topAnchor.constraint(equalTo: aboutViewBackground.topAnchor, constant: 10),
+            aboutView.bottomAnchor.constraint(equalTo: aboutViewBackground.bottomAnchor, constant: -10),
+            aboutView.rightAnchor.constraint(equalTo: aboutViewBackground.rightAnchor, constant: -10),
+            aboutView.leftAnchor.constraint(equalTo: aboutViewBackground.leftAnchor, constant: 10)
         ])
     }
 }
