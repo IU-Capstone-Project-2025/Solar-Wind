@@ -16,6 +16,18 @@ services:
       - notificationsService
       - deckShufflingService
 
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    environment:
+      - REDIS_PASSWORD=${DECK_CACHE_PASSWORD}
+    command: sh -c "redis-server --requirepass \"$REDIS_PASSWORD\""
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
   profileService:
     build:
       context: ./profiles/
@@ -48,6 +60,9 @@ services:
     container_name: notifications
     environment:
       LIKE_TO_NOTIFICATION_TOKEN: ${LIKE_TO_NOTIFICATION_TOKEN}
+      SPRING_DATASOURCE_URL: ${TOKENS_DB_URL}
+      SPRING_DATASOURCE_USERNAME: ${TOKENS_DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${TOKENS_DB_PASSWORD}
     image: notifications_service:latest
 
   deckShufflingService:
@@ -58,10 +73,13 @@ services:
     image: deck_shuffle_service:latest
     depends_on:
       - profileService
+      - redis
     environment:
       SPRING_DATASOURCE_URL: ${PROFILE_DB_URL}
       SPRING_DATASOURCE_USERNAME: ${PROFILE_DB_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${PROFILE_DB_PASSWORD}
+      DECK_CACHE_HOST: ${DECK_CACHE_HOST}
+      DECK_CACHE_PASSWORD: ${DECK_CACHE_PASSWORD}
 
   authBot:
     build: ./auth-bot
@@ -75,3 +93,4 @@ services:
 
 volumes:
   postgres_data:
+  redis_data:

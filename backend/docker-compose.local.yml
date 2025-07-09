@@ -17,6 +17,18 @@ services:
       POSTGRES_USER: ${PROFILE_DB_USERNAME}
       POSTGRES_PASSWORD: ${PROFILE_DB_PASSWORD}
 
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    environment:
+      - REDIS_PASSWORD=${DECK_CACHE_PASSWORD}
+    command: sh -c "redis-server --requirepass \"$REDIS_PASSWORD\""
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
   profileService:
     build:
       context: ./profiles/
@@ -56,6 +68,11 @@ services:
       dockerfile: ../Dockerfile
     container_name: notifications
     image: notifications_service:latest
+    environment:
+      LIKE_TO_NOTIFICATION_TOKEN: ${LIKE_TO_NOTIFICATION_TOKEN}
+      SPRING_DATASOURCE_URL: ${TOKENS_DB_URL}
+      SPRING_DATASOURCE_USERNAME: ${TOKENS_DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${TOKENS_DB_PASSWORD}
     ports:
       - "8082:8080"
     depends_on:
@@ -70,10 +87,13 @@ services:
     depends_on:
       - profileService
       - db
+      - redis
     environment:
       SPRING_DATASOURCE_URL: ${PROFILE_DB_URL}
       SPRING_DATASOURCE_USERNAME: ${PROFILE_DB_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${PROFILE_DB_PASSWORD}
+      DECK_CACHE_HOST: ${DECK_CACHE_HOST}
+      DECK_CACHE_PASSWORD: ${DECK_CACHE_PASSWORD}
       <<: *tokens_source
     ports:
       - "8083:8080"
@@ -81,3 +101,4 @@ services:
 
 volumes:
   postgres_data:
+  redis_data:
