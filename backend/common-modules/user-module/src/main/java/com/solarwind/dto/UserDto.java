@@ -22,8 +22,6 @@ public class UserDto implements Serializable {
     String lastName;
     String description;
 //    @NotNull
-    @Min(5)
-    @Max(120)
     LocalDate age;
 //    @NotNull
     Gender gender;
