@@ -5,19 +5,23 @@ import com.solarwind.securityModule.exceptions.AccessorNotFoundException;
 import com.solarwind.securityModule.models.UserSecurityNode;
 import com.solarwind.securityModule.repositories.TokensRepository;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class DatabaseSourceReader implements TokenSourceReader {
-    private final TokensRepository tokenSourceRepository;
-
-    public DatabaseSourceReader(TokensRepository tokenSourceRepository) {
-        this.tokenSourceRepository = tokenSourceRepository;
-    }
+    @Autowired
+    private TokensRepository tokenSourceRepository;
 
     @Override
     public TokenData extractToken(HttpServletRequest request) {
+        if (request.getHeader("Authorization-telegram-id") == null ||  request.getHeader("Authorization") == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
         Long id = Long.parseLong(request.getHeader("Authorization-telegram-id"));
         String token = request.getHeader("Authorization");
         return new TokenData(id, token);
