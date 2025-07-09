@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableCaching
 @EnableJpaRepositories(basePackages = {"com.solarwind.repositories", "com.solarwind.securityModule.repositories"})
 @EntityScan(basePackages = {"com.solarwind.models", "com.solarwind.securityModule.models"})
-@ComponentScan(basePackages = {"com.solarwind", "com.solarwind.services", "com.solarwind.mappers", "deckShuffle.app"})
+@ComponentScan(basePackages = {"com.solarwind", "com.solarwind.services", "com.solarwind.mappers", "deckShuffle.app", "deckShuffle.app.services.implementation"})
 public class DeckShuffleApplication {
 
 	public static void main(String[] args) {
