@@ -19,7 +19,7 @@ public class DatabaseSourceReader implements TokenSourceReader {
     @Override
     public TokenData extractToken(HttpServletRequest request) {
         Long id = Long.parseLong(request.getHeader("Authorization-telegram-id"));
-        String token = request.getHeader("Authorize");
+        String token = request.getHeader("Authorization");
         return new TokenData(id, token);
     }
 

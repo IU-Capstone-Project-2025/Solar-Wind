@@ -14,26 +14,31 @@ import java.util.*;
 public class UserController {
     @Autowired
     private UserManagementService service;
+
     @PostMapping("/me")
     public Map<String, Long> createUser(@Valid @RequestBody UserDto dto) {
         Map<String, Long> response = new HashMap<>();
         response.put("id", service.createUser(dto));
         return response;
     }
-    @GetMapping("/ping")
-    public String hello() {
-        return "pong";
-    }
+
     @GetMapping("/me")
-    public ProfileDto getUserById(@RequestParam long id) {
+    public ProfileDto getUserById(@RequestHeader("Authorization-telegram-id") long id) {
         return service.getByUserId(id);
     }
-    @GetMapping("/getUsers")
-    public List<ProfileDto> getUsers() {
-        return service.getUsers();
-    }
+
     @DeleteMapping("/me")
     public void deleteUser(@RequestParam long id) {
         service.deleteUserById(id);
+    }
+
+    @PutMapping("/me")
+    public void updateUser(@Valid @RequestBody UserDto dto) {
+        service.updateUser(dto);
+    }
+
+    @GetMapping("/getUsers")
+    public List<ProfileDto> getUsers() {
+        return service.getUsers();
     }
 }

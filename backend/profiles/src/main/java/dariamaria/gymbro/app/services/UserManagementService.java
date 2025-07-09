@@ -6,4 +6,5 @@ import com.solarwind.services.UserRetrievalService;
 public interface UserManagementService extends UserRetrievalService {
     Long createUser(UserDto dto);
     void deleteUserById(long id);
+    void updateUser(UserDto dto);
 }
