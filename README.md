@@ -1,11 +1,74 @@
+# Solar Wind 🌤️
 ## Project overview
+**Solar Wind** is a social matching iOS app designed to connect people based on shared sports and fitness interests. Whether you're a casual jogger or a competitive player, Solar Wind helps you find like-minded workout partners in your area with similar schedules and goals.
 
-*Solar Wind* is a social matching app designed to connect people based on shared sports and fitness interests. Users specify their preferred activities, locations, and availability, and the app suggests compatible partners. 
-Whether you're looking for a workout partner, or just want to meet new people who love staying active, this is the place to start. From casual joggers to competitive players — everyone is welcome.
+### 💡 Problem Statement 
 
-**Key Features:**
+Staying consistent with a workout routine is tough — but having a reliable partner makes it easier. Solar Wind solves this by helping users find nearby people with similar fitness goals, interests, and availability. Unlike generic meetup platforms, Solar Wind is focused entirely on building a sport-oriented community with personal matching.
 
-- Personalized matching: user feed suggests people with similar sports preferences, schedules, and locations.
-- Profile customization: add sports interests, skill levels, and availability.
-- Direct Telegram integration: after users have added each other as friends within the app, they can redirect to Telegram chat for further coordination.
-- Community-oriented: encourages local meetups and long-term fitness relationships.
+### 👥 Target Users
+
+Young adults (18–30) who want to:
+
+- Stay motivated via social accountability
+- Easily find compatible workout partners
+- Join an active lifestyle community
+
+###  ⚡Key Features
+
+- **Personalized Matching**: Feed suggests people based on shared sports interests, time availability, and location.
+- **Profile Customization**: Add sports, skill levels, and availability.
+- **Telegram Integration**: Easily initiate Telegram chats after mutual friendship to coordinate meetups.
+- **Community-Oriented**: Encourages local sport meetups and long-term fitness relationships.
+
+## 🧑‍💻 Tech Stack
+
+### Frontend (iOS):
+- **UIKit** + **modular SwiftUI** for flexibility and stability
+- **Clean Swift** architecture for maintainability
+- **Alamofire** for HTTP networking
+- **Kingfisher** for image loading and caching
+
+### Backend:
+- **Java 23.0**
+- **Spring Boot** for RESTful services
+- **Hibernate** for ORM and caching
+
+### Database:
+- **PostgreSQL** (primary data storage)
+- **Redis** (caching layer)
+
+## 🛠️ How to Run Locally
+
+1. Clone this repo:
+   ``git clone https://github.com/your-username/solar-wind.git``
+   ``cd solar-wind``
+   
+2. For iOS frontend:
+- Open ``SolarWind.xcodeproj`` in Xcode
+- Ensure you have latest dependencies (Alamofire, Kingfisher, etc.)
+- Build and run on simulator or device
+    
+3. For backend:
+- Navigate to backend directory
+- Run Spring Boot app:
+    ``./gradlew bootRun``
+- Ensure PostgreSQL and Redis are running locally
+
+## 💻 API Specification
+
+Each microservice has its own Swagger UI documentation:
+
+- [Likes Service API](https://solar-wind-gymbro.ru/likes/swagger-ui.html)
+- [Profiles Service API](https://solar-wind-gymbro.ru/profiles/swagger-ui.html)
+- [Notifications Service API](https://solar-wind-gymbro.ru/notifications/swagger-ui.html)
+- [Deck Shuffle Service API](https://solar-wind-gymbro.ru/deckShuffle/swagger-ui.html)
+
+Full Postman collection:
+- [Solar Wind API on Postman](https://www.postman.com/grey-satellite-701545/solar-wind/overview)
+
+## 📝 License
+[MIT License](https://github.com/IU-Capstone-Project-2025/Solar-Wind/blob/backend/LICENSE)
+
+##  📩  Contact
+For questions or feedback, please contact the team leader at: da.nikolaeva@innopolis.university.
