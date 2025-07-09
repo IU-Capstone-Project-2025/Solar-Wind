@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -23,16 +24,16 @@ public class UserDto implements Serializable {
 //    @NotNull
     @Min(5)
     @Max(120)
-    Integer age;
+    LocalDate age;
 //    @NotNull
     Gender gender;
     Boolean verified;
 //    @NotNull
     Gender preferredGender;
-    @NotNull
+//    @NotNull
     Long cityId;
-    @NotEmpty
+//    @NotEmpty
     List<Integer> preferredGymTime;
-    @NotEmpty
+//    @NotEmpty
     List<Long> sportId;
 }

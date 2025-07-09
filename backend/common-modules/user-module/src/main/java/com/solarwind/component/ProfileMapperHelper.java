@@ -36,13 +36,13 @@ public class ProfileMapperHelper {
 
     @Named("mapGymTimeFromBits")
     public List<Integer> mapGymTimeFromBits(Integer bitmask) {
-        if (bitmask == null) return new ArrayList<>();
-        List<Integer> days = new ArrayList<>();
-        for (int i = 0; i < 7; i++) {
+        List<Integer> result = new ArrayList<>();
+        if (bitmask == null) return result;
+        for (int i = 0; i < 32; i++) {
             if ((bitmask & (1 << i)) != 0) {
-                days.add(i);
+                result.add(i);
             }
         }
-        return days;
+        return result;
     }
 }

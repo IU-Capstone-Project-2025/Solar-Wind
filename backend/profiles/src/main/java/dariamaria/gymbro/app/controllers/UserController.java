@@ -37,7 +37,7 @@ public class UserController {
 
     @PutMapping("/me")
     public void updateUser(@Valid @RequestBody UserDto dto) {
-        service.updateUser(dto);
+        service.update(dto);
     }
 
     @GetMapping("/getUsers")

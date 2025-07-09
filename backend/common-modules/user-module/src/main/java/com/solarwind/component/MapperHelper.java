@@ -23,10 +23,12 @@ public class MapperHelper {
         this.sportRepository = sportRepository;
     }
 
+    @Named("fromId")
     public CityEntity fromId(Long id) {
         return id == null ? null : cityRepository.findById(id).orElse(null);
     }
 
+    @Named("toId")
     public Long toId(CityEntity city) {
         return city != null ? city.getId() : null;
     }
@@ -43,23 +45,25 @@ public class MapperHelper {
 
     @Named("mapGymTimeFromBits")
     public List<Integer> mapGymTimeFromBits(Integer bitmask) {
-        if (bitmask == null) return new ArrayList<>();
-        List<Integer> days = new ArrayList<>();
-        for (int i = 0; i < 7; i++) {
+        List<Integer> result = new ArrayList<>();
+        if (bitmask == null) return result;
+        for (int i = 0; i < 32; i++) {
             if ((bitmask & (1 << i)) != 0) {
-                days.add(i);
+                result.add(i);
             }
         }
-        return days;
+        return result;
     }
 
     @Named("mapGymTimeToBits")
-    public Integer mapGymTimeToBits(List<Integer> days) {
-        if (days == null) return 0;
-        int bitmask = 0;
-        for (Integer day : days) {
-            bitmask |= (1 << day);
+    public Integer mapGymTimeToBits(List<Integer> times) {
+        if (times == null) return 0;
+        int mask = 0;
+        for (Integer time : times) {
+            if (time != null && time >= 0 && time < 32) {
+                mask |= (1 << time);
+            }
         }
-        return bitmask;
+        return mask;
     }
 }

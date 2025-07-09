@@ -3,6 +3,7 @@ package dariamaria.gymbro.app.controllers;
 import com.solarwind.securityModule.annotation.Secured;
 import com.solarwind.securityModule.service.PropertyTokenSourceReader;
 import dariamaria.gymbro.app.services.implementation.AuthService;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
@@ -28,6 +29,7 @@ import java.util.concurrent.TimeUnit;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 @RestController
+@NoArgsConstructor
 @RequestMapping("/auth/telegram")
 public class AuthController {
     @Value("${telegram.bot-token}")

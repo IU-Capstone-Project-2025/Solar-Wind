@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,7 +46,7 @@ public class DeckCreationServiceTest {
         city.setCityName("Абаза");
 
         entity.setUsername("Test2");
-        entity.setAge(10);
+        entity.setAge(LocalDate.ofEpochDay(2005-12-06));
         entity.setGender(Gender.MALE);
         entity.setPreferredGender(Gender.FEMALE);
         entity.setCity(city);
@@ -53,14 +54,14 @@ public class DeckCreationServiceTest {
         UserDto dto1 = new UserDto();
         dto1.setId(1L);
         dto1.setUsername("Test");
-        dto1.setAge(10);
+        dto1.setAge(LocalDate.ofEpochDay(2005-12-06));
         dto1.setGender(Gender.MALE);
         dto1.setPreferredGender(Gender.FEMALE);
         dto1.setCityId(1L);
 
         UserEntity entity2 = new UserEntity();
         entity2.setUsername("Test2");
-        entity2.setAge(10);
+        entity2.setAge(LocalDate.ofEpochDay(2005-12-06));
         entity2.setGender(Gender.MALE);
         entity2.setPreferredGender(Gender.FEMALE);
         entity2.setCity(city);
