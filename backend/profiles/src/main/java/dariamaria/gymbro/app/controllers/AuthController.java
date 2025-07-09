@@ -1,8 +1,12 @@
 package dariamaria.gymbro.app.controllers;
 
+import dariamaria.gymbro.app.services.implementation.AuthService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,14 +15,28 @@ import javax.crypto.spec.SecretKeySpec;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 import java.util.Map;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.concurrent.TimeUnit;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 @RestController
 @RequestMapping("/auth/telegram")
 public class AuthController {
-    private final String tgBotToken = "7727350068:AAFDInaLmrhRlVT4EXOp3R_QT2ToupoNEA8";
+    @Value("${telegram.bot-token}")
+    private String tgBotToken;
+    @Autowired
+    private AuthService authService;
+    private final Cache<Integer, Long> code_awaiters = Caffeine
+            .newBuilder()
+            .expireAfterWrite(60, TimeUnit.SECONDS)
+            .build();
+
 
     @GetMapping
     public ResponseEntity<Resource> getAuthScript() {
@@ -75,5 +93,26 @@ public class AuthController {
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
             throw new RuntimeException(e);
         }
+    }
+
+
+    @PostMapping("/custom-auth")
+    public void postMatchingCode(@RequestParam Integer code, @RequestParam Long userId) {
+        code_awaiters.put(code, userId);
+    }
+
+    @GetMapping("/custom-auth")
+    public ResponseEntity<Map<String, String>> getCustomAuthToken(@RequestParam Integer code) {
+        Long userId = code_awaiters.getIfPresent(code);
+        if (userId == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+
+        String token = authService.obtainPersonalToken(userId);
+        Map<String, String> response = new HashMap<>();
+        response.put("token", token);
+        response.put("id", userId.toString());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

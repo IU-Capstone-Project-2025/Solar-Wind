@@ -5,11 +5,12 @@ import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class UserDto {
+public class UserDto implements Serializable {
     Long id;
     Long telegramId;
     @Size(max = 50)

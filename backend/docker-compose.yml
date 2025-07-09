@@ -39,12 +39,15 @@ services:
       SPRING_LIKES_DATASOURCE_USERNAME: ${LIKES_DB_USERNAME}
       SPRING_LIKES_DATASOURCE_PASSWORD: ${LIKES_DB_PASSWORD}
       NOTIFICATION_SERVICE_URL: "http://notifications:8080"
+      LIKE_TO_NOTIFICATION_TOKEN: ${LIKE_TO_NOTIFICATION_TOKEN}
 
   notificationsService:
     build:
       context: ./notifications/
       dockerfile: ../Dockerfile
     container_name: notifications
+    environment:
+      LIKE_TO_NOTIFICATION_TOKEN: ${LIKE_TO_NOTIFICATION_TOKEN}
     image: notifications_service:latest
 
   deckShufflingService:
@@ -60,6 +63,15 @@ services:
       SPRING_DATASOURCE_USERNAME: ${PROFILE_DB_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${PROFILE_DB_PASSWORD}
 
+  authBot:
+    build: ./auth-bot
+    image: auth_bot:latest
+    container_name: auth_bot
+    depends_on:
+      - profileService
+    environment:
+      PROFILES_URL: ${PROFILES_URL}
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
 
 volumes:
   postgres_data:
