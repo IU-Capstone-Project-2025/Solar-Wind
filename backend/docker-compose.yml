@@ -16,6 +16,16 @@ services:
       - notificationsService
       - deckShufflingService
 
+
+  authBot:
+    build: ./auth-bot
+    image: auth_bot:latest
+    environment:
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      PROFILES_URL: ${PROFILES_URL}
+    depends_on:
+      - profileService
+
   redis:
     image: redis:7-alpine
     container_name: redis
