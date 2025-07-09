@@ -14,6 +14,12 @@ public final class AnotherUserProfileViewConrtroller: UIViewController {
     
     public override func loadView() {
         view = rootView
+        rootView.actionHandler = { [weak self] action in
+            switch action {
+            case .back:
+                self?.router?.back()
+            }
+        }
     }
     
     override public func viewWillAppear(_ animated: Bool) {

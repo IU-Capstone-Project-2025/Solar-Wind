@@ -27,6 +27,14 @@ enum ChooseCategory {
         struct Response { }
         struct ViewModel { }
     }
+    
+    enum Back {
+        struct Request { }
+        
+        struct Response { }
+        
+        struct ViewModel { }
+    }
 
     enum Add {
         struct Request {}
@@ -34,6 +42,22 @@ enum ChooseCategory {
             var model: Model?
             var error: AppError?
         }
+        struct ViewModel {
+            var root: RootViewModel?
+            var error: AppError?
+        }
+    }
+    
+    enum Search {
+        struct Request {
+            var word: String
+        }
+        
+        struct Response {
+            var model: Model?
+            var error: AppError?
+        }
+        
         struct ViewModel {
             var root: RootViewModel?
             var error: AppError?
@@ -47,6 +71,7 @@ enum ChooseCategory {
     struct Category: Codable, Sendable, Hashable {
         let id: Int
         let name: String
+        var isSelected: Bool = false
     }
 
     struct RootViewModel {

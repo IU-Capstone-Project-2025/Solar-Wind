@@ -11,4 +11,8 @@ final class FeedRouter {
     @MainActor func openUser(with id: Int) {
         self.vc?.navigationController?.pushViewController(AnotherUserProfileBuilder.build(userId: id), animated: true)
     }
+    
+    @MainActor func myProfile() {
+        self.vc?.navigationController?.pushViewController(MyProfileBuilder.build(), animated: true)
+    }
 }

@@ -80,4 +80,24 @@ final class ChooseCategoryInteractor: @unchecked Sendable {
             }
         }
     }
+    
+    func request(_ request: ChooseCategory.Search.Request) {
+        worker.find(word: request.word) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let model):
+                self.categories = model.items
+                DispatchQueue.main.async { self.presenter.present(categories: self.categories) }
+            case .failure(let error):
+                print("Error loading more categories: \(error)")
+            }
+        }
+    }
+    
+    func request(_ request: ChooseCategory.Next.Request) {
+        if !selectedCategories.isEmpty {
+            DispatchQueue.main.async { self.presenter.present(ChooseCategory.Next.ViewModel()) }
+        }
+    }
 }

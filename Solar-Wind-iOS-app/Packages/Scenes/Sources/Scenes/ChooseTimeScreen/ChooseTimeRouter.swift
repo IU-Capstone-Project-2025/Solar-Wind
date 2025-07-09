@@ -10,4 +10,7 @@ final class ChooseTimeRouter {
     @MainActor func next() {
         vc?.navigationController?.pushViewController(FillAboutMeBuilder.build(), animated: true)
     }
+    @MainActor func back() {
+        vc?.navigationController?.popViewController(animated: true)
+    }
 }

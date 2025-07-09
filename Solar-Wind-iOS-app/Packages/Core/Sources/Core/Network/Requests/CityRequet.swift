@@ -11,7 +11,7 @@ public struct CityRequest: APIRequest {
     public typealias Response = [City]
     
     public var method: HTTPMethod { .get }
-    public var path: String { "cities/pagination" }
+    public var path: String { "profiles/api/cities/pagination" }
     public var parameters: Parameters?
     public var headers: HTTPHeaders? { nil }
     public var encoding: ParameterEncoding { URLEncoding.default }

@@ -1,26 +1,31 @@
 //
-//  AnotherUserProfileInteractor.swift
+//  MyProfileInteractor.swift
 //  Scenes
 //
-//  Created by Даша Николаева on 01.07.2025.
+//  Created by Даша Николаева on 04.07.2025.
 //
 
 import Foundation
-import Core
 
-final class AnotherUserProfileInteractor: @unchecked Sendable {
-    private let presenter: AnotherUserProfilePresenter
-    private let worker: AnotherUserProfileWorker
-    private let userId: Int
+final class MyProfileInteractor: @unchecked Sendable {
+    private let presenter: MyProfilePresenter
+    private let worker: MyProfileWorker
     
-    public init(presenter: AnotherUserProfilePresenter, worker: AnotherUserProfileWorker, userId: Int) {
+    init(presenter: MyProfilePresenter, worker: MyProfileWorker) {
         self.presenter = presenter
         self.worker = worker
-        self.userId = userId
     }
     
-    public func request(_ request: AnotherUserProfile.Fetch.Request) {
-        worker.fetch(id: userId) { [weak self] result in
+    @MainActor func logout() {
+        if let appDomain = Bundle.main.bundleIdentifier {
+            UserDefaults.standard.removePersistentDomain(forName: appDomain)
+            UserDefaults.standard.synchronize()
+        }
+        presenter.logout()
+    }
+    
+    public func request(_ request: MyProfile.Fetch.Request) {
+        worker.fetch() { [weak self] result in
             guard let self else { return }
             switch result {
             case .success(let user):

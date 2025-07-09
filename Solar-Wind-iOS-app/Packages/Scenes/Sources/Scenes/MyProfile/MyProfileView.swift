@@ -1,22 +1,22 @@
 //
-//  AnotherUserProfileView.swift
+//  MyProfileView.swift
 //  Scenes
 //
-//  Created by Даша Николаева on 30.06.2025.
+//  Created by Даша Николаева on 04.07.2025.
 //
 
 import UIKit
 import CommonUI
 
-final class AnotherUserProfileView: View {
+final class MyProfileView: View {
     enum Action {
+        case logout
         case back
+        case edit
     }
-
     var actionHandler: (Action) -> Void = { _ in }
     
-    private var isLiked: Bool = false
-    var viewModel: AnotherUserProfile.RootViewModel? {
+    var viewModel: MyProfile.RootViewModel? {
         didSet {
             guard let viewModel = viewModel else { return }
             image.update(rootView: ImageWithFooter(image: UIImage(named: "avatarPlaceholder")!, name: viewModel.username, city: viewModel.city))
@@ -26,10 +26,11 @@ final class AnotherUserProfileView: View {
         }
     }
     
-    private lazy var header = addGradientHeader(backButton: true) { [weak self] in
+    lazy var header = addGradientHeader(text: "My profile", backButton: true, rightButton: true, rightButtonActoin: {[weak self] in
+        self?.actionHandler(.edit)}) { [weak self] in
         self?.actionHandler(.back)
     }
-
+    
     private lazy var scrollView: UIScrollView = {
         let scroll = UIScrollView()
         scroll.translatesAutoresizingMaskIntoConstraints = false
@@ -43,6 +44,12 @@ final class AnotherUserProfileView: View {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+
+    private lazy var image = SwiftUIHostingView(rootView: ImageWithFooter(image: UIImage(named: "avatarPlaceholder")!, name: "", city: ""))
+
+    private lazy var tagsView = SwiftUIHostingView(rootView: TagsView())
+
+    private lazy var daysView = SwiftUIHostingView(rootView: DaysView(days: []))
     
     private let daysViewBackground: UIView = {
         let view = UIView()
@@ -71,12 +78,6 @@ final class AnotherUserProfileView: View {
         return view
     }()
 
-    private lazy var image = SwiftUIHostingView(rootView: ImageWithFooter(image: UIImage(named: "avatarPlaceholder")!, name: "", city: ""))
-
-    private lazy var tagsView = SwiftUIHostingView(rootView: TagsView())
-
-    private lazy var daysView = SwiftUIHostingView(rootView: DaysView(days: []))
-
     private lazy var aboutView: UILabel = {
         let view = UILabel()
         view.font = .size16Medium
@@ -87,54 +88,33 @@ final class AnotherUserProfileView: View {
         return view
     }()
     
-    private let likeView: HalfCircleView = {
-        let view = HalfCircleView()
-        let image = UIImage(systemName: "heart")
+    private lazy var logoutButton: UIButton = {
+        let view = UIButton()
+        view.setTitle("Log out", for: .normal)
+        view.setTitleColor(.darkPinkColor, for: .normal)
+        view.titleLabel?.font = .size24Medium
+        view.addAction(UIAction(handler: {[weak self] _ in self?.actionHandler(.logout)}), for: .touchUpInside)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    private lazy var likeButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        let config = UIImage.SymbolConfiguration(pointSize: 26, weight: .medium)
-        button.setImage(UIImage(systemName: "heart", withConfiguration: config), for: .normal)
-        button.tintColor = .black
-        button.addTarget(self, action: #selector(likeTapped), for: .touchUpInside)
-        return button
-    }()
-    
-    @objc private func likeTapped() {
-        isLiked.toggle()
-        let config = UIImage.SymbolConfiguration(pointSize: 26, weight: .medium)
-        likeButton.setImage(UIImage(systemName: isLiked ? "heart.fill" : "heart", withConfiguration: config), for: .normal)
-        likeButton.tintColor = isLiked ? .darkPinkColor : .black
-    }
-
     override func setupContent() {
-        super.setupContent()
         backgroundColor = .white
-
         addSubview(header)
         addSubview(scrollView)
-        addSubview(likeView)
-        likeView.addSubview(likeButton)
         scrollView.addSubview(contentView)
-
         contentView.addSubview(image)
         contentView.addSubview(tagsViewBackground)
         contentView.addSubview(aboutViewBackground)
         contentView.addSubview(daysViewBackground)
+        contentView.addSubview(logoutButton)
         daysViewBackground.addSubview(daysView)
         tagsViewBackground.addSubview(tagsView)
         aboutViewBackground.addSubview(aboutView)
     }
-
+    
     override func setupConstraints() {
-        super.setupConstraints()
-
         NSLayoutConstraint.activate([
-            // header
             header.topAnchor.constraint(equalTo: topAnchor),
             header.leftAnchor.constraint(equalTo: leftAnchor),
             header.rightAnchor.constraint(equalTo: rightAnchor),
@@ -160,7 +140,7 @@ final class AnotherUserProfileView: View {
             image.heightAnchor.constraint(equalToConstant: 300),
 
             // tagsView
-            tagsViewBackground.topAnchor.constraint(equalTo: image.bottomAnchor, constant: 70),
+            tagsViewBackground.topAnchor.constraint(equalTo: image.bottomAnchor, constant: 60),
             tagsViewBackground.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
             tagsViewBackground.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16),
             tagsViewBackground.heightAnchor.constraint(equalToConstant: 100),
@@ -172,20 +152,15 @@ final class AnotherUserProfileView: View {
 
             // daysView
             daysViewBackground.topAnchor.constraint(equalTo: aboutViewBackground.bottomAnchor, constant: 20),
-            daysViewBackground.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16),
             daysViewBackground.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
+            daysViewBackground.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16),
             daysViewBackground.heightAnchor.constraint(equalToConstant: 80),
 
             // bottom constraint to scroll
-            daysViewBackground.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -30),
             
-            likeView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -80),
-            likeView.rightAnchor.constraint(equalTo: rightAnchor),
-            likeView.heightAnchor.constraint(equalToConstant: 120),
-            likeView.widthAnchor.constraint(equalToConstant: 60),
-            
-            likeButton.centerXAnchor.constraint(equalTo: likeView.centerXAnchor),
-            likeButton.centerYAnchor.constraint(equalTo: likeView.centerYAnchor),
+            logoutButton.topAnchor.constraint(equalTo: daysViewBackground.bottomAnchor, constant: 20),
+            logoutButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
+            logoutButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
             daysView.centerXAnchor.constraint(equalTo: daysViewBackground.centerXAnchor),
             daysView.centerYAnchor.constraint(equalTo: daysViewBackground.centerYAnchor),

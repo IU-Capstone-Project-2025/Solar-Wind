@@ -6,5 +6,9 @@
 //
 
 final class AnotherUserProfileRouter {
+    weak var vc: AnotherUserProfileViewConrtroller?
     
+    @MainActor func back() {
+        self.vc?.navigationController?.popViewController(animated: true)
+    }
 }

@@ -21,13 +21,17 @@ class ChooseCityViewController: UIViewController {
             guard let self else { return }
             switch action {
             case .next:
-                self.interactor?.requset(ChooseCity.Next.Request())
+                self.interactor?.request(ChooseCity.Next.Request())
             case .selected(let index):
-                guard let city = self.interactor?.cities[index] else { return }
+                guard let city = self.interactor?.findCityById(index) else { break }
                 self.interactor?.saveSelectedCity(city)
                 rootView.setSelectedCity(city)
             case .add:
                 self.interactor?.loadMoreData()
+            case .back:
+                self.router?.back()
+            case .search(let word):
+                self.interactor?.request(ChooseCity.Search.Request(word: word))
             }
         }
     }

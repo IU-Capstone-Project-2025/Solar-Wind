@@ -24,11 +24,15 @@ public final class ChooseCategoryViewController: UIViewController {
             guard let self else { return }
             switch action {
             case .next:
-                self.router?.next()
+                self.interactor?.request(ChooseCategory.Next.Request())
             case .selected(let id):
                 self.interactor?.toggleCategory(with: id)
             case .add:
                 self.interactor?.loadMoreData()
+            case .back:
+                self.router?.back()
+            case .search(let word):
+                self.interactor?.request(ChooseCategory.Search.Request(word: word))
             }
         }
     }

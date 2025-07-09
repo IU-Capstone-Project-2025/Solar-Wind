@@ -50,13 +50,13 @@ final class FeedInteractor {
 //        
 //        presenter.present(users: mockUsers)
         let request = FeedRequest()
-        APIClient.shared.send(request) { result in
+        APIClient.shared.send(request) {[weak self] result in
             switch result {
             case .success(let response):
-//                let mappedResult = result.map { users in
-//                    users.map { Feed.RootViewModel.User(id: $0.id, name: $0.username, city: $0.city, tags: $0.sports, description: $0.description) }
-//                }
-//                presenter.present(users: mappedResult)
+                let feedUsers = response.map {
+                    Feed.RootViewModel.User(id: $0.id, name: $0.username, city: $0.cityName, tags: $0.sportName, description: $0.description)
+                }
+                self?.presenter.present(users: feedUsers)
                 return
             case .failure(let error):
                 print(error)

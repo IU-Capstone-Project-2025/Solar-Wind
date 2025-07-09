@@ -8,10 +8,10 @@
 import Alamofire
 
 public struct ProfileRequest: APIRequest {
-    public typealias Response = [City]
+    public typealias Response = Profile
     
     public var method: HTTPMethod { .get }
-    public var path: String { "" }
+    public var path: String { "profiles/api/me" }
     public var parameters: Parameters?
     public var headers: HTTPHeaders? { nil }
     public var encoding: ParameterEncoding { URLEncoding.default }
@@ -27,10 +27,9 @@ public struct ProfileRequest: APIRequest {
 
 public struct Profile: Decodable, Sendable {
     public let id: Int
-    public let name: String
-    
-    private enum CodingKeys: String, CodingKey {
-        case id
-        case name = "cityName"
-    }
+    public let username: String
+    public let description: String
+    public let cityName: String
+    public let preferredGymTime: [Int]
+    public let sportName: [String]
 }

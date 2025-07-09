@@ -24,7 +24,7 @@ enum ChooseCity {
     
     enum Search {
         struct Request {
-            let text: String
+            let word: String
         }
 
         struct Response {
@@ -39,6 +39,14 @@ enum ChooseCity {
     }
     
     enum Next {
+        struct Request { }
+        
+        struct Response { }
+        
+        struct ViewModel { }
+    }
+    
+    enum Back {
         struct Request { }
         
         struct Response { }
@@ -67,6 +75,7 @@ enum ChooseCity {
     struct City: Codable, Sendable, Hashable {
         let id: Int
         let name: String
+        var isSelected: Bool = false
     }
     
     struct RootViewModel {

@@ -13,6 +13,7 @@ final class FeedView: CommonUI.View, UITableViewDelegate {
     enum Action {
         case selected(Int)
         case liked(Int)
+        case myProfile
     }
     var actionHandler: (Action) -> Void = { _ in }
     
@@ -32,7 +33,9 @@ final class FeedView: CommonUI.View, UITableViewDelegate {
         }
     }
     
-    lazy private var header = addGradientHeader()
+    lazy private var header = addGradientHeader(backButton: true, imaheName: "person") { [weak self] in
+        self?.actionHandler(.myProfile)
+    }
     
     private typealias DataSource = UITableViewDiffableDataSource<Feed.RootViewModel.Section, Feed.RootViewModel.User>
     private typealias Snapshot = NSDiffableDataSourceSnapshot<Feed.RootViewModel.Section, Feed.RootViewModel.User>
@@ -259,7 +262,7 @@ class FeedCellContentView: CommonUI.View {
             cityLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
             cityLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
             
-            tagsView.topAnchor.constraint(equalTo: cityLabel.bottomAnchor, constant: 24),
+            tagsView.topAnchor.constraint(equalTo: cityLabel.bottomAnchor, constant: 36),
             tagsView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
             tagsView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
             
