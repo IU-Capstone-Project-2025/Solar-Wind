@@ -7,8 +7,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@EnableJpaRepositories(basePackages = {"com.solarwind.repositories"})
-@EntityScan(basePackages = {"com.solarwind.models"})
+@EnableJpaRepositories(basePackages = {"com.solarwind.repositories", "com.solarwind.securityModule.repositories"})
+@EntityScan(basePackages = {"com.solarwind.models", "com.solarwind.securityModule.models"})
 @ComponentScan(basePackages = {"com.solarwind", "com.solarwind.services", "com.solarwind.mappers", "dariamaria.gymbro.app"})
 public class ProfileApplication {
 

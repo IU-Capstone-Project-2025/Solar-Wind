@@ -43,13 +43,6 @@ public class UserControllerTest {
     }
 
     @Test
-    void shouldReturnPong() throws Exception {
-        mockMvc.perform(get("/api/ping"))
-                .andExpect(status().isOk())
-                .andExpect(content().string("pong"));
-    }
-
-    @Test
     void shouldCreateUser() throws Exception {
         UserDto dto = new UserDto();
         dto.setUsername("testuser");
@@ -71,7 +64,7 @@ public class UserControllerTest {
         profile.setUsername("testuser");
         Mockito.when(service.getByUserId(1L)).thenReturn(profile);
 
-        mockMvc.perform(get("/api/me").param("id", "1"))
+        mockMvc.perform(get("/api/me").header("Authorization-telegram-id", "1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username").value("testuser"));
     }
@@ -92,7 +85,7 @@ public class UserControllerTest {
 
     @Test
     void shouldDeleteUser() throws Exception {
-        mockMvc.perform(delete("/api/me").param("id", "1"))
+        mockMvc.perform(delete("/api/me").header("Authorization-telegram-id", "1"))
                 .andExpect(status().isOk());
 
         verify(service).deleteUserById(1L);

@@ -12,7 +12,7 @@ public class ProfileDto {
     Long id;
     String username;
     String description;
-//    Integer age;
+//    LocalDate age;
 //    Gender gender;
     String cityName;
     List<Integer> preferredGymTime;

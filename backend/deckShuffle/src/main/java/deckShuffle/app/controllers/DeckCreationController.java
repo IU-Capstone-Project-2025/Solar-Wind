@@ -1,15 +1,16 @@
 package deckShuffle.app.controllers;
 
 import com.solarwind.dto.ProfileDto;
+import com.solarwind.securityModule.annotation.Secured;
+import com.solarwind.securityModule.service.DatabaseSourceReader;
+import com.solarwind.dto.UserDto;
 import deckShuffle.app.services.DeckCreationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Secured(DatabaseSourceReader.class)
 @RestController
 @RequestMapping("/api")
 public class DeckCreationController {
@@ -17,7 +18,11 @@ public class DeckCreationController {
     private DeckCreationService service;
 
     @GetMapping("/create-deck")
-    public List<ProfileDto> createDeck(@RequestParam Long id) {
+    public List<ProfileDto> createDeck(@RequestHeader("Authorization-telegram-id") Long id) {
         return service.createDeck(id);
+    }
+    @GetMapping("/filter")
+    public List<ProfileDto> createDeckByFilter(@RequestBody UserDto filterDto) {
+        return service.createDeckByFilter(filterDto);
     }
 }

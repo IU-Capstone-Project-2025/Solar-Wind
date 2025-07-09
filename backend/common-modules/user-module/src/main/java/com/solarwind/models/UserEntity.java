@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -19,14 +21,10 @@ public class UserEntity {
     Long telegramId;
     @Column(unique = true, name = "username")
     String username;
-    @Column(name = "first_name")
-    String firstName;
-    @Column(name = "last_name")
-    String lastName;
     @Column(name = "description")
     String description;
     @Column(name = "age")
-    Integer age;
+    LocalDate age;
     @Enumerated(EnumType.STRING)
     @Column (name = "gender")
     Gender gender;

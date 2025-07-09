@@ -5,11 +5,13 @@ import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class UserDto {
+public class UserDto implements Serializable {
     Long id;
     Long telegramId;
     @Size(max = 50)
@@ -20,18 +22,16 @@ public class UserDto {
     String lastName;
     String description;
 //    @NotNull
-    @Min(5)
-    @Max(120)
-    Integer age;
+    LocalDate age;
 //    @NotNull
     Gender gender;
     Boolean verified;
 //    @NotNull
     Gender preferredGender;
-    @NotNull
+//    @NotNull
     Long cityId;
-    @NotEmpty
+//    @NotEmpty
     List<Integer> preferredGymTime;
-    @NotEmpty
+//    @NotEmpty
     List<Long> sportId;
 }

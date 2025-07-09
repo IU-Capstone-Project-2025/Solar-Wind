@@ -40,6 +40,13 @@ jobs:
             LIKES_DB_URL=${{ secrets.LIKES_DB_URL }}
             LIKES_DB_USERNAME=${{ secrets.LIKES_DB_USERNAME }}
             LIKES_DB_PASSWORD=${{ secrets.LIKES_DB_PASSWORD }}
+            TOKENS_DB_URL=${{ secrets.TOKENS_MANAGEMENT_DB_URL }}
+            TOKENS_DB_USERNAME=${{ secrets.TOKENS_MANAGEMENT_DB_USERNAME }}
+            TOKENS_DB_PASSWORD=${{ secrets.TOKENS_MANAGEMENT_DB_PASSWORD }}
+            PROFILES_URL=${{ secrets.PROFILES_URL }}
+            LIKE_TO_NOTIFICATION_TOKEN=${{ secrets.LIKE_TO_NOTIFICATION_TOKEN }}
+            DECK_CACHE_PASSWORD=${{ secrets.DECK_CACHE_PASSWORD }}
+            DECK_CACHE_HOST=${{ secrets.DECK_CACHE_HOST }}
             EOF
             
             docker compose down
