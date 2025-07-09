@@ -45,6 +45,8 @@ jobs:
             TOKENS_DB_PASSWORD=${{ secrets.TOKENS_MANAGEMENT_DB_PASSWORD }}
             PROFILES_URL=${{ secrets.PROFILES_URL }}
             LIKE_TO_NOTIFICATION_TOKEN=${{ secrets.LIKE_TO_NOTIFICATION_TOKEN }}
+            DECK_CACHE_PASSWORD=${{ secrets.DECK_CACHE_PASSWORD }}
+            DECK_CACHE_HOST=${{ secrets.DECK_CACHE_HOST }}
             EOF
             
             docker-compose down
