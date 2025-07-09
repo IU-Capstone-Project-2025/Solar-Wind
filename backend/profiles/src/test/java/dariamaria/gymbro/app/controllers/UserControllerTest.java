@@ -85,7 +85,7 @@ public class UserControllerTest {
 
     @Test
     void shouldDeleteUser() throws Exception {
-        mockMvc.perform(delete("/api/me").param("id", "1"))
+        mockMvc.perform(delete("/api/me").header("Authorization-telegram-id", "1"))
                 .andExpect(status().isOk());
 
         verify(service).deleteUserById(1L);
