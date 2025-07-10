@@ -1,5 +1,6 @@
 FROM python:3.12-alpine as builder
 WORKDIR /app
+COPY requirements.txt .
 RUN python -m venv /opt/venv && \
     /opt/venv/bin/pip install --no-cache-dir -r requirements.txt
 
