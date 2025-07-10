@@ -56,7 +56,6 @@ To refresh all packages to their latest compatible versions:
     
 3. For backend:
 - Prerequisites: [Docker](https://www.docker.com/products/docker-desktop) installed
-- Open ``backend/``
 
 ```bash
 cd backend
