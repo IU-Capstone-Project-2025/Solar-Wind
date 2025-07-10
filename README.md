@@ -41,31 +41,46 @@ Young adults (18–30) who want to:
 ## 🛠️ How to Run Locally
 
 1. Clone this repo:
-   ``git clone https://github.com/your-username/solar-wind.git``
-   ``cd solar-wind``
+```bash
+git clone https://github.com/your-username/solar-wind.git
+cd solar-wind
+```
    
 2. For iOS frontend:
-- Open ``SolarWind.xcodeproj`` in Xcode
-- Ensure you have latest dependencies (Alamofire, Kingfisher, etc.)
+- Open ``Solar-Wind-iOS-app/Solar-Wind-iOS-app.xcodeproj/project.xcworkspace`` in Xcode
+- In Xcode, go to:
+    `File` → `Packages` → `Resolve Package Versions`
+To refresh all packages to their latest compatible versions:  
+   `File` → `Packages` → `Update to Latest Package Versions`
 - Build and run on simulator or device
     
 3. For backend:
-- Navigate to backend directory
-- Run Spring Boot app:
-    ``./gradlew bootRun``
-- Ensure PostgreSQL and Redis are running locally
+- Prerequisites: [Docker](https://www.docker.com/products/docker-desktop) installed
+- Open ``backend/``
+
+```bash
+cd backend
+docker-compose up --build
+```
 
 ## 💻 API Specification
 
 Each microservice has its own Swagger UI documentation:
 
-- [Likes Service API](https://solar-wind-gymbro.ru/likes/swagger-ui.html)
-- [Profiles Service API](https://solar-wind-gymbro.ru/profiles/swagger-ui.html)
-- [Notifications Service API](https://solar-wind-gymbro.ru/notifications/swagger-ui.html)
-- [Deck Shuffle Service API](https://solar-wind-gymbro.ru/deckShuffle/swagger-ui.html)
+- [🔗Likes Service API](https://solar-wind-gymbro.ru/likes/swagger-ui.html)
+- [🔗Profiles Service API](https://solar-wind-gymbro.ru/profiles/swagger-ui.html)
+- [🔗Notifications Service API](https://solar-wind-gymbro.ru/notifications/swagger-ui.html)
+- [🔗Deck Shuffle Service API](https://solar-wind-gymbro.ru/deckShuffle/swagger-ui.html)
 
 Full Postman collection:
-- [Solar Wind API on Postman](https://www.postman.com/grey-satellite-701545/solar-wind/overview)
+- [🔗Solar Wind API on Postman](https://www.postman.com/grey-satellite-701545/solar-wind/overview)
+
+## 🔁 User Flow Diagrams
+
+The following diagrams illustrate the core user flows in the Solar Wind app:
+
+- [🔗 Registration flow](https://www.figma.com/design/si98563MfBSXuDtOfV8655/FitFlame?node-id=0-1&p=f&t=0YEz2ac3MJ8uvHij-0)
+- [🔗 Main flow](https://www.figma.com/design/si98563MfBSXuDtOfV8655/FitFlame?node-id=129-1161&p=f&t=ZYFIR9AQSHxESbqE-0)
 
 ## 📝 License
 [MIT License](https://github.com/IU-Capstone-Project-2025/Solar-Wind/blob/backend/LICENSE)
