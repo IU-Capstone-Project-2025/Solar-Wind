@@ -20,11 +20,11 @@ dp = Dispatcher()
 async def command_start_handler(message: Message) -> None:
     code = f"{randint(0, 10000):04d}"
     requests.post(
-        f"{getenv('PROFILES_URL')}/custom-auth",
+        f"{getenv('PROFILES_URL')}/auth/telegram/custom-auth",
         params={"code": f"{code}", "userId": message.from_user.id},
         headers={"Authorize": TOKEN},
     )
-    await message.answer(f"Your code is ||`{code}`||. Do not pass it to anybody, and use **only** to authenticate in Solar-Wind app")
+    await message.answer(f"Your code is <tg-spoiler>{code}</tg-spoiler>. Do not pass it to anybody, and use <b>only</b> to authenticate in Solar-Wind app")
 
 
 async def main() -> None:

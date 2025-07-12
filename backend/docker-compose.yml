@@ -71,6 +71,10 @@ services:
       dockerfile: ../Dockerfile
     container_name: notifications
     image: notifications_service:latest
+    environment:
+      SPRING_DATASOURCE_URL: ${LIKES_DB_URL}
+      SPRING_DATASOURCE_USERNAME: ${LIKES_DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${LIKES_DB_PASSWORD}
     ports:
       - "8082:8080"
 
