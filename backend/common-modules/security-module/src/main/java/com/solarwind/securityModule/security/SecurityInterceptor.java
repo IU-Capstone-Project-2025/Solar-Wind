@@ -6,10 +6,17 @@ import com.solarwind.securityModule.service.TokenSourceReader;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+@Component
 public class SecurityInterceptor implements HandlerInterceptor {
+
+    @Autowired
+    private ApplicationContext applicationContext;
 
     @Override
     public boolean preHandle(
@@ -28,7 +35,7 @@ public class SecurityInterceptor implements HandlerInterceptor {
             return true;
         }
         Class<? extends TokenSourceReader> tokenSourceClass = secured.value();
-        TokenSourceReader tokenSource = tokenSourceClass.getDeclaredConstructor().newInstance();
+        TokenSourceReader tokenSource = applicationContext.getBean(tokenSourceClass);
 
         TokenData tokenData = tokenSource.extractToken(request);
         if (tokenData == null || !tokenSource.isValid(tokenData)) {
