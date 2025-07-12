@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 public interface UserRepository extends JpaRepository<UserEntity, Long>, JpaSpecificationExecutor<UserEntity> {
@@ -16,7 +15,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long>, JpaSpec
         SELECT id, preferred_gym_time
         FROM users
         WHERE city_id = :city
-          AND age BETWEEN (:age - 10) AND (:age + 10)
           AND LOWER(gender) = LOWER(:preferred)
           AND LOWER(preferred_gender) = LOWER(:gender)
     ),
@@ -54,5 +52,5 @@ public interface UserRepository extends JpaRepository<UserEntity, Long>, JpaSpec
     );
 
     @Query(value = "SELECT id FROM users WHERE username = :username", nativeQuery = true)
-    public Long findIdByUsername(@Param("username") String username);
+    Long findIdByUsername(@Param("username") String username);
 }
