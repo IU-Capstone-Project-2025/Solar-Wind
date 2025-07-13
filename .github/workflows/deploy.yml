@@ -6,14 +6,14 @@ on:
       - main
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Deploy on remote server via SSH
+      - name: Build application  and prepare environment
         uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.REMOTE_HOST }}
@@ -48,8 +48,18 @@ jobs:
             DECK_CACHE_PASSWORD=${{ secrets.DECK_CACHE_PASSWORD }}
             DECK_CACHE_HOST=${{ secrets.DECK_CACHE_HOST }}
             EOF
-            
             docker compose down
-            ./mvnw clean package -DskipTests
-            docker compose build
-            docker compose up -d
+            ./mvnw install -DskipTests
+
+  run:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Run prebuild application
+      uses: appleboy/ssh-action@v0.1.7
+      with:
+        host: ${{ secrets.REMOTE_HOST }}
+        username: ${{ secrets.REMOTE_HOST_USER }}
+        key: ${{ secrets.REMOTE_HOST_SSH_KEY }}
+        script: |
+          docker compose up -d --build
