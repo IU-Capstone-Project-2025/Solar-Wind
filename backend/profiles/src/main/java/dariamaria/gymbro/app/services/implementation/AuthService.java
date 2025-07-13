@@ -17,6 +17,15 @@ public class AuthService {
     public String obtainPersonalToken(Long userId) {
         Example<UserSecurityNode> example = Example.of(UserSecurityNode.builder().id(userId).build());
         Optional<UserSecurityNode> node = tokensRepository.findOne(example);
-        return node.map(UserSecurityNode::getToken).orElse(TokenGenerator.generateToken(userId));
+        UserSecurityNode result;
+        if (node.isEmpty()){
+            result = new UserSecurityNode();
+            result.setId(userId);
+            result.setToken(TokenGenerator.generateToken(userId));
+            tokensRepository.save(result);
+        } else {
+            result = node.get();
+        }
+        return result.getToken();
     }
 }

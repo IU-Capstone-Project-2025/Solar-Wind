@@ -5,9 +5,12 @@ import com.solarwind.dto.UserDto;
 import com.solarwind.securityModule.annotation.Secured;
 import com.solarwind.securityModule.service.DatabaseSourceReader;
 import dariamaria.gymbro.app.services.UserManagementService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 
@@ -27,7 +30,11 @@ public class UserController {
 
     @GetMapping("/me")
     public ProfileDto getUserById(@RequestHeader("Authorization-telegram-id") long id) {
-        return service.getByUserId(id);
+        try {
+            return service.getByUserId(id);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
     @DeleteMapping("/me")

@@ -1,7 +1,9 @@
 package dariamaria.gymbro.app.controllers;
 
+import com.solarwind.dto.ProfileDto;
 import com.solarwind.securityModule.annotation.Secured;
 import com.solarwind.securityModule.service.PropertyTokenSourceReader;
+import dariamaria.gymbro.app.services.UserManagementService;
 import dariamaria.gymbro.app.services.implementation.AuthService;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
+
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import org.springframework.web.server.ResponseStatusException;
@@ -36,6 +39,9 @@ public class AuthController {
     private String tgBotToken;
     @Autowired
     private AuthService authService;
+    @Autowired
+    private UserManagementService userRetrievalService;
+
     private final Cache<Integer, Long> code_awaiters = Caffeine
             .newBuilder()
             .expireAfterWrite(60, TimeUnit.SECONDS)
@@ -114,8 +120,19 @@ public class AuthController {
 
         String token = authService.obtainPersonalToken(userId);
         Map<String, String> response = new HashMap<>();
+        boolean isRegistered;
+        try {
+            ProfileDto userEntity = userRetrievalService.getByUserId(userId);
+            if (userEntity==null){
+                throw new Exception();
+            }
+            isRegistered = true;
+        } catch (Exception e) {
+            isRegistered = false;
+        }
         response.put("token", token);
         response.put("id", userId.toString());
+        response.put("isRegistered", Boolean.toString(isRegistered));
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
