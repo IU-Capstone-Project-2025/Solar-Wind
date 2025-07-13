@@ -50,6 +50,7 @@ jobs:
             EOF
             docker compose down
             ./mvnw install -DskipTests
+            docker compose build
 
   run:
     needs: build
@@ -62,4 +63,5 @@ jobs:
         username: ${{ secrets.REMOTE_HOST_USER }}
         key: ${{ secrets.REMOTE_HOST_SSH_KEY }}
         script: |
-          docker compose up -d --build
+          cd ~/app/backend
+          docker compose up -d
