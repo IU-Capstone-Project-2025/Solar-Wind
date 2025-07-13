@@ -25,7 +25,7 @@ public class UserManagementServiceImp extends UserRetrievalServiceImp implements
     public Long createUser(UserDto dto) {
         UserEntity user = userMapper.mapToUsersEntity(dto);
         repository.save(user);
-        return repository.findIdByUsername(user.getUsername());
+        return user.getId();
     }
 
     @Override

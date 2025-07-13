@@ -6,7 +6,7 @@ else
     MVNW := ./mvnw
 endif
 compile:
-	$(MVNW) clean package -DskipTests
+	$(MVNW) install -DskipTests
 build: compile
 	docker compose --env-file .env.example -f docker-compose.local.yml build
 up:

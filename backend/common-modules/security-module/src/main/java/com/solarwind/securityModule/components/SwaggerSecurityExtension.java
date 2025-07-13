@@ -27,7 +27,7 @@ public class SwaggerSecurityExtension implements OperationCustomizer {
         Class<? extends TokenSourceReader> tokenSource = secured.value();
 
         if (tokenSource.equals(DatabaseSourceReader.class)) {
-            addHeader(operation, "Authorization", "Access token");
+            addHeader(operation, "Authorize", "Access token");
             addHeader(operation, "Authorization-telegram-id", "Telegram User ID");
         } else if (tokenSource.equals(PropertyTokenSourceReader.class)) {
             addHeader(operation, "Authorize", "Simple token");

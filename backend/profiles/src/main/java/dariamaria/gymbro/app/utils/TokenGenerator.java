@@ -5,7 +5,7 @@ import java.security.SecureRandom;
 // todo: make proper JWT generation
 public class TokenGenerator {
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    private static final int LENGTH = 256;
+    private static final int LENGTH = 255;
 
     public static String generateToken(Long user) {
         SecureRandom random = new SecureRandom();
