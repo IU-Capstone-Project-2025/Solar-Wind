@@ -17,6 +17,18 @@ services:
       POSTGRES_USER: ${PROFILE_DB_USERNAME}
       POSTGRES_PASSWORD: ${PROFILE_DB_PASSWORD}
 
+  photo-db:
+    image: postgres:17-alpine
+    container_name: photo-db
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./photo-init:/docker-entrypoint-initdb.d
+    environment:
+      SPRING_DATASOURCE_USERNAME: ${PROFILE_DB_USERNAME2}
+      SPRING_DATASOURCE_PASSWORD: ${PROFILE_DB_USERNAME2}
+      SPRING_DATASOURCE_URL: ${PROFILE_DB_URL2}
+
   redis:
     image: redis:7-alpine
     container_name: redis

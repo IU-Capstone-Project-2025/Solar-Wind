@@ -18,6 +18,7 @@
         <module>likes-module</module>
         <module>user-module</module>
         <module>security-module</module>
+        <module>photo-module</module>
     </modules>
 
     <dependencies>

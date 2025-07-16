@@ -7,4 +7,6 @@ public interface UserManagementService extends UserRetrievalService {
     Long createUser(UserDto dto);
     void deleteUserById(long id);
     void update(UserDto user);
+
+    void savePhoto(Long id, byte[] photo);
 }

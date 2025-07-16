@@ -1,5 +1,7 @@
 package dariamaria.gymbro.app.services.implementation;
 
+import com.photoservice.models.PhotoEntity;
+import com.photoservice.repository.PhotoRepository;
 import com.solarwind.component.MapperHelper;
 import com.solarwind.dto.UserDto;
 import com.solarwind.mappers.UserMapper;
@@ -12,12 +14,14 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserManagementServiceImp extends UserRetrievalServiceImp implements UserManagementService {
     @Autowired
     private CityRepository cityRepository;
     @Autowired
-    private SportRepository sportRepository;
+    private PhotoRepository photoRepository;
     @Autowired
     private MapperHelper helper;
 
@@ -77,6 +81,19 @@ public class UserManagementServiceImp extends UserRetrievalServiceImp implements
         }
         System.out.println(user);
 
+        repository.save(user);
+    }
+
+    @Override
+    public void savePhoto(Long id, byte[] photo) {
+        PhotoEntity entity = new PhotoEntity();
+        entity.setImage(photo);
+        photoRepository.save(entity);
+        Optional<PhotoEntity> optional = photoRepository.findByImage(photo);
+        Long photoId = optional.map(PhotoEntity::getId)
+                .orElseThrow(() -> new EntityNotFoundException("Photo not found"));
+        UserEntity user = repository.getReferenceById(id);
+        user.setPhotoId(photoId);
         repository.save(user);
     }
 }
