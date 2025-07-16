@@ -16,7 +16,7 @@ final class VerificationView: View {
     
     private let label: UILabel = {
         let view = UILabel()
-        view.text = "To continue, tap the button below.\nYour Telegram account data will be shared for authentication."
+        view.text = "To continue, tap the button below to open our Telegram bot. Then, press Start in the Telegram chat to recive the code"
         view.font = .size20Medium
         view.textColor = .black
         view.numberOfLines = 0
@@ -26,7 +26,7 @@ final class VerificationView: View {
     
     private lazy var linkButton: PurpleButton = {
         let view = PurpleButton()
-        view.title = "Log in with Telegram"
+        view.title = "@SolarWindAuthorization_bot"
         view.addAction(
             UIAction(
                 handler: { [weak self] _ in

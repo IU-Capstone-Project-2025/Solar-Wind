@@ -6,6 +6,7 @@
 //
 
 import Alamofire
+import Foundation
 
 public struct ProfileRequest: APIRequest {
     public typealias Response = Profile
@@ -13,15 +14,14 @@ public struct ProfileRequest: APIRequest {
     public var method: HTTPMethod { .get }
     public var path: String { "profiles/api/me" }
     public var parameters: Parameters?
-    public var headers: HTTPHeaders? { nil }
+    public var headers: HTTPHeaders?
     public var encoding: ParameterEncoding { URLEncoding.default }
     
     public init(id: Int) {
-        var params: [String: String] = [
-            "id": "\(id)"
+        self.headers = [
+            "Authorize": "\(UserDefaults.standard.string(forKey: "token") ?? "")",
+            "Authorization-telegram-id": "\(UserDefaults.standard.string(forKey: "id") ?? "")"
         ]
-        
-        self.parameters = params
     }
 }
 

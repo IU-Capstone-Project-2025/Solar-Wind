@@ -13,7 +13,7 @@ public struct SaveAboutMeRequest: APIRequest {
     public var method: HTTPMethod { .post }
     public var path: String { "profiles/api/me" }
     public var parameters: Parameters?
-    public var headers: HTTPHeaders? { nil }
+    public var headers: HTTPHeaders?
     public var encoding: ParameterEncoding { JSONEncoding.default }
     
     public init(userDefaults: UserDefaults = .standard) {
@@ -24,20 +24,25 @@ public struct SaveAboutMeRequest: APIRequest {
         let days: [Int] = (userDefaults.array(forKey: "selectedWeekdays") as? [Int]) ?? [1]
         
         self.parameters = [
+            "id": userDefaults.string(forKey: "id") ?? "",
+            "telegramId": userDefaults.string(forKey: "id") ?? "",
             "username": username,
             "firstName": "firstName",
             "lastName": "lastName",
             "description": description,
-            "age": 10,
+            "age": "2025-07-11",
             "gender": "male",
             "preferredGender": "male",
             "cityId": cityId,
             "preferredGymTime": days,
             "sportId": sportId
         ]
+        self.headers = [
+            "Authorize": "\(userDefaults.string(forKey: "token") ?? "")",
+            "Authorization-telegram-id": "\(userDefaults.string(forKey: "id") ?? "")"
+        ]
     }
+    
 }
 
-public struct SaveAboutMeResponse: Decodable, Sendable {
-    public let id: Int
-}
+public struct SaveAboutMeResponse: Decodable, Sendable { }

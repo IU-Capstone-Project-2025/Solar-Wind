@@ -7,7 +7,8 @@
 
 class VerificationRouter: @preconcurrency VerificationRoutingLogic {
     weak var vc: VerificationViewController?
-    @MainActor func toCity() {
-        vc?.navigationController?.setViewControllers([ChooseCityBuilder.build()], animated: true)
+    @MainActor func toEnterCode() {
+        vc?.navigationController?.setViewControllers([EnterCodeBuilder.build()], animated: true)
     }
+    
 }

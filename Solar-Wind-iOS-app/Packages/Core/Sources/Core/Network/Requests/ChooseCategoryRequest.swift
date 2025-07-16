@@ -23,6 +23,7 @@ public struct CategoryRequest: APIRequest {
             "page": "\(page)",
             "size": "\(size)"
         ]
+        
     }
 }
 

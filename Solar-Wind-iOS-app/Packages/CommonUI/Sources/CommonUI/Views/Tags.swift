@@ -12,7 +12,7 @@ public struct TagsView: SwiftUI.View {
     var tags: [String] = []
     var backgroundColor: Color = Color(UIColor.orangeColor)
     var textColor: Color = .white
-    var cornerRadius: CGFloat = 16
+    var cornerRadius: CGFloat = 8
     var padding: CGFloat = 8
     
     public init(tags: [String] = []) {
@@ -70,7 +70,12 @@ public struct TagsView: SwiftUI.View {
             .background(backgroundColor)
             .foregroundColor(textColor)
             .cornerRadius(cornerRadius)
+            .overlay(
+                RoundedRectangle(cornerRadius: cornerRadius)
+                    .stroke(textColor.opacity(0.7), lineWidth: 1)
+            )
     }
+
     
     private func viewHeightReader(_ binding: Binding<CGFloat>) -> some SwiftUI.View {
         GeometryReader { geometry -> Color in
