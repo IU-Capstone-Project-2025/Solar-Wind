@@ -1,16 +1,16 @@
 //
-//  SaveAboutMeRequest.swift
+//  EditAboutMeRequest.swift
 //  Core
 //
-//  Created by Даша Николаева on 27.06.2025.
+//  Created by Даша Николаева on 15.07.2025.
 //
 
 import Alamofire
 import Foundation
 
-public struct SaveAboutMeRequest: APIRequest {
+public struct EditAboutMeRequest: APIRequest {
     public typealias Response = SaveAboutMeResponse
-    public var method: HTTPMethod { .post }
+    public var method: HTTPMethod { .put }
     public var path: String { "profiles/api/me" }
     public var parameters: Parameters?
     public var headers: HTTPHeaders?
@@ -44,5 +44,3 @@ public struct SaveAboutMeRequest: APIRequest {
     }
     
 }
-
-public struct SaveAboutMeResponse: Decodable, Sendable { }

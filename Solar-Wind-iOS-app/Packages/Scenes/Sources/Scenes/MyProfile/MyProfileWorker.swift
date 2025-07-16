@@ -13,6 +13,7 @@ final class MyProfileWorker {
     func fetch(completion: MyProfile.MyProfileCompletion?) {
         let id = UserDefaults.standard.integer(forKey: "userId")
         let request = ProfileRequest(id: id)
+        print(request)
         APIClient.shared.send(request) { result in
             switch result {
             case .success(let user):

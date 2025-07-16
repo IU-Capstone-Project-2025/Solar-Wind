@@ -14,17 +14,15 @@ public struct FeedRequest: APIRequest {
     public var method: HTTPMethod { .get }
     public var path: String { "deckShuffle/api/create-deck" }
     public var parameters: Parameters?
-    public var headers: HTTPHeaders? { nil }
+    public var headers: HTTPHeaders?
     public var encoding: ParameterEncoding { URLEncoding.default }
     
     public init(userDefaults: UserDefaults = .standard) {
-        let id = userDefaults.integer(forKey: "userId")
-        print(id)
-        var params: [String: String] = [
-            "id": "\(id)",
+        let id = userDefaults.string(forKey: "id")
+        self.headers = [
+            "Authorize": "\(userDefaults.string(forKey: "token") ?? "")",
+            "Authorization-telegram-id": "\(id ?? "")"
         ]
-        
-        self.parameters = params
     }
 }
 
