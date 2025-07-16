@@ -31,6 +31,7 @@ Young adults (18–30) who want to:
 
 ### Backend:
 - **Java 23.0**
+- **Python 3.12**
 - **Spring Boot** for RESTful services
 - **Hibernate** for ORM and caching
 
@@ -55,12 +56,11 @@ To refresh all packages to their latest compatible versions:
 - Build and run on simulator or device
     
 3. For backend:
-- Prerequisites: [Docker](https://www.docker.com/products/docker-desktop) installed
-- Open ``backend/``
+- Prerequisites: [Docker](https://www.docker.com/products/docker-desktop) and [GNU Make (for Windows)](https://www.gnu.org/software/make/) installed.
 
 ```bash
 cd backend
-docker-compose up --build
+make all
 ```
 
 ## 💻 API Specification
