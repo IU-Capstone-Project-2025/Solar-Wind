@@ -1,34 +1,54 @@
 package dariamaria.gymbro.app.controllers;
 
-import dariamaria.gymbro.app.dto.UsersDto;
-import dariamaria.gymbro.app.services.UserService;
+import com.solarwind.dto.ProfileDto;
+import com.solarwind.dto.UserDto;
+import com.solarwind.securityModule.annotation.Secured;
+import com.solarwind.securityModule.service.DatabaseSourceReader;
+import dariamaria.gymbro.app.services.UserManagementService;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
+import java.util.*;
 
+@Secured(DatabaseSourceReader.class)
 @RestController
+@RequestMapping("/api")
 public class UserController {
     @Autowired
-    private UserService service;
-    @PostMapping("/createUser")
-    public UsersDto createUser(@RequestBody UsersDto dto) {
-        return service.createUser(dto);
+    private UserManagementService service;
+
+    @PostMapping("/me")
+    public Map<String, Long> createUser(@Valid @RequestBody UserDto dto) {
+        Map<String, Long> response = new HashMap<>();
+        response.put("id", service.createUser(dto));
+        return response;
     }
-    @GetMapping("/")
-    public String hello() {
-        return "Hello Дарияяяяяяяя!";
+
+    @GetMapping("/me")
+    public ProfileDto getUserById(@RequestHeader("Authorization-telegram-id") long id) {
+        try {
+            return service.getByUserId(id);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
-    @GetMapping("/getUserById")
-    public UsersDto getUserById(@RequestParam long id) {
-        return service.getByUserId(id);
-    }
-    @GetMapping("/getUsers")
-    public List<UsersDto> getUsers() {
-        return service.getUsers();
-    }
-    @DeleteMapping("/deleteUserById")
-    public void deleteUser(@RequestParam long id) {
+
+    @DeleteMapping("/me")
+    public void deleteUser(@RequestHeader("Authorization-telegram-id") long id) {
         service.deleteUserById(id);
+    }
+
+    @PutMapping("/me")
+    public void updateUser(@Valid @RequestBody UserDto dto) {
+        service.update(dto);
+    }
+
+    @GetMapping("/getUsers")
+    public List<ProfileDto> getUsers() {
+        return service.getUsers();
     }
 }

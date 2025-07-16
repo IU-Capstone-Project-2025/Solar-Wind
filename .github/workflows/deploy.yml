@@ -1,0 +1,67 @@
+name: Deploy to remote server
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build application  and prepare environment
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_HOST_USER }}
+          key: ${{ secrets.REMOTE_HOST_SSH_KEY }}
+          script: |
+            APP_DIR=~/app
+
+            if [ -d "$APP_DIR" ]; then
+              cd $APP_DIR
+              git fetch origin
+              git reset --hard origin/main
+            else
+              git clone https://github.com/${{ github.repository }} $APP_DIR
+              cd $APP_DIR
+            fi
+            cd backend
+
+            cat > .env <<EOF
+            PROFILE_DB_URL=${{ secrets.PROFILE_DB_URL }}
+            PROFILE_DB_USERNAME=${{ secrets.PROFILE_DB_USERNAME }}
+            PROFILE_DB_PASSWORD=${{ secrets.PROFILE_DB_PASSWORD }}
+            TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}
+            LIKES_DB_URL=${{ secrets.LIKES_DB_URL }}
+            LIKES_DB_USERNAME=${{ secrets.LIKES_DB_USERNAME }}
+            LIKES_DB_PASSWORD=${{ secrets.LIKES_DB_PASSWORD }}
+            TOKENS_DB_URL=${{ secrets.TOKENS_MANAGEMENT_DB_URL }}
+            TOKENS_DB_USERNAME=${{ secrets.TOKENS_MANAGEMENT_DB_USERNAME }}
+            TOKENS_DB_PASSWORD=${{ secrets.TOKENS_MANAGEMENT_DB_PASSWORD }}
+            PROFILES_URL=${{ secrets.PROFILES_URL }}
+            LIKE_TO_NOTIFICATION_TOKEN=${{ secrets.LIKE_TO_NOTIFICATION_TOKEN }}
+            DECK_CACHE_PASSWORD=${{ secrets.DECK_CACHE_PASSWORD }}
+            DECK_CACHE_HOST=${{ secrets.DECK_CACHE_HOST }}
+            EOF
+            docker compose down
+            ./mvnw install -DskipTests
+            docker compose build
+
+  run:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Run prebuild application
+      uses: appleboy/ssh-action@v0.1.7
+      with:
+        host: ${{ secrets.REMOTE_HOST }}
+        username: ${{ secrets.REMOTE_HOST_USER }}
+        key: ${{ secrets.REMOTE_HOST_SSH_KEY }}
+        script: |
+          cd ~/app/backend
+          docker compose up -d

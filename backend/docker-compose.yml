@@ -1,47 +1,101 @@
-version: '3.8'
-
 services:
-  postgres:
-    image: postgres:17
-    environment:
-      POSTGRES_DB: gymbroDB
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+  nginx-proxy:
+    image: nginx:latest
+    container_name: nginx-proxy
     ports:
-      - "5440:5432"
+      - "80:80"
+      - "443:443"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - /etc/ssl/solar-wind-gymbro.ru:/etc/ssl/solar-wind-gymbro.ru:ro
+    depends_on:
+      - profileService
+      - likesService
+      - notificationsService
+      - deckShufflingService
+
+
+  authBot:
+    build: ./auth-bot
+    image: auth_bot:latest
+    environment:
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      PROFILES_URL: ${PROFILES_URL}
+    depends_on:
+      - profileService
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    environment:
+      - REDIS_PASSWORD=${DECK_CACHE_PASSWORD}
+    entrypoint: >
+      sh -c 'exec redis-server --requirepass "$REDIS_PASSWORD"'
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
 
   profileService:
-    build: ./profiles
+    build:
+      context: ./profiles/
+      dockerfile: ../Dockerfile
     image: profiles_service:latest
-    depends_on:
-      - postgres
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/gymbroDB
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_DATASOURCE_URL: ${PROFILE_DB_URL}
+      SPRING_DATASOURCE_USERNAME: ${PROFILE_DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${PROFILE_DB_PASSWORD}
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
     ports:
       - "8080:8080"
 
   likesService:
-    build: ./likes
+    build:
+      context: ./likes/
+      dockerfile: ../Dockerfile
     image: likes_service:latest
+    depends_on:
+      - notificationsService
+    environment:
+      SPRING_LIKES_DATASOURCE_URL: ${LIKES_DB_URL}
+      SPRING_LIKES_DATASOURCE_USERNAME: ${LIKES_DB_USERNAME}
+      SPRING_LIKES_DATASOURCE_PASSWORD: ${LIKES_DB_PASSWORD}
+      NOTIFICATION_SERVICE_URL: "http://notifications:8080"
     ports:
       - "8081:8080"
 
   notificationsService:
-    build: ./notifications
+    build:
+      context: ./notifications/
+      dockerfile: ../Dockerfile
+    container_name: notifications
     image: notifications_service:latest
+    environment:
+      SPRING_DATASOURCE_URL: ${LIKES_DB_URL}
+      SPRING_DATASOURCE_USERNAME: ${LIKES_DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${LIKES_DB_PASSWORD}
     ports:
       - "8082:8080"
 
   deckShufflingService:
-    build: ./deckShuffle
+    build:
+      context: ./deckShuffle/
+      dockerfile: ../Dockerfile
+    container_name: deck_shuffle
     image: deck_shuffle_service:latest
+    depends_on:
+      - profileService
+    environment:
+      SPRING_DATASOURCE_URL: ${PROFILE_DB_URL}
+      SPRING_DATASOURCE_USERNAME: ${PROFILE_DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${PROFILE_DB_PASSWORD}
+      DECK_CACHE_PASSWORD: ${DECK_CACHE_PASSWORD}
+      DECK_CACHE_HOST: ${DECK_CACHE_HOST}
     ports:
       - "8083:8080"
 
 
 volumes:
   postgres_data:
+  redis_data:

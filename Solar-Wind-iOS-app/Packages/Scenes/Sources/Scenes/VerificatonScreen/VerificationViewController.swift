@@ -19,7 +19,8 @@ final class VerificationViewController: UIViewController {
             guard let self else { return }
             switch action {
             case .openTelegram:
-                router?.toCity()
+                UIApplication.shared.open(URL(string: "https://t.me/SolarWindAuthorization_bot")!)
+                router?.toEnterCode()
             }
         }
     }

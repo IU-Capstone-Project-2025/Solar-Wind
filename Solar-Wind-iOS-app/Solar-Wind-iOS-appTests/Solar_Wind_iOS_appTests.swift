@@ -7,6 +7,7 @@
 
 import XCTest
 @testable import Solar_Wind_iOS_app
+@testable import Scenes
 
 final class Solar_Wind_iOS_appTests: XCTestCase {
 
@@ -32,5 +33,6 @@ final class Solar_Wind_iOS_appTests: XCTestCase {
             // Put the code you want to measure the time of here.
         }
     }
+    
 
 }

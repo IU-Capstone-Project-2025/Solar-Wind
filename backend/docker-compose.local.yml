@@ -1,0 +1,104 @@
+version: '3.8'
+
+x-shared-environment: &tokens_source
+  TOKENS_DB_URL: ${TOKENS_DB_URL}
+  TOKENS_DB_USERNAME: ${TOKENS_DB_USERNAME}
+  TOKENS_DB_PASSWORD: ${TOKENS_DB_PASSWORD}
+
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./.init-db:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_USER: ${PROFILE_DB_USERNAME}
+      POSTGRES_PASSWORD: ${PROFILE_DB_PASSWORD}
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    environment:
+      - REDIS_PASSWORD=${DECK_CACHE_PASSWORD}
+    command: sh -c "redis-server --requirepass \"$REDIS_PASSWORD\""
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+  profileService:
+    build:
+      context: ./profiles/
+      dockerfile: ../Dockerfile
+    image: profiles_service:latest
+    environment:
+      SPRING_DATASOURCE_URL: ${PROFILE_DB_URL}
+      SPRING_DATASOURCE_USERNAME: ${PROFILE_DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${PROFILE_DB_PASSWORD}
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      <<: *tokens_source
+    ports:
+       - "8080:8080"
+    depends_on:
+      - db
+
+  likesService:
+    build:
+      context: ./likes/
+      dockerfile: ../Dockerfile
+    image: likes_service:latest
+    depends_on:
+      - notificationsService
+      - db
+    environment:
+      SPRING_LIKES_DATASOURCE_URL: ${LIKES_DB_URL}
+      SPRING_LIKES_DATASOURCE_USERNAME: ${LIKES_DB_USERNAME}
+      SPRING_LIKES_DATASOURCE_PASSWORD: ${LIKES_DB_PASSWORD}
+      NOTIFICATION_SERVICE_URL: "http://notifications:8080"
+      <<: *tokens_source
+    ports:
+      - "8081:8080"
+
+  notificationsService:
+    build:
+      context: ./notifications/
+      dockerfile: ../Dockerfile
+    container_name: notifications
+    image: notifications_service:latest
+    environment:
+      LIKE_TO_NOTIFICATION_TOKEN: ${LIKE_TO_NOTIFICATION_TOKEN}
+      SPRING_DATASOURCE_URL: ${TOKENS_DB_URL}
+      SPRING_DATASOURCE_USERNAME: ${TOKENS_DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${TOKENS_DB_PASSWORD}
+    ports:
+      - "8082:8080"
+    depends_on:
+      - db
+
+  deckShufflingService:
+    build:
+      context: ./deckShuffle/
+      dockerfile: ../Dockerfile
+    container_name: deck_shuffle
+    image: deck_shuffle_service:latest
+    depends_on:
+      - profileService
+      - db
+      - redis
+    environment:
+      SPRING_DATASOURCE_URL: ${PROFILE_DB_URL}
+      SPRING_DATASOURCE_USERNAME: ${PROFILE_DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${PROFILE_DB_PASSWORD}
+      DECK_CACHE_HOST: ${DECK_CACHE_HOST}
+      DECK_CACHE_PASSWORD: ${DECK_CACHE_PASSWORD}
+      <<: *tokens_source
+    ports:
+      - "8083:8080"
+
+
+volumes:
+  postgres_data:
+  redis_data:
