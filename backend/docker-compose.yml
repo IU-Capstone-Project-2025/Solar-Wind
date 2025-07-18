@@ -30,7 +30,7 @@ services:
     environment:
       - REDIS_PASSWORD=${DECK_CACHE_PASSWORD}
     entrypoint: >
-      sh -c 'exec redis-server --requirepass "$REDIS_PASSWORD"'
+      sh -c 'exec redis-server --requirepass "$$REDIS_PASSWORD"'
     ports:
       - "6379:6379"
     volumes:

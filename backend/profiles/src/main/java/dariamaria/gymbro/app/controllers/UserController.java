@@ -47,8 +47,17 @@ public class UserController {
         service.update(dto);
     }
 
-    @GetMapping("/getUsers")
+    @GetMapping("/users")
     public List<ProfileDto> getUsers() {
         return service.getUsers();
+    }
+
+    @GetMapping("/users/{id}")
+    public ProfileDto getAnotherUser(@PathVariable Long id) {
+        try {
+            return service.getByUserId(id);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 }
