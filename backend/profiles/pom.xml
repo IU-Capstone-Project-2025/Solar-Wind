@@ -44,6 +44,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>com.solarwind</groupId>
+			<artifactId>photo-module</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
 			<groupId>com.lambdaworks</groupId>
 			<artifactId>scrypt</artifactId>
 			<version>1.4.0</version>

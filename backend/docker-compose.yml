@@ -37,6 +37,18 @@ services:
       - redis_data:/data
     restart: unless-stopped
 
+  photo-db:
+    image: postgres:17-alpine
+    container_name: photo-db
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./photo-init:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_USER: ${PROFILE_DB_USERNAME}
+      POSTGRES_PASSWORD: ${PROFILE_DB_USERNAME}
+      POSTGRES_DB: photodb
+
   profileService:
     build:
       context: ./profiles/

@@ -44,6 +44,8 @@ public class UserEntity {
             inverseJoinColumns = @JoinColumn(name = "sport_id")
     )
     List<SportEntity> sports;
+    @Column(name="phoho_id")
+    Long photoId;
     @PrePersist
     public void prePersist() {
         if (this.gender == null) {
