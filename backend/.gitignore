@@ -4,6 +4,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 .env
+*/.venv
+*/datasets
+!*/datasets/*.py
 
 ### STS ###
 .apt_generated
