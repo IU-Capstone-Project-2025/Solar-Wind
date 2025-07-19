@@ -3,13 +3,11 @@ from torch.utils.data import Dataset
 from torch import tensor, stack, float32
 
 class MatchDataset(Dataset):
-    def __init__(self, pairs_file, profile_file):
-        with open(pairs_file) as f:
-            self.pairs = json.load(f)
-        with open(profile_file) as f:
-            self.profiles = {
-                int(p["id"]): padded_user(p) for p in json.load(f)
-            }
+    def __init__(self, pairs_stream, profile_stream):
+        self.pairs = [*pairs_stream]
+        self.profiles = {
+            int(p["id"]): padded_user(p) for p in profile_stream
+        }
 
     def __getitem__(self, idx):
         pair = self.pairs[idx]

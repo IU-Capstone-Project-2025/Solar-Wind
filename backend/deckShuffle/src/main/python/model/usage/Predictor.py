@@ -1,11 +1,17 @@
+from pathlib import Path
+
 import torch
 
 from model.MatchPredictor import MatchPredictor
 from model.learning.MatchDataset import encode
+from model.learning.learn_script import learn
+
 
 class Predictor:
-    def __init__(self, model_path: str):
+    def __init__(self, model_path: Path):
         self.model = MatchPredictor()
+        if not model_path.exists():
+            learn()
         self.model.load_state_dict(torch.load(model_path))
         self.model.eval()
 
