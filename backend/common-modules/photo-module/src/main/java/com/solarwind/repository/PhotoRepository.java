@@ -1,6 +1,6 @@
-package com.photoservice.repository;
+package com.solarwind.repository;
 
-import com.photoservice.models.PhotoEntity;
+import com.solarwind.models.PhotoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
