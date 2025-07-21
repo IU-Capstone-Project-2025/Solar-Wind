@@ -27,6 +27,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
 
   bool _isLoading = true;
   RegistrationData _data = RegistrationData();
+  bool _showDaysSelection = false;
 
   // Город
   final _citySearchController = TextEditingController();
@@ -53,19 +54,33 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     super.dispose();
   }
 
-Future<void> _logout() async {
-  final prefs = await SharedPreferences.getInstance();
-  await prefs.clear();
-
-  if (!mounted) return;
-  Navigator.pushAndRemoveUntil(
-    context,
-    MaterialPageRoute(
-      builder: (_) => WelcomeScreen(),
-    ),
-    (route) => false,
-  );
+  List<String> getWeekDayNames(List<int> days) {
+  const weekDays = [
+    'Monday',    // 1
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',    // 7
+  ];
+  return days.map((d) => weekDays[d - 1]).toList();
 }
+
+
+  Future<void> _logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+
+    if (!mounted) return;
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (_) => WelcomeScreen(),
+      ),
+      (route) => false,
+    );
+  }
 
   Future<void> _loadInitialData() async {
     try {
@@ -155,6 +170,17 @@ Future<void> _logout() async {
     setState(() {
       _selectedSports.removeWhere((s) => s.id == sport.id);
       _data.sportId.removeWhere((id) => id == sport.id);
+    });
+  }
+
+  void _toggleDaySelection(int day) {
+    setState(() {
+      if (_data.days.contains(day)) {
+        _data.days.remove(day);
+      } else {
+        _data.days.add(day);
+      }
+      _data.days.sort();
     });
   }
 
@@ -269,6 +295,66 @@ Future<void> _logout() async {
     );
   }
 
+  Widget _buildWeekDaysSelector(ThemeData theme) {
+    const days = [
+      {'id': 1, 'name': 'Mon'},
+      {'id': 2, 'name': 'Tue'},
+      {'id': 3, 'name': 'Wed'},
+      {'id': 4, 'name': 'Thu'},
+      {'id': 5, 'name': 'Fri'},
+      {'id': 6, 'name': 'Sut'},
+      {'id': 7, 'name': 'Sun'},
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(
+              "Training days",
+              style: theme.textTheme.labelLarge?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            IconButton(
+              icon: Icon(
+                _showDaysSelection ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+              ),
+              onPressed: () {
+                setState(() {
+                  _showDaysSelection = !_showDaysSelection;
+                });
+              },
+            ),
+          ],
+        ),
+        if (_showDaysSelection)
+          Wrap(
+            spacing: 8,
+            children: days.map((day) {
+              final isSelected = _data.days.contains(day['id']);
+              return FilterChip(
+                label: Text(day['name'] as String),
+                selected: isSelected,
+                onSelected: (_) => _toggleDaySelection(day['id'] as int),
+                selectedColor: theme.colorScheme.primary.withOpacity(0.2),
+                checkmarkColor: theme.colorScheme.primary,
+                labelStyle: TextStyle(
+                  color: isSelected ? theme.colorScheme.primary : theme.colorScheme.onSurface,
+                ),
+              );
+            }).toList(),
+          ),
+        if (!_showDaysSelection && _data.days.isNotEmpty)
+          Wrap(
+            spacing: 8,
+            children: getWeekDayNames(_data.days)
+                .map((day) => Chip(label: Text(day)))
+                .toList(),
+          ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -323,6 +409,8 @@ Future<void> _logout() async {
                     _buildCitySearchField(theme),
                     const SizedBox(height: 12),
                     _buildSportSearchField(theme),
+                    const SizedBox(height: 12),
+                    _buildWeekDaysSelector(theme),
                     const SizedBox(height: 24),
                     ElevatedButton(
                       onPressed: _saveProfile,

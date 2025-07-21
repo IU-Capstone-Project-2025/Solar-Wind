@@ -71,4 +71,34 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get authorizationInstruction =>
       'To authorize, click the button below and write /start to the Telegram bot. You will receive a code';
+
+  @override
+  String get chooseWorkoutDays => 'Choose workout days';
+
+  @override
+  String get done => 'Done';
+
+  @override
+  String get monday => 'Monday';
+
+  @override
+  String get tuesday => 'Tuesday';
+
+  @override
+  String get wednesday => 'Wednesday';
+
+  @override
+  String get thursday => 'Thursday';
+
+  @override
+  String get friday => 'Friday';
+
+  @override
+  String get saturday => 'Saturday';
+
+  @override
+  String get sunday => 'Sunday';
+
+  @override
+  String get selectPhoto => 'Select Photo';
 }

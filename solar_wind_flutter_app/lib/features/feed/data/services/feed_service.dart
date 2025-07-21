@@ -6,20 +6,32 @@ import 'package:solar_wind_flutter_app/mock/mock_users.dart';
 
 class FeedService {
   final Dio dio;
+  static const String _boxName = 'feedBox';
 
-  FeedService({Dio? dio}) : dio = dio ?? Dio();
+  FeedService({Dio? dio}) : dio = dio ?? Dio() {
+    // Регистрируем адаптер, если еще не зарегистрирован
+    if (!Hive.isAdapterRegistered(UserAdapter().typeId)) {
+      Hive.registerAdapter(UserAdapter());
+    }
+  }
 
   Future<List<User>> fetchFeed() async {
+    print('[FeedService] Starting feed fetch...');
+    
+    // 1. Получаем учетные данные
     final prefs = await SharedPreferences.getInstance();
     final telegramId = prefs.getString('telegram_id');
     final token = prefs.getString('token');
 
     if (telegramId == null || token == null) {
+      print('❌ Missing credentials');
       throw Exception('Missing token or telegram_id in SharedPreferences');
     }
 
     try {
-      final response = await dio.get(
+      // 2. Запрос к API
+      print('🌐 Fetching feed from API...');
+      final response = await dio.get<List<dynamic>>(
         'https://solar-wind-gymbro.ru/deckShuffle/api/create-deck',
         options: Options(headers: {
           'Authorization-telegram-id': telegramId,
@@ -27,72 +39,53 @@ class FeedService {
         }),
       );
 
-      print(response);
-      print('Response status: ${response.statusCode}');
-      print('Response data: ${response.data}');
+      print('✅ API response: ${response.statusCode}');
+      print('📦 Data type: ${response.data?.runtimeType}');
 
-      if (response.statusCode == 200) {
-        final data = response.data as List;
-        final users = data.map((json) => User.fromJson(json)).toList();
+      if (response.statusCode == 200 && response.data != null) {
+        // 3. Парсинг пользователей
+        final users = response.data!
+            .map((json) => User.fromJson(json as Map<String, dynamic>))
+            .toList();
 
+        print('👥 Fetched ${users.length} real users');
+
+        // 4. Обогащаем mock-пользователями
         final enriched = [...users, ...mockUsers];
+        print('🎭 Added ${mockUsers.length} mock users');
 
-        final box = Hive.box('feedBox');
-        await box.put('users', enriched);
+        // 5. Сохраняем в Hive
+        final box = await Hive.openBox<List<dynamic>>(_boxName);
+        await box.put('users', enriched.map((u) => u.toJson()).toList());
+        print('💾 Saved ${enriched.length} users to Hive');
 
         return enriched;
       } else {
-        throw Exception('Failed to fetch feed. Status: ${response.statusCode}');
+        throw Exception('API returned ${response.statusCode}');
       }
     } catch (e) {
-      print('Failed to fetch online. Using cached. Error: $e');
-      final box = Hive.box('feedBox');
-      final cachedUsers = box.get('users') as List<User>?;
+      print('⚠️ Error fetching feed: $e');
+      print('🔄 Trying to load from cache...');
+      
+      try {
+        // 6. Загрузка из кэша
+        final box = await Hive.openBox<List<dynamic>>(_boxName);
+        final cachedData = box.get('users');
 
-      if (cachedUsers != null) return cachedUsers;
-      throw Exception('No internet and no cached data available');
+        if (cachedData != null && cachedData is List) {
+          final cachedUsers = cachedData
+              .map((json) => User.fromJson(json as Map<String, dynamic>))
+              .toList();
+          
+          print('♻️ Loaded ${cachedUsers.length} users from cache');
+          return cachedUsers;
+        }
+      } catch (cacheError) {
+        print('❌ Cache error: $cacheError');
+      }
+
+      print('🆘 No cache available, returning mock users');
+      return mockUsers; // Fallback
     }
   }
 }
-
-
-
-// import 'package:dio/dio.dart';
-// import '../models/user.dart';
-
-// class FeedService {
-//   final Dio dio;
-
-//   FeedService({Dio? dio}) : dio = dio ?? Dio();
-
-//   Future<List<User>> fetchFeed() async {
-//     await Future.delayed(const Duration(milliseconds: 500));
-
-//     return [
-//       User(
-//         id: 1,
-//         username: 'alex_fitness',
-//         description: 'I love morning workouts 💪',
-//         cityName: 'Berlin',
-//         preferredGymTime: [9, 10],
-//         sportName: ['Running', 'CrossFit'],
-//       ),
-//       User(
-//         id: 2,
-//         username: 'yoga_girl',
-//         description: 'Namaste 🌿',
-//         cityName: 'Munich',
-//         preferredGymTime: [18],
-//         sportName: ['Yoga', 'Pilates'],
-//       ),
-//       User(
-//         id: 3,
-//         username: 'night_lifter',
-//         description: 'Deadlifts at midnight 🏋️‍♂️',
-//         cityName: 'Hamburg',
-//         preferredGymTime: [23],
-//         sportName: ['Powerlifting'],
-//       ),
-//     ];
-//   }
-// }

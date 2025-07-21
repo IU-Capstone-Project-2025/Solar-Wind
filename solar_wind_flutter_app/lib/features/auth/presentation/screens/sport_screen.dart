@@ -5,6 +5,7 @@ import '../../data/models/city.dart';
 import '../../data/services/sport_service.dart';
 import '../../presentation/state/registration_provider.dart';
 import '../screens/about_me.dart';
+import '../screens/week_days_screen.dart';
 
 class ChooseSportScreen extends StatefulWidget {
   final City selectedCity;
@@ -56,7 +57,7 @@ class _ChooseSportScreenState extends State<ChooseSportScreen> {
 
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => const FillProfileScreen()),
+      MaterialPageRoute(builder: (_) =>  WeekDaysScreen(initiallySelected: [])),
     );
   }
 

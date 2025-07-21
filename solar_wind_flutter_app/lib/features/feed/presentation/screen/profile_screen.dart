@@ -3,6 +3,7 @@ import 'package:solar_wind_flutter_app/features/feed/data/services/profile_servi
 import 'package:solar_wind_flutter_app/features/feed/data/services/like_service.dart';
 import 'package:solar_wind_flutter_app/features/feed/data/models/user.dart';
 
+
 class UserProfileScreen extends StatefulWidget {
   final int userId;
 
@@ -22,6 +23,21 @@ class _UserProfileScreenState extends State<UserProfileScreen> with SingleTicker
 
   late AnimationController _likeAnimationController;
   late Animation<double> _likeScaleAnimation;
+
+  List<String> getWeekDayNames(List<int> days) {
+  const weekDays = [
+    'Monday',    // 1
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',    // 7
+  ];
+  return days.map((d) => weekDays[d - 1]).toList();
+}
+
+
 
   @override
   void initState() {
@@ -167,6 +183,25 @@ class _UserProfileScreenState extends State<UserProfileScreen> with SingleTicker
                         .toList(),
                   ),
                 ),
+                const SizedBox(height: 20),
+                Center(
+                  child: Column(
+                    children: [
+                      const Text(
+                        'Chosen training days',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                      ),
+                      const SizedBox(height: 8),
+                      Wrap(
+                        spacing: 8,
+                        children: getWeekDayNames(_user!.preferredGymTime)
+                            .map((day) => Chip(label: Text(day)))
+                            .toList(),
+                      ),
+                    ],
+                  ),
+                ),
+
               ],
             ),
           ),

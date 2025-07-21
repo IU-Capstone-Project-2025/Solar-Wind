@@ -20,5 +20,15 @@
   "profileUpdated": "Профиль обновлён",
   "updateFailed": "Ошибка при обновлении профиля",
   "profileLoadError": "Не удалось загрузить профиль",
-  "authorizationInstruction": "Для авторизации нажмите кнопку ниже и напишите /start в Telegram-боте. Вы получите код"
+  "authorizationInstruction": "Для авторизации нажмите кнопку ниже и напишите /start в Telegram-боте. Вы получите код",
+  "chooseWorkoutDays": "Выберите дни для тренировок",
+  "done": "Готово",
+  "monday": "Понедельник",
+  "tuesday": "Вторник",
+  "wednesday": "Среда",
+  "thursday": "Четверг",
+  "friday": "Пятница",
+  "saturday": "Суббота",
+  "sunday": "Воскресенье",
+  "selectPhoto": "Выбрать фото"
 }

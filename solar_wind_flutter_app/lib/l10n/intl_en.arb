@@ -20,5 +20,15 @@
   "profileUpdated": "Profile updated",
   "updateFailed": "Failed to update profile",
   "profileLoadError": "Failed to load profile",
-   "authorizationInstruction": "To authorize, click the button below and write /start to the Telegram bot. You will receive a code"
+  "authorizationInstruction": "To authorize, click the button below and write /start to the Telegram bot. You will receive a code",
+  "chooseWorkoutDays": "Choose workout days",
+  "done": "Done",
+  "monday": "Monday",
+  "tuesday": "Tuesday",
+  "wednesday": "Wednesday",
+  "thursday": "Thursday",
+  "friday": "Friday",
+  "saturday": "Saturday",
+  "sunday": "Sunday",
+  "selectPhoto": "Select Photo"
 }

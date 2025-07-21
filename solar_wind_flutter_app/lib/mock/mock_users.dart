@@ -6,7 +6,7 @@ final mockUsers = <User>[
     username: 'fake_user_1',
     description: 'Just testing things out',
     cityName: 'Fake City',
-    preferredGymTime: [10],
+    preferredGymTime: [1],
     sportName: ['TestSport'],
   ),
   User(
@@ -14,7 +14,7 @@ final mockUsers = <User>[
     username: 'test_account_2',
     description: 'Here for fun 🧪',
     cityName: 'SimCity',
-    preferredGymTime: [17],
+    preferredGymTime: [1, 2],
     sportName: ['Debugging'],
   ),
   User(
@@ -30,7 +30,7 @@ final mockUsers = <User>[
     username: 'qa_guru',
     description: 'Finding bugs and gains 🐛🏋️',
     cityName: 'QApolis',
-    preferredGymTime: [8],
+    preferredGymTime: [4],
     sportName: ['CrossFit'],
   ),
   User(
@@ -38,7 +38,7 @@ final mockUsers = <User>[
     username: 'frontend_beast',
     description: 'CSS by day, squats by night',
     cityName: 'Codeville',
-    preferredGymTime: [20],
+    preferredGymTime: [2],
     sportName: ['Yoga', 'Climbing'],
   ),
 ];

@@ -71,4 +71,34 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get authorizationInstruction =>
       'Для авторизации нажмите кнопку ниже и напишите /start в Telegram-боте. Вы получите код';
+
+  @override
+  String get chooseWorkoutDays => 'Выберите дни для тренировок';
+
+  @override
+  String get done => 'Готово';
+
+  @override
+  String get monday => 'Понедельник';
+
+  @override
+  String get tuesday => 'Вторник';
+
+  @override
+  String get wednesday => 'Среда';
+
+  @override
+  String get thursday => 'Четверг';
+
+  @override
+  String get friday => 'Пятница';
+
+  @override
+  String get saturday => 'Суббота';
+
+  @override
+  String get sunday => 'Воскресенье';
+
+  @override
+  String get selectPhoto => 'Выбрать фото';
 }

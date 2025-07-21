@@ -33,6 +33,8 @@ class ProfileService {
     }),
   );
 
+  print(response.data);
+
   if (response.data == null) {
     throw Exception('User not found');
   }

@@ -44,6 +44,12 @@ void setBirthDate(DateTime date) {
   notifyListeners();
 }
 
+void setWorkoutDays(List<int> days) {
+  _data.days = days;
+  notifyListeners();
+}
+
+
 void reset() {
   _data.username = null;
   _data.description = null;
@@ -52,6 +58,7 @@ void reset() {
   _data.preferredGender = null;
   _data.birthDate = null;
   _data.sportId.clear();
+  _data.days.clear();
   notifyListeners();
 }
 }

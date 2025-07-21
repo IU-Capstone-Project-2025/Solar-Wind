@@ -5,7 +5,7 @@ class RegistrationData {
   String? description;
   int? cityId;
   List<int> sportId = [];
-  List<int> days = [1];
+  List<int> days = [];
   String? gender; 
   String? preferredGender;
   DateTime? birthDate;
