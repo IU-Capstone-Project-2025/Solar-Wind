@@ -94,7 +94,7 @@ services:
   deckShufflingService:
     build:
       context: ./deckShuffle/
-      dockerfile: ../Dockerfile
+      dockerfile: ./Dockerfile
     container_name: deck_shuffle
     image: deck_shuffle_service:latest
     depends_on:

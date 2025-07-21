@@ -1,9 +1,9 @@
 import json
+from re import match
 from datetime import date
 from os import getenv
 
 import psycopg2
-
 
 def calculate_age(birth_date: date) -> int:
     today = date.today()
@@ -15,17 +15,27 @@ def prepare_user(row) -> dict[str: any]:
         "age": calculate_age(row["age"]),
         "gender": 0 if row["gender"]=="MALE" else 1,
         "preferredGender": 0 if row["preferred_gender"]=="MALE" else 1,
-        "preferredGymTime": json.loads(row["preferred_gym_time"]) if row["preferred_gym_time"].startswith("[") else [int(row["preferred_gym_time"])],
+        "preferredGymTime": [row["preferred_gym_time"]],
         "sports_ids": row["sports_ids"]
     }
 
 
+jdbc_url = getenv("SPRING_DATASOURCE_URL")
+if jdbc_url.startswith("jdbc:"):
+    jdbc_url = jdbc_url[len("jdbc:"):]
+match = match(r"postgresql://([^:/]+):?(\d+)?/(\w+)", jdbc_url)
+if not match:
+    raise ValueError("Invalid SPRING_DATASOURCE_URL format")
+
+host, port, dbname = match.groups()
+port = int(port or 5432)  # default port
+
 pg_conn = psycopg2.connect(
-    host=getenv("POSTGRES_HOST"),
-    port=5432,
-    dbname=getenv("POSTGRES_DB"),
-    user=getenv("POSTGRES_USER"),
-    password=getenv("POSTGRES_PASSWORD")
+    host=host,
+    port=port,
+    dbname=dbname,
+    user=getenv("SPRING_DATASOURCE_USERNAME"),
+    password=getenv("SPRING_DATASOURCE_PASSWORD")
 )
 pg_conn.autocommit = True
 cursor = pg_conn.cursor()
@@ -36,7 +46,7 @@ def retrieve_users():
                u.preferred_gym_time, u.city_id,
                COALESCE(json_agg(us.sport_id) FILTER (WHERE us.sport_id IS NOT NULL), '[]') as sports_ids
         FROM users u
-        LEFT JOIN users_sports us ON u.id = us.user_id
+        LEFT JOIN user_sport us ON u.id = us.user_id
         GROUP BY u.id
     """)
 
