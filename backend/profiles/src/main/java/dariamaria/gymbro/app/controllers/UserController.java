@@ -39,15 +39,6 @@ public class UserController {
         }
     }
 
-    @PostMapping("/save-photo")
-    public void savePhoto(@RequestHeader("Authorization-telegram-id") long id, @RequestParam MultipartFile photo) {
-        try {
-            service.savePhoto(id, photo.getBytes());
-        } catch (EntityNotFoundException | IOException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
-    }
-
     @DeleteMapping("/me")
     public void deleteUser(@RequestHeader("Authorization-telegram-id") long id) {
         service.deleteUserById(id);

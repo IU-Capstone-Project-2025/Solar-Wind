@@ -1,18 +1,17 @@
 package dariamaria.gymbro.app.services.implementation;
 
-import com.solarwind.models.PhotoEntity;
+import com.solarwind.model.PhotoEntity;
 import com.solarwind.repository.PhotoRepository;
 import com.solarwind.component.MapperHelper;
 import com.solarwind.dto.UserDto;
-import com.solarwind.mappers.UserMapper;
 import com.solarwind.models.UserEntity;
 import com.solarwind.repositories.CityRepository;
-import com.solarwind.repositories.SportRepository;
 import com.solarwind.services.implementations.UserRetrievalServiceImp;
 import dariamaria.gymbro.app.services.UserManagementService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -84,16 +83,24 @@ public class UserManagementServiceImp extends UserRetrievalServiceImp implements
         repository.save(user);
     }
 
+    @Transactional("secondTransactionManager")
     @Override
     public void savePhoto(Long id, byte[] photo) {
         PhotoEntity entity = new PhotoEntity();
         entity.setImage(photo);
+        entity.setUserId(id);
         photoRepository.save(entity);
         Optional<PhotoEntity> optional = photoRepository.findByImage(photo);
         Long photoId = optional.map(PhotoEntity::getId)
                 .orElseThrow(() -> new EntityNotFoundException("Photo not found"));
-        UserEntity user = repository.getReferenceById(id);
-        user.setPhotoId(photoId);
-        repository.save(user);
+    }
+
+    @Transactional("secondTransactionManager")
+    @Override
+    public byte[] getPhoto(long userId) {
+        PhotoEntity photo = photoRepository.findByUserId(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Photo not found for userId: " + userId));
+
+        return photo.getImage();
     }
 }

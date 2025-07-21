@@ -22,7 +22,7 @@ import java.util.Map;
 @EnableTransactionManagement
 @EnableJpaRepositories(
         basePackages = "com.solarwind.repositories",
-        entityManagerFactoryRef = "firstEntityManagerFactory",
+        entityManagerFactoryRef = "entityManagerFactory",
         transactionManagerRef = "firstTransactionManager"
 )
 public class FirstDbConfig {
@@ -36,7 +36,7 @@ public class FirstDbConfig {
 
     @Primary
     @Bean
-    public LocalContainerEntityManagerFactoryBean firstEntityManagerFactory(
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(
             EntityManagerFactoryBuilder builder) {
         Map<String, Object> props = new HashMap<>();
         props.put("hibernate.hbm2ddl.auto", "update");
@@ -44,7 +44,10 @@ public class FirstDbConfig {
 
         return builder
                 .dataSource(firstDataSource())
-                .packages("com.solarwind.models")
+                .packages(
+                        "com.solarwind.models",
+                        "com.solarwind.securityModule.models"
+                )
                 .persistenceUnit("first")
                 .properties(props)
                 .build();
@@ -54,7 +57,7 @@ public class FirstDbConfig {
     @Primary
     @Bean
     public PlatformTransactionManager firstTransactionManager(
-            @Qualifier("firstEntityManagerFactory") EntityManagerFactory emf) {
+            @Qualifier("entityManagerFactory") EntityManagerFactory emf) {
         return new JpaTransactionManager(emf);
     }
 }

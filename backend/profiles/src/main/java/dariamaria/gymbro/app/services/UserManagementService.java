@@ -9,4 +9,6 @@ public interface UserManagementService extends UserRetrievalService {
     void update(UserDto user);
 
     void savePhoto(Long id, byte[] photo);
+
+    byte[] getPhoto(long userId);
 }

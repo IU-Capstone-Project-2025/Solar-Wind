@@ -1,4 +1,4 @@
-package com.solarwind.models;
+package com.solarwind.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
