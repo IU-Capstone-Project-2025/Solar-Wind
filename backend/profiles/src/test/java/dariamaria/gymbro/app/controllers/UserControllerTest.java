@@ -78,7 +78,7 @@ public class UserControllerTest {
 
         Mockito.when(service.getUsers()).thenReturn(List.of(profile1, profile2));
 
-        mockMvc.perform(get("/api/getUsers"))
+        mockMvc.perform(get("/api/users"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(2));
     }
