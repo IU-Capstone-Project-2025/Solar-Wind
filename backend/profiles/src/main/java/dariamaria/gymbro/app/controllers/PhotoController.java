@@ -34,7 +34,7 @@ public class PhotoController {
     }
 
     @GetMapping("/get")
-    public ResponseEntity<byte[]> getPhoto(@RequestHeader("Authorization-telegram-id") long id) {
+    public ResponseEntity<byte[]> getPhoto(@RequestParam long id) {
         try {
             byte[] photo = service.getPhoto(id);
             HttpHeaders headers = new HttpHeaders();
