@@ -1,7 +1,7 @@
 package dariamaria.gymbro.app.services.implementation;
 
-import com.photoservice.models.PhotoEntity;
-import com.photoservice.repository.PhotoRepository;
+import com.solarwind.models.PhotoEntity;
+import com.solarwind.repository.PhotoRepository;
 import com.solarwind.component.MapperHelper;
 import com.solarwind.dto.UserDto;
 import com.solarwind.mappers.UserMapper;

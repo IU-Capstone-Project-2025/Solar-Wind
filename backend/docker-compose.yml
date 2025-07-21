@@ -45,8 +45,8 @@ services:
     volumes:
       - ./photo-init:/docker-entrypoint-initdb.d
     environment:
-      POSTGRES_USER: ${PROFILE_DB_USERNAME}
-      POSTGRES_PASSWORD: ${PROFILE_DB_USERNAME}
+      POSTGRES_USER: ${PROFILE_DB_USERNAME2}
+      POSTGRES_PASSWORD: ${PROFILE_DB_PASSWORD2}
       POSTGRES_DB: photodb
 
   profileService:

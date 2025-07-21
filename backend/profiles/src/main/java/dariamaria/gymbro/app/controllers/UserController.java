@@ -10,8 +10,10 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.util.*;
 
 @Secured(DatabaseSourceReader.class)
@@ -38,10 +40,10 @@ public class UserController {
     }
 
     @PostMapping("/save-photo")
-    public void savePhoto(@RequestHeader("Authorization-telegram-id") long id, @RequestParam byte[] photo) {
+    public void savePhoto(@RequestHeader("Authorization-telegram-id") long id, @RequestParam MultipartFile photo) {
         try {
-            service.savePhoto(id, photo);
-        } catch (EntityNotFoundException e) {
+            service.savePhoto(id, photo.getBytes());
+        } catch (EntityNotFoundException | IOException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }
