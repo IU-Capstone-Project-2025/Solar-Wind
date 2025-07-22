@@ -1,6 +1,9 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:image/image.dart' as img;
+import 'package:http_parser/http_parser.dart';
+
 
 class PhotoPostService {
   final Dio dio;
@@ -16,10 +19,29 @@ class PhotoPostService {
       throw Exception('Missing token or telegram_id in SharedPreferences');
     }
 
-    final fileName = photo.path.split('/').last;
+    // 📷 Читаем изображение как байты
+    final bytes = await photo.readAsBytes();
+
+    // 🖼️ Декодируем изображение
+    final originalImage = img.decodeImage(bytes);
+    if (originalImage == null) {
+      throw Exception('Failed to decode image');
+    }
+
+    // 🔧 Сжимаем и конвертируем в JPEG (80% качества)
+    final jpgBytes = img.encodeJpg(originalImage, quality: 80);
+
+    // 💾 Сохраняем временный файл JPEG
+    final tempDir = Directory.systemTemp;
+    final compressedFile = File('${tempDir.path}/compressed_photo.jpg');
+    await compressedFile.writeAsBytes(jpgBytes);
 
     final formData = FormData.fromMap({
-      'photo': await MultipartFile.fromFile(photo.path, filename: fileName),
+      'photo': await MultipartFile.fromFile(
+        compressedFile.path,
+        filename: 'photo.jpg',
+        contentType: MediaType('image', 'jpeg'),
+      ),
     });
 
     final response = await dio.post(

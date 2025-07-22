@@ -1,11 +1,14 @@
 import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:typed_data';
 
-class RegistrationService {
+class PhotoGetService {
   final Dio dio;
 
-  RegistrationService({Dio? dio}) : dio = dio ?? Dio();
+  PhotoGetService({Dio? dio}) : dio = dio ?? Dio();
 
-  Future<void> getPhoto(RegistrationData data) async {
+  Future<Uint8List> getPhoto(int id) async {
+    final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
     final telegramId = prefs.getString('telegram_id');
 
@@ -15,17 +18,21 @@ class RegistrationService {
 
     final response = await dio.post(
       'https://solar-wind-gymbro.ru/profiles/api/photo/get',
-      data: ,
+      data: {'id': id},
       options: Options(
         headers: {
           'Authorize': token,
           'Authorization-telegram-id': telegramId,
         },
+        responseType: ResponseType.bytes, // Важно для получения байтов
       ),
     );
 
     if (response.statusCode != 200) {
-      throw Exception('Failed to send photo. Status: ${response.statusCode}');
+      throw Exception('Failed to get photo. Status: ${response.statusCode}');
     }
+
+    return Uint8List.fromList(response.data);
   }
 }
+

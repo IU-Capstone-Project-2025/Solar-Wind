@@ -1,4 +1,7 @@
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solar_wind_flutter_app/features/auth/data/models/city.dart';
 import 'package:solar_wind_flutter_app/features/auth/data/models/registration_data.dart';
@@ -8,6 +11,8 @@ import 'package:solar_wind_flutter_app/features/auth/data/services/sport_service
 import 'package:solar_wind_flutter_app/features/auth/presentation/screens/welcome_screen.dart';
 import 'package:solar_wind_flutter_app/features/feed/data/services/profile_service.dart';
 import 'package:solar_wind_flutter_app/features/feed/data/services/profile_update_service.dart';
+import 'package:solar_wind_flutter_app/data/services/photo_get_service.dart';
+import 'package:solar_wind_flutter_app/data/services/photo_post_service.dart';
 
 class MyProfileScreen extends StatefulWidget {
   final int userId;
@@ -24,10 +29,16 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   final _updateService = ProfileUpdateService();
   final _cityService = CityService();
   final _sportService = SportService();
+  final _photoGetService = PhotoGetService();
+  final _photoPostService = PhotoPostService();
+  final ImagePicker _picker = ImagePicker();
 
   bool _isLoading = true;
+  bool _isUploading = false;
   RegistrationData _data = RegistrationData();
   bool _showDaysSelection = false;
+  Uint8List? _profilePhoto;
+  File? _newPhotoFile;
 
   // Город
   final _citySearchController = TextEditingController();
@@ -55,18 +66,121 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   }
 
   List<String> getWeekDayNames(List<int> days) {
-  const weekDays = [
-    'Monday',    // 1
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-    'Sunday',    // 7
-  ];
-  return days.map((d) => weekDays[d - 1]).toList();
+    const weekDays = [
+      'Monday',    // 1
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+      'Sunday',    // 7
+    ];
+    return days.map((d) => weekDays[d - 1]).toList();
+  }
+
+  Future<void> _loadInitialData() async {
+  try {
+    final prefs = await SharedPreferences.getInstance();
+    final telegramIdString = prefs.getString('telegram_id');
+    if (telegramIdString == null) {
+      throw Exception('Telegram ID not found in SharedPreferences');
+    }
+    final telegramId = int.tryParse(telegramIdString);
+    if (telegramId == null) {
+      throw Exception('Telegram ID is not a valid number');
+    }
+    final user = await _profileService.fetchUser(telegramId);
+    
+    // Загружаем фото профиля по ID пользователя
+    try {
+      final photo = await _photoGetService.getPhoto(telegramId); // Используем telegramId вместо user.photoId
+      setState(() => _profilePhoto = photo);
+    } catch (e) {
+      print('Error loading profile photo: $e');
+    }
+
+    final cities = await _cityService.searchCities('');
+    final sports = await _sportService.searchSports('');
+
+    final city = cities.firstWhere(
+      (c) => c.name == user.cityName,
+      orElse: () => cities.first,
+    );
+
+    final selectedSports = sports.where((s) => user.sportName.contains(s.name)).toList();
+
+    setState(() {
+      _data.username = user.username;
+      _data.description = user.description;
+      _selectedCity = city;
+      _data.cityId = city.id;
+      _selectedSports = selectedSports;
+      _data.sportId = selectedSports.map((s) => s.id).toList();
+      _data.days = user.preferredGymTime;
+
+      _citySearchResults = cities;
+      _sportSearchResults = sports;
+      _citySearchController.text = city.name;
+      _isLoading = false;
+    });
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Failed to load profile: $e")),
+    );
+    setState(() => _isLoading = false);
+  }
 }
 
+  Future<void> _pickImage() async {
+    try {
+      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+      if (image != null) {
+        setState(() {
+          _newPhotoFile = File(image.path);
+        });
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to pick image: $e')),
+      );
+    }
+  }
+
+  Future<void> _uploadPhoto() async {
+  if (_newPhotoFile == null) return;
+
+  setState(() => _isUploading = true);
+  try {
+    await _photoPostService.sendPhoto(_newPhotoFile!);
+    
+    // После успешной загрузки обновляем фото
+    final prefs = await SharedPreferences.getInstance();
+    final telegramIdString = prefs.getString('telegram_id');
+    if (telegramIdString != null) {
+      final telegramId = int.tryParse(telegramIdString);
+      if (telegramId != null) {
+        try {
+          final photo = await _photoGetService.getPhoto(telegramId);
+          setState(() {
+            _profilePhoto = photo;
+            _newPhotoFile = null;
+          });
+        } catch (e) {
+          print('Error loading updated photo: $e');
+        }
+      }
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Profile photo updated successfully')),
+    );
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Failed to upload photo: $e')),
+    );
+  } finally {
+    setState(() => _isUploading = false);
+  }
+}
 
   Future<void> _logout() async {
     final prefs = await SharedPreferences.getInstance();
@@ -80,50 +194,6 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
       ),
       (route) => false,
     );
-  }
-
-  Future<void> _loadInitialData() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final telegramIdString = prefs.getString('telegram_id');
-      if (telegramIdString == null) {
-        throw Exception('Telegram ID not found in SharedPreferences');
-      }
-      final telegramId = int.tryParse(telegramIdString);
-      if (telegramId == null) {
-        throw Exception('Telegram ID is not a valid number');
-      }
-      final user = await _profileService.fetchUser(telegramId);
-      final cities = await _cityService.searchCities('');
-      final sports = await _sportService.searchSports('');
-
-      final city = cities.firstWhere(
-        (c) => c.name == user.cityName,
-        orElse: () => cities.first,
-      );
-
-      final selectedSports = sports.where((s) => user.sportName.contains(s.name)).toList();
-
-      setState(() {
-        _data.username = user.username;
-        _data.description = user.description;
-        _selectedCity = city;
-        _data.cityId = city.id;
-        _selectedSports = selectedSports;
-        _data.sportId = selectedSports.map((s) => s.id).toList();
-        _data.days = user.preferredGymTime;
-
-        _citySearchResults = cities;
-        _sportSearchResults = sports;
-        _citySearchController.text = city.name;
-        _isLoading = false;
-      });
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Failed to load profile")),
-      );
-      setState(() => _isLoading = false);
-    }
   }
 
   Future<void> _onCitySearchChanged() async {
@@ -184,7 +254,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     });
   }
 
-  void _saveProfile() async {
+  Future<void> _saveProfile() async {
     if (_formKey.currentState!.validate()) {
       try {
         await _updateService.updateProfile(userId: widget.userId, data: _data);
@@ -302,7 +372,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
       {'id': 3, 'name': 'Wed'},
       {'id': 4, 'name': 'Thu'},
       {'id': 5, 'name': 'Fri'},
-      {'id': 6, 'name': 'Sut'},
+      {'id': 6, 'name': 'Sat'},
       {'id': 7, 'name': 'Sun'},
     ];
 
@@ -355,6 +425,57 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     );
   }
 
+  Widget _buildProfilePhotoSection(ThemeData theme) {
+    return Column(
+      children: [
+        Stack(
+          children: [
+            CircleAvatar(
+              radius: 60,
+              backgroundColor: theme.colorScheme.surfaceVariant,
+              backgroundImage: _newPhotoFile != null 
+                  ? FileImage(_newPhotoFile!) as ImageProvider
+                  : _profilePhoto != null
+                      ? MemoryImage(_profilePhoto!)
+                      : null,
+              child: _newPhotoFile == null && _profilePhoto == null
+                  ? Icon(
+                      Icons.person,
+                      size: 60,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    )
+                  : null,
+            ),
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.primary,
+                  shape: BoxShape.circle,
+                ),
+                child: IconButton(
+                  icon: Icon(Icons.camera_alt, color: theme.colorScheme.onPrimary),
+                  onPressed: _pickImage,
+                ),
+              ),
+            ),
+          ],
+        ),
+        if (_newPhotoFile != null) ...[
+          const SizedBox(height: 8),
+          ElevatedButton(
+            onPressed: _isUploading ? null : _uploadPhoto,
+            child: _isUploading
+                ? const CircularProgressIndicator()
+                : const Text('Save Photo'),
+          ),
+        ],
+        const SizedBox(height: 16),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -365,6 +486,13 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
         foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer, 
         elevation: 0,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: _logout,
+            tooltip: 'Logout',
+          ),
+        ],
       ),
       body: _isLoading
           ? Center(child: CircularProgressIndicator(color: theme.colorScheme.primary))
@@ -374,6 +502,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                 key: _formKey,
                 child: ListView(
                   children: [
+                    _buildProfilePhotoSection(theme),
                     Text(
                       "Edit your profile",
                       style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
@@ -417,11 +546,6 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                       child: const Text("Save Changes"),
                     ),
                     const SizedBox(height: 24),
-                    TextButton(
-                      onPressed: _logout,
-                      style: TextButton.styleFrom(foregroundColor: theme.colorScheme.error),
-                      child: const Text("Log out"),
-                    ),
                   ],
                 ),
               ),
